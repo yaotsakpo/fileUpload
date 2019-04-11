@@ -33,3 +33,7 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+    CreationOperationCaisse:
+              public: true
+              class: AppBundle\Service\CreationOperationCaisse
+              arguments: [ '@doctrine.orm.entity_manager' ]

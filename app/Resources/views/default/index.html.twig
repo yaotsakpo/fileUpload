@@ -9,11 +9,73 @@
         {{ form_errors(form.datacsv) }}
          {{ form_widget(form.datacsv,{'attr':{'class':'form-control'}}) }}  </div>
     </div>
-<br>
+    <br>
+    <div class="form-group">
+      <label class="col-sm-2 col-sm-2 control-label">Type d'operation:</label>
+      <div class="col-sm-10">
+        {{ form_errors(form.typeOperation) }}
+         {{ form_widget(form.typeOperation,{'attr':{'class':'form-control'}}) }}  </div>
+    </div>
+    <br>
         <button type="submit" class="btn btn-primary">valider</button>
         <button type="reset" class="btn btn-default">annuler</button> 
    
     {{ form_end(form) }}
 </div>
+
+    <table border="1px" style="margin-top:10px">
+        <thead>
+            <th>Jour</th>
+            <th>Date Reglement</th>
+            <th>N*Compte General</th>
+            <th>Libelle ecriture</th>
+            <th>Debit</th>
+            <th>Credit</th>
+        </thead>
+        <tbody>
+              {{ dump(journalArray)  }}
+
+              {% for ligneJournal in journalArray %}
+                   <tr>
+                       <td>{{ ligneJournal['jour'] }}</td>
+                       <td>{{ ligneJournal['opCumul']['dateReglement']|date('d/m/Y') }}</td>
+                       <td>{{ ligneJournal['opCumul']['numeroCompteDebit'] }}</td>
+                       <td></td>
+                       <td>{{ ligneJournal['opCumul']['prime'] }}</td>
+                       <td></td>
+                   </tr>
+                    {% for ligneOperation in ligneJournal['detailsOp']  %}
+                       <tr style="background-color: #000004;color: white">
+                           <td>{{ ligneJournal['jour'] }}</td>
+                           <td>{{ ligneOperation.dateDeReglement|date('d m y') }}</td>
+                           <td>{{ ligneOperation.produit.numCptCredit}}</td>
+                           <td> Reglement - {{ ligneOperation.typeOperation.libelleTypeOperation }}</td>
+                           <td></td>
+                           <td>{{ ligneOperation.prime }}</td>
+                       </tr>
+                   {% endfor %}  
+              {% endfor %}
+               {#
+               {% for operation in operations %}
+                   <tr>
+                       <td>{{ today|date('d-m-Y') }}</td>
+                       <td></td>
+                       <td></td>
+                       <td>{{ operation.prime }}</td>
+                       <td></td>
+                   </tr>
+                   {% for operationscaisse in operationscaisses if operationscaisse.dateDeReglement|date('d-m-Y')==operation.dateReglement|date('d-m-Y') %}
+                       <tr style="background-color: #000004;color: white">
+                           <td>{{ today|date('d-m-Y') }}</td>
+                           <td>{{ operationscaisse.typeOperation.numeroTypeOperation }}</td>
+                           <td> Reglement - {{ operationscaisse.typeOperation.libelleTypeOperation }}</td>
+                           <td></td>
+                           <td>{{ operationscaisse.prime }}</td>
+                       </tr>
+                   {% endfor %}
+               {% endfor %}
+               #}
+        </tbody>
+    </table>
 
 {% endblock %}
