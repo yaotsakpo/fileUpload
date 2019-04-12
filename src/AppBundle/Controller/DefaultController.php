@@ -12,6 +12,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use AppBundle\Entity\Importation;
+use AppBundle\Form\ImportationType;
+use AppBundle\Entity\Journal;
 
 
 class DefaultController extends Controller
@@ -21,19 +24,11 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-       $form = $this->createFormBuilder()
-            ->add('datacsv',FileType::class, array("required"=>true,'label' => ' '))
-           ->add('typeOperation',EntityType::class,array(
-               'class'=>'AppBundle\Entity\TypeOperation',
-               'choice_label'=>'libelleTypeOperation',
-               'choice_value'=>'id',
-               'placeholder'=>'-Selectionner-',
-               'expanded'=>false,
-               'multiple'=>false,
-               'mapped'=>false,
-               'attr'=> ['class'=>'form-control','multiple'=>false],
-           ))
-            ->getForm();
+
+        $importation= new Importation();
+
+       $form= $this->createform(ImportationType::class,$importation)
+                   ->add('datacsv',FileType::class, array("required"=>true,'label' => ' ',"mapped"=>false));
 
         $form->handleRequest($request);
         $session = $request->getSession();
@@ -47,78 +42,140 @@ class DefaultController extends Controller
         $tableau=[];
         $temp="";
         if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form["datacsv"]->getData();
+             $file = $form["datacsv"]->getData();
             if( $file != NULL && $file != "" ){
-                if (($handle = fopen($file, "r")) !== FALSE) {
-                    while (($data = fgetcsv($handle,1000, ",")) !== FALSE) 
-                    {
-                        $num = count($data);
-                        $row++;
-                        if($row>3)
-                        {
-                            for($c=0; $c < $num; $c++) 
-                            {
-                                $temp=$data[$c];
-                            }  
-                            if($temp[1]!=";")
-                            {
-                            array_push($tableau,$temp);
-                            }         
-                        }
-                    }
-                    fclose($handle);
-                }
-
-                $em = $this->getDoctrine()->getManager();
-                for($i=0;$i<(sizeof($tableau)-1);$i++)
-                {
-                    $lignes=(explode(";",$tableau[$i]));
-                    //service d'hydratation d'envoie des lignes d'operation dans la base de donnees
-                    $creationOperationCaisse=$this->get('CreationOperationCaisse');
-                    $creationOperationCaisse->hydratation($lignes,$form['typeOperation']->getdata());
-                }
-                $em->flush();
 
                 $ext = $file->guessExtension();
                 $fileName = "datacsv_".uniqid().".".$ext ;
                 $file->move( $repertoire."/uploads", $fileName );
                 $session->set('csvname', $fileName);
 
+                $em = $this->getDoctrine()->getManager();
+                $importation->setDateCreation(new \Datetime());
+                $importation->setStatus(0);
+                $importation->setSource($fileName);
+                $em->persist($importation);
+                $em->flush();
+                $this->addFlash('notice','Importation effectué avec succes');
+
+                }
+
+                return $this->redirectToRoute('homepage');
             }
-            return $this->redirectToRoute('homepage');
-        }
 
-        $repository= $this->getDoctrine()->getRepository('AppBundle:OperationCaisse');
-        $operations= $repository->getStat();
-        $journalArray = [];
-        $index = 1;
-        $today = new \DateTime();
-        foreach ($operations as $key => $opCumul) {
-            # code...
-            $dateCumul = $opCumul['dateReglement'];
-            $detailsOp = $repository->findBy(['dateDeReglement' => $dateCumul]);
-            
-            $journalArray[] = array('opCumul' => $opCumul, 'detailsOp' => $detailsOp, 'jour' => $today->format('dmy') . '  ' . $index );
-            $index++;
-        }
-        // dump( $journalArray );
-// exit;
-        $operationscaisses=$repository->findAll();
         
+        //dump($journalArray);
 
+        //exit();
 
-        //var_dump($operations);
+        $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
+        $importations= $repository->findAll();
+            
 
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
             'form' => $form->createView(),
-            'journalArray' => $journalArray, 
-            // 'operations' => $operations,
-            // 'operationscaisses' => $operationscaisses,
-            'today' => $today,
+            'importations' => $importations,
         ]);
     }
 
+
+    /**
+     * @Route("/operationCaisse/{importation}", name="operationCaisse")
+     */
+    public function operationCaisseAction(Request $request,$importation)
+    {
+        $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
+        $import= $repository->findOneBy(['id'=>$importation]);
+        $repertoire=realpath('../web/uploads');
+        $file=$repertoire.'\\'.$import->getSource();
+       
+        $contenu_du_fichier=file($file);
+        $em = $this->getDoctrine()->getManager();
+        for($i=3;$i<(sizeof($contenu_du_fichier)-1);$i++)
+        {
+            if($contenu_du_fichier[$i][1]!=";")
+            {      
+             $lignes=(explode(";",$contenu_du_fichier[$i]));
+             $creationOperationCaisse=$this->get('CreationOperationCaisse');
+             $creationOperationCaisse->hydratation($lignes,$importation);
+            }
+        }
+        $import->setStatus(1);
+        $em->flush();
+        $this->addFlash('notice','Traitement effectué effectué avec succes');
+
+        return $this->redirectToRoute('homepage');
+
+    }
+
+
+    /**
+     * @Route("/generationDeJournal/{importation}", name="generationDeJournal")
+     */
+    public function generationDeJournalAction(Request $request,$importation)
+    {
+
+        
+
+        $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
+        $import= $repository->findOneBy(['id'=>$importation]);
+
+        $repository= $this->getDoctrine()->getRepository('AppBundle:OperationCaisse');
+        $operations= $repository->findBy(['importation'=>$import]);
+
+        $cumul= $repository->cumul($importation);
+
+
+        $journal= new Journal();
+
+        $em = $this->getDoctrine()->getManager();
+        $journal->setJour(new \DateTime());
+        $journal->setMontantDebit($cumul[0]['prime']);
+        $journal->setLibelleEcriture('Remboursement'.' - '.$cumul[0]['type']);
+        $journal->setNumCompteGeneral($cumul[0]['numeroCompteDebit']);
+        $journal->setImportation($import);
+        $em->persist($journal);
+        $em->flush();
+
+
+        foreach ($operations as $key => $operation) {
+            $detailsJournal= new Journal();
+            $em = $this->getDoctrine()->getManager();
+                $detailsJournal->setJour(new \DateTime());
+                $detailsJournal->setMontantCredit($operation->getPrime());
+                $detailsJournal->setLibelleEcriture('Remboursement'.' - '.$cumul[0]['type']);
+                $detailsJournal->setNumCompteGeneral($operation->getProduit()->getnumCptCredit());
+                $detailsJournal->setCumul($journal);
+                $detailsJournal->setImportation($operation->getImportation());
+            $em->persist($detailsJournal);
+            $em->flush();
+        }
+
+    
+        $em = $this->getDoctrine()->getManager();
+        $import->setStatus(2);
+        $em->flush();
+        $this->addFlash('notice','Journal généré avec succes');
+
+        return $this->redirectToRoute('homepage');
+
+    }
+
+
+      /**
+     * @Route("/visualisationDeJournal/{importation}", name="visualisationDeJournal")
+     */
+    public function visualisationDeJournalAction(Request $request,$importation)
+    {
+
+    $repository= $this->getDoctrine()->getRepository('AppBundle:Journal');
+    $journalArray= $repository->findBy(['importation'=>$importation]);;
+        
+      return $this->render('journal.html.twig', [
+            'journalArray' => $journalArray
+        ]);
+    }
 
 
 

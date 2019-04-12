@@ -2,12 +2,58 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}Journal-GENERATOR{% endblock %}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link href="{{ asset ('css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset ('css/datepicker3.css') }}" rel="stylesheet">
+        {% block stylesheets %}{% endblock %}
+
+        <link href="{{ asset ('css/styles.css') }}" rel="stylesheet">
+        <script src="{{ asset ('js/lumino.glyphs.js') }}"></script>
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{{path('homepage')}}"><span>Journal-</span>GENERATOR</a>
+                <a href="#" class="user-menu pull-right" ><svg class="glyph stroked cancel" ><use xlink:href="#stroked-cancel"/></svg></a>
+            </div>               
+        </div><!-- /.container-fluid -->
+        </nav>
+        {% block body %}
+
+
+
+        {% endblock %}
+
+        
+        <script src="{{ asset ('js/jquery-1.11.1.min.js') }}"></script>
+        <script src="{{ asset ('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset ('js/chart.min.js') }}"></script>
+        <script src="{{ asset ('js/chart-data.js') }}"></script>
+        <script src="{{ asset ('js/easypiechart.js') }}"></script>
+        <script src="{{ asset ('js/easypiechart-data.js') }}"></script>
+        <script src="{{ asset ('js/bootstrap-datepicker.js') }}"></script>
+        
         {% block javascripts %}{% endblock %}
+
+        <script>
+        $('#calendar').datepicker({
+        });
+
+        !function ($) {
+            $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
+                $(this).find('em:first').toggleClass("glyphicon-minus");      
+            }); 
+            $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+        }(window.jQuery);
+
+        $(window).on('resize', function () {
+          if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+        })
+        $(window).on('resize', function () {
+          if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')})
+        </script>
+
     </body>
 </html>

@@ -17,21 +17,19 @@ class CreationOperationCaisse
         $this->em = $em;
     }
 
-    public function hydratation($ligne,$typeOperation)
+    public function hydratation($ligne,$importation)
     {
         
         $repository = $this->em->getRepository('AppBundle:Produit');
         $produit= $repository->findOneBy(['nomProduit'=>$ligne[1]]);
 
-        $repository = $this->em->getRepository('AppBundle:TypeOperation');
-        $type= $repository->findOneBy(['id'=>$typeOperation]);
-
+        $repository = $this->em->getRepository('AppBundle:Importation');
+        $import= $repository->findOneBy(['id'=>$importation]);
             if(!empty($produit)){
             $operation= new OperationCaisse();
-            $operation->setDateUpload(new \DateTime('now'));
             $operation->setCodeProduit($ligne[0]);
-            $operation->setTypeOperation($type);
             $operation->setProduit($produit);
+            $operation->setImportation($import);
             $operation->setModeDeComptabilisation($ligne[2]);
             $operation->setCategorie($ligne[3]);
             $operation->setClassification($ligne[4]);

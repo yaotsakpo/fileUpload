@@ -37,10 +37,12 @@ class TypeOperation
 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\OperationCaisse",mappedBy="produit",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Importation",mappedBy="operations",cascade={"remove"})
      */
 
-    private $operations;
+    private $importation;
+
+
 
 
     /**
@@ -62,6 +64,9 @@ class TypeOperation
     {
         $this->operations = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+
+
 
     /**
      * Set libelleTypeOperation
@@ -112,36 +117,36 @@ class TypeOperation
     }
 
     /**
-     * Add operation
+     * Add importation
      *
-     * @param \AppBundle\Entity\OperationCaisse $operation
+     * @param \AppBundle\Entity\Importation $importation
      *
      * @return TypeOperation
      */
-    public function addOperation(\AppBundle\Entity\OperationCaisse $operation)
+    public function addImportation(\AppBundle\Entity\Importation $importation)
     {
-        $this->operations[] = $operation;
+        $this->importation[] = $importation;
 
         return $this;
     }
 
     /**
-     * Remove operation
+     * Remove importation
      *
-     * @param \AppBundle\Entity\OperationCaisse $operation
+     * @param \AppBundle\Entity\Importation $importation
      */
-    public function removeOperation(\AppBundle\Entity\OperationCaisse $operation)
+    public function removeImportation(\AppBundle\Entity\Importation $importation)
     {
-        $this->operations->removeElement($operation);
+        $this->importation->removeElement($importation);
     }
 
     /**
-     * Get operations
+     * Get importation
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getOperations()
+    public function getImportation()
     {
-        return $this->operations;
+        return $this->importation;
     }
 }

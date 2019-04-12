@@ -10,15 +10,27 @@ namespace AppBundle\Repository;
  */
 class OperationCaisseRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function getStat()
+	public function getStat($id)
     {
         $query="
-        SELECT o.dateDeReglement as dateReglement ,SUM(o.prime) as prime,t.numCptDebit as numeroCompteDebit
-        FROM AppBundle:OperationCaisse o
-        JOIN AppBundle:TypeOperation t
-        WHERE o.typeOperation= t.id
+        SELECT o.dateDeReglement as dateReglement , SUM(o.prime) as prime, t.numCptDebit as numeroCompteDebit
+        FROM AppBundle:OperationCaisse o, AppBundle:TypeOperation t,AppBundle:Importation i  
+        WHERE i.typeOperation=t.id and o.importation =i.id and i.id='$id'
         GROUP BY o.dateDeReglement ";
         return $this->getEntityManager()->createQuery($query)->getResult();
     }
 
+    public function cumul($id)
+    {
+        $query="
+        SELECT  SUM(o.prime) as prime, t.numCptDebit as numeroCompteDebit, t.libelleTypeOperation as type
+        FROM AppBundle:OperationCaisse o, AppBundle:TypeOperation t,AppBundle:Importation i  
+        WHERE i.typeOperation=t.id and o.importation =i.id and i.id='$id' ";
+        return $this->getEntityManager()->createQuery($query)->getResult();
+    }
+
 }
+
+
+
+

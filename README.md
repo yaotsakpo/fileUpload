@@ -1,4 +1,2 @@
-sf34
-====
-
-A Symfony project created on April 3, 2019, 10:02 am.
+les fichiers à uploader doivent avoir deux lignes au debut pour les entetes et les noms des colonnes
+le mois et l'année d'importation des fichiers enregistrés en base de données sont des dates dont le mois et l'annee dont juste
