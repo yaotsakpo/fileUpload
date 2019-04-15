@@ -37,7 +37,7 @@ class TypeOperation
 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Importation",mappedBy="operations",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Importation",mappedBy="typeOperation",cascade={"remove"})
      */
 
     private $importation;
@@ -114,5 +114,39 @@ class TypeOperation
     public function getNumCptDebit()
     {
         return $this->numCptDebit;
+    }
+
+    /**
+     * Add importation
+     *
+     * @param \AppBundle\Entity\Importation $importation
+     *
+     * @return TypeOperation
+     */
+    public function addImportation(\AppBundle\Entity\Importation $importation)
+    {
+        $this->importation[] = $importation;
+
+        return $this;
+    }
+
+    /**
+     * Remove importation
+     *
+     * @param \AppBundle\Entity\Importation $importation
+     */
+    public function removeImportation(\AppBundle\Entity\Importation $importation)
+    {
+        $this->importation->removeElement($importation);
+    }
+
+    /**
+     * Get importation
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImportation()
+    {
+        return $this->importation;
     }
 }

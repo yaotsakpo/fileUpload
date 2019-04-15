@@ -68,7 +68,7 @@ class Importation
      *
      * @var TypeOperation $typeOperation
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TypeOperation",inversedBy="importaions",cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TypeOperation",inversedBy="importations",cascade={"all"})
      *
      * @ORM\JoinColumn(nullable=true,onDelete="CASCADE")
      */
@@ -279,5 +279,39 @@ class Importation
     public function getTypeOperation()
     {
         return $this->typeOperation;
+    }
+
+    /**
+     * Add journal
+     *
+     * @param \AppBundle\Entity\Journal $journal
+     *
+     * @return Importation
+     */
+    public function addJournal(\AppBundle\Entity\Journal $journal)
+    {
+        $this->journals[] = $journal;
+
+        return $this;
+    }
+
+    /**
+     * Remove journal
+     *
+     * @param \AppBundle\Entity\Journal $journal
+     */
+    public function removeJournal(\AppBundle\Entity\Journal $journal)
+    {
+        $this->journals->removeElement($journal);
+    }
+
+    /**
+     * Get journals
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getJournals()
+    {
+        return $this->journals;
     }
 }

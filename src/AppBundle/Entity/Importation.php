@@ -68,7 +68,7 @@ class Importation
      *
      * @var TypeOperation $typeOperation
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TypeOperation",inversedBy="importaions",cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TypeOperation",inversedBy="importations",cascade={"all"})
      *
      * @ORM\JoinColumn(nullable=true,onDelete="CASCADE")
      */

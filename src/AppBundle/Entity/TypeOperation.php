@@ -37,7 +37,7 @@ class TypeOperation
 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Importation",mappedBy="operations",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Importation",mappedBy="typeOperation",cascade={"remove"})
      */
 
     private $importation;

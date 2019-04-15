@@ -14,7 +14,11 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use AppBundle\Entity\Importation;
 use AppBundle\Form\ImportationType;
+use AppBundle\Entity\Produit;
+use AppBundle\Form\ProduitType;
 use AppBundle\Entity\Journal;
+use AppBundle\Form\TypeOperationType;
+use AppBundle\Entity\TypeOperation;
 use Symfony\Component\Form\FormError as FormError;
 
 
@@ -39,7 +43,7 @@ class DefaultController extends Controller
         $temp="";
 
         $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
-        $importations= $repository->findAll();
+        $importations= $repository->findBy([],['id' => 'DESC']);
 
         $bool=0;
 
@@ -132,13 +136,86 @@ class DefaultController extends Controller
                 }
             
         }
+
+
+        /********Formulaire de produit*******/
+
+        $produit= new Produit();
+
+        $produitForm= $this->createform(ProduitType::class,$produit);
+
+        $produitForm->handleRequest($request);
+
+        if ($produitForm->isSubmitted() && $produitForm->isValid()) {
+
+            $repository= $this->getDoctrine()->getRepository('AppBundle:Produit');
+            $pdt= $repository->findOneBy(['nomProduit'=>$produitForm['nomProduit']->getdata(),'numeroDeCodeProduit'=>$produitForm['numeroDeCodeProduit']->getdata(),'numCptCredit'=>$produitForm['numCptCredit']->getdata()]);
+
+            if(empty($pdt))
+            {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($produit);
+                $em->flush();
+
+                $this->addFlash('notice','Produit enregistré avec success');
+
+                return $this->redirectToRoute('homepage');
+
+            }else
+            {
+                $produitForm->addError(new FormError("Il existe deja un produit avec ces informations! veuillez ressaisir"));
+            }
+            
+        }
+
+
+        $repository= $this->getDoctrine()->getRepository('AppBundle:Produit');
+        $produits= $repository->findAll();
+
+
+        /********Formulaire de type operation*******/
+
+        $typeOperation= new TypeOperation();
+
+        $typeOperationForm= $this->createform(TypeOperationType::class,$typeOperation);
+
+        $typeOperationForm->handleRequest($request);
+
+        if ($typeOperationForm->isSubmitted() && $typeOperationForm->isValid()) {
+
+            $repository= $this->getDoctrine()->getRepository('AppBundle:TypeOperation');
+            $typeOpe= $repository->findOneBy(['libelleTypeOperation'=>$typeOperationForm['libelleTypeOperation']->getdata(),'numCptDebit'=>$typeOperationForm['numCptDebit']->getdata()]);
+
+            if(empty($typeOpe))
+            {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($typeOperation);
+                $em->flush();
+
+                $this->addFlash('notice','Type d\'operation enregistré avec success');
+
+                return $this->redirectToRoute('homepage');
+
+            }else
+            {
+                $typeOperationForm->addError(new FormError("Il existe deja un type d'operation existant avec ces informations! veuillez ressaisir"));
+            }
+
+        }
+
+        $repository= $this->getDoctrine()->getRepository('AppBundle:TypeOperation');
+        $typeOperations= $repository->findAll();
             
 
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
             'form' => $form->createView(),
             'rechercheForm' => $rechercheForm->createView(),
+            'produitForm' => $produitForm->createView(),
+            'typeOperationForm' => $typeOperationForm->createView(),
             'importations' => $importations,
+            'produits' => $produits,
+            'typeOperations' => $typeOperations,
         ]);
     }
 
@@ -236,7 +313,8 @@ class DefaultController extends Controller
     $journalArray= $repository->findBy(['importation'=>$importation]);;
         
       return $this->render('journal.html.twig', [
-            'journalArray' => $journalArray
+            'journalArray' => $journalArray,
+            'importation' => $importation
         ]);
     }
 
@@ -252,6 +330,60 @@ class DefaultController extends Controller
       return $this->render('recherche.html.twig', [
             'importation' => $import
         ]);
+    }
+
+
+    /**
+     * @Route("/exportationJournal/{importation}", name="exportationJournal")
+     */
+    public function exportationJournalAction(Request $request,Importation $importation)
+    {
+        $repository= $this->getDoctrine()->getRepository('AppBundle:Journal');
+        $import= $repository->findBy(['importation'=>$importation]);;
+
+         $lignes = [];
+
+         foreach ($import as $ligne) {
+
+           $c['jour'] = $ligne->getjour()->format('d-m-Y');
+           $c['Numero Piece'] = $ligne->getnumPiece();
+           $c['Numero Facture'] = $ligne->getnumFacture();
+           $c['Reference'] = $ligne->getreference();
+           $c['Numero de Compte General'] = $ligne->getnumCompteGeneral();
+           $c['Numero Compte Tiers'] = $ligne->getnumComptTiers();
+           $c['Libelle Ecriture'] = $ligne->getlibelleEcriture();
+           $c['Date Echeance'] = $ligne->getdateEcheance();
+           $c['Position Journal'] = $ligne->getpositionJournal();
+           $c['Debit'] = $ligne->getmontantDebit();
+           $c['Credit'] = $ligne->getmontantCredit();
+            $lignes[] = $c;
+        }
+
+        $filename = "datacsv_". date('d-m-Y') . "_" . date('H:i:s') . ".csv";        
+        $this->outputCsv($filename, $lignes);
+        exit();
+        
+    }
+
+
+    function outputCsv($fileName, $assocDataArray) { 
+        ob_clean();
+        header('Pragma: public');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Cache-Control: private', false);    
+        header('Content-Type: Application/csv');    
+        header('Content-Disposition: attachment;filename=' . $fileName);    
+
+        if (isset($assocDataArray['0'])) {        
+            $fp = fopen('php://output', 'w');        
+            fputcsv($fp, array_keys($assocDataArray['0']));        
+            foreach ($assocDataArray AS $values) {            
+                fputcsv($fp, $values, ";");        
+            }        
+            fclose($fp);    
+        }    
+        ob_flush();
     }
 
 
