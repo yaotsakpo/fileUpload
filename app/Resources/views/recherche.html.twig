@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+
+<link href="{{ asset ('css/bootstrap-table.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="col-lg-12">
+      <a class="btn btn-primary" href="{{ path('homepage')}}" style="margin:2%">retour</a>
+             <h3 style="margin-top:-5%"><center>Resultat de la recherche</center></h3>
+              <div class="panel panel-default">
+                     <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <table data-toggle="table" data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc">
+                                        <thead>
+                                        <tr>
+                                            <th data-field="jour"  >Jour d'importation</th>
+                                            <th ddata-field="periode">Mois-Annee de l'operation</th>
+                                            <th ddata-field="periode">Type de l'operation importé</th>
+                                            <th data-field="action">Action</th>
+                                           
+                                        </tr>                           
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ importation[0].dateCreation|date('d-m-Y') }}</td> 
+                                                <td>{{ importation[0].mois|date('m') }} - {{ importation[0].annee|date('Y') }}</td> 
+                                                <td>{{ importation[0].typeOperation.libelletypeOperation }} </td> 
+                                             
+                                                <td>
+                                                  {% if importation[0].status == 0 %}
+                                                    <a  href="{{ path('operationCaisse',{'importation':importation[0].id}) }}" onclick="return confirm('confirmez?')" ><button class="btn btn-primary waves-effect" type="submit" >Traiter l'importation</button></a>
+                                                  {% endif %}
+                                                  {% if importation[0].status == 1 %}
+                                                    <a  href="{{ path('generationDeJournal',{'importation':importation[0].id}) }}" onclick="return confirm('confirmez?')" ><button class="btn btn-primary waves-effect" type="submit" >Creer le Journal de l'operation</button></a>
+                                                  {% endif %}
+                                                  {% if importation[0].status == 2 %}
+                                                    <a  href="{{ path('visualisationDeJournal',{'importation':importation[0].id}) }}" ><button class="btn btn-primary waves-effect" type="submit" >Voir Le Journal</button></a>
+                                                  {% endif %}
+                                                </td>  
+
+                                            </tr>
+                                            
+                                        </tbody>
+                                    </table>
+                                    
+                                </div>
+                            </div>
+              </div>
+          </div>
+    {% endblock %}
+
+{% block javascripts %}
+
+
+<script src="{{ asset ('js/bootstrap-table.js') }}"></script>
+
+<script type="text/javascript">
+
+</script>
+
+{% endblock %}

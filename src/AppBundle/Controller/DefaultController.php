@@ -27,54 +27,115 @@ class DefaultController extends Controller
 
         $importation= new Importation();
 
-       $form= $this->createform(ImportationType::class,$importation)
+        $form= $this->createform(ImportationType::class,$importation)
                    ->add('datacsv',FileType::class, array("required"=>true,'label' => ' ',"mapped"=>false));
 
         $form->handleRequest($request);
-        $session = $request->getSession();
-        $session->remove('csvname');
-        $session->remove('csvArray');
-        $session->remove('previewTab');
-        $session->remove('customContent');
 
         $repertoire=realpath('../web');
         $row = 1;
         $tableau=[];
         $temp="";
-        if ($form->isSubmitted() && $form->isValid()) {
-             $file = $form["datacsv"]->getData();
-            if( $file != NULL && $file != "" ){
-
-                $ext = $file->guessExtension();
-                $fileName = "datacsv_".uniqid().".".$ext ;
-                $file->move( $repertoire."/uploads", $fileName );
-                $session->set('csvname', $fileName);
-
-                $em = $this->getDoctrine()->getManager();
-                $importation->setDateCreation(new \Datetime());
-                $importation->setStatus(0);
-                $importation->setSource($fileName);
-                $em->persist($importation);
-                $em->flush();
-                $this->addFlash('notice','Importation effectué avec succes');
-
-                }
-
-                return $this->redirectToRoute('homepage');
-            }
-
-        
-        //dump($journalArray);
-
-        //exit();
 
         $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
         $importations= $repository->findAll();
+
+        $bool=0;
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+                foreach ($importations as $key => $import) {
+                    if($import->getmois()->format('MM') == $importation->getmois()->format('MM') && 
+                        $import->getannee()->format('YYYY') == $importation->getannee()->format('YYYY') &&
+                        $import->gettypeOperation() == $importation->gettypeOperation() )
+                    {
+                        $bool=1;
+                    }
+                }
+
+                if($bool==0)
+                {
+                     $file = $form["datacsv"]->getData();
+                if( $file != NULL && $file != "" ){
+
+                    $ext = $file->guessExtension();
+                    $fileName = "datacsv_".uniqid().".".$ext ;
+                    $file->move( $repertoire."/uploads", $fileName );
+
+                    $em = $this->getDoctrine()->getManager();
+                    $importation->setDateCreation(new \Datetime());
+                    $importation->setStatus(0);
+                    $importation->setSource($fileName);
+                    $em->persist($importation);
+                    $em->flush();
+                    $this->addFlash('notice','Importation effectué avec succes');
+
+                    }
+
+                    return $this->redirectToRoute('homepage');
+
+                }else
+                {
+                    $this->addFlash('notice','Il existe deja une importation avec ce mois,cette annee et ce type d\'operation.Veuillez changer la date ou le mois des operations');
+
+                }
+            
+            }
+
+
+        /********Formulaire de recherche*******/
+
+        $rechercheForm= $this->createformBuilder()
+         ->add('typeOperation',EntityType::class,array(
+                        'class'=>'AppBundle\Entity\TypeOperation',
+                        'choice_label'=>'libelleTypeOperation',
+                        'choice_value'=>'id',
+                        'placeholder'=>'-Selectionner-',
+                        'expanded'=>false,
+                        'mapped'=>false,
+                        'attr'=> ['class'=>'form-control','multiple'=>false],
+                    ))
+            ->add('mois',DateType::class,array('widget' => 'single_text',
+                        'html5'=>true,'format' => 'MM'))
+                ->add('annee',DateType::class,array('widget' => 'single_text',
+                        'html5'=>true,'format' => 'yyyy'
+                        ))
+            ->getform();
+
+        $rechercheForm->handleRequest($request);
+
+        if ($rechercheForm->isSubmitted() && $rechercheForm->isValid()) {
+
+            $recherche=null;
+
+                foreach ($importations as $key => $import) {
+                    if($import->getmois()->format('MM') == $rechercheForm['mois']->getdata()->format('MM') && 
+                        $import->getannee()->format('YYYY') == $rechercheForm['annee']->getdata()->format('YYYY') &&
+                        $import->gettypeOperation() ==$rechercheForm['typeOperation']->getdata() )
+                    {
+                        $bool=1;
+                        $recherche=$import;
+                    }
+                }
+
+                if($bool==0)
+                {
+                    $this->addFlash('notice','Il n\'existe aucune importation correspondate à votre demande');
+
+                }else
+                {
+
+                    return $this->redirectToRoute('rechercheImportation',['importation'=>$recherche->getId()]);
+
+                }
+            
+        }
             
 
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
             'form' => $form->createView(),
+            'rechercheForm' => $rechercheForm->createView(),
             'importations' => $importations,
         ]);
     }
@@ -177,6 +238,19 @@ class DefaultController extends Controller
         ]);
     }
 
+
+    /**
+     * @Route("/rechercheImportation/{importation}", name="rechercheImportation")
+     */
+    public function rechercheImportationAction(Request $request,Importation $importation)
+    {
+        $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
+        $import= $repository->findBy(['id'=>$importation]);;
+
+      return $this->render('recherche.html.twig', [
+            'importation' => $import
+        ]);
+    }
 
 
 }

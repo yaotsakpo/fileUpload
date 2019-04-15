@@ -25,6 +25,7 @@
                 <ul class="nav nav-pills">
                     <li class="active"><a href="#pilltab1" data-toggle="tab">Importation de fichier</a></li>
                     <li><a href="#pilltab2" data-toggle="tab">Affichage des Importations</a></li>
+                    <li><a href="#pilltab3" data-toggle="tab">Recherche d'importation</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -83,6 +84,7 @@
                                         <tr>
                                             <th data-field="jour"  >Jour d'importation</th>
                                             <th ddata-field="periode">Mois-Annee de l'operation</th>
+                                            <th ddata-field="periode">Type de l'operation importé</th>
                                             <th data-field="action">Action</th>
                                            
                                         </tr>                           
@@ -92,6 +94,7 @@
                                             <tr>
                                                 <td>{{ importation.dateCreation|date('d-m-Y') }}</td> 
                                                 <td>{{ importation.mois|date('m') }} - {{ importation.annee|date('Y') }}</td> 
+                                                <td>{{ importation.typeOperation.libelletypeOperation }} </td> 
                                              
                                                 <td>
                                                   {% if importation.status == 0 %}
@@ -112,6 +115,46 @@
                                     
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                     <div class="tab-pane fade" id="pilltab3">
+                        <div class="col-lg-12">
+                            <div class="col-lg-12">
+                                  {{ form_start(rechercheForm,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
+                                  <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label">Type d'operation:</label>
+                                      <div class="col-sm-10">
+                                      {{ form_errors(rechercheForm.typeOperation) }}
+                                       {{ form_widget(rechercheForm.typeOperation,{'attr':{'class':'form-control'}}) }}  
+                                      </div>
+                                  </div>
+                                  <br>
+                                  <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label">Mois:</label>
+                                    <div class="col-sm-10">
+                                     <b>  *veuillez renseigner le numero du mois</b>
+                                     {{ form_errors(rechercheForm.mois) }}
+                                     {{ form_widget(rechercheForm.mois,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
+                                    </div>
+                                  </div>
+                                  <br>
+                                  <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label">annee: </label>
+                                    <div class="col-sm-10">
+                                     {{ form_errors(rechercheForm.annee) }}
+                                     {{ form_widget(rechercheForm.annee,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
+                                    </div>
+                                  </div>
+                                  <br>
+                                  <br>
+                                  <div class="form-group">
+                                    <center>
+                                    <button type="submit" class="btn btn-primary">valider</button>
+                                      <button type="reset" class="btn btn-default">annuler</button> 
+                                    </center>
+                                  </div>
+                                  {{ form_end(rechercheForm) }}
+                              </div>
                         </div>
                     </div>
                 </div>
