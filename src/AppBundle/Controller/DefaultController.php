@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use AppBundle\Entity\Importation;
 use AppBundle\Form\ImportationType;
 use AppBundle\Entity\Journal;
+use Symfony\Component\Form\FormError as FormError;
 
 
 class DefaultController extends Controller
@@ -76,7 +77,7 @@ class DefaultController extends Controller
 
                 }else
                 {
-                    $this->addFlash('notice','Il existe deja une importation avec ce mois,cette annee et ce type d\'operation.Veuillez changer la date ou le mois des operations');
+                   $form->addError(new FormError("Il existe deja une importation avec ce mois,cette annee et ce type d'operation.Veuillez changer la date ou le mois des operations"));
 
                 }
             
@@ -120,7 +121,8 @@ class DefaultController extends Controller
 
                 if($bool==0)
                 {
-                    $this->addFlash('notice','Il n\'existe aucune importation correspondate à votre demande');
+
+                    $rechercheForm->addError(new FormError("Il n'existe aucune importation correspondate à votre demande"));
 
                 }else
                 {

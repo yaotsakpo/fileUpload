@@ -10,12 +10,28 @@
 
     {% for message in app.flashes('notice') %}
 
-    <div class="alert bg-primary" role="alert">
-    <svg class="glyph stroked empty-message">
-        <use xlink:href="#stroked-empty-message"></use></svg> {{ message }} 
-        <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
+    <div class="alert bg-success" role="alert">
+      <svg class="glyph stroked checkmark">
+        <use xlink:href="#stroked-checkmark"></use></svg> {{ message }}  
+      <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
     </div>
 
+    {% endfor %}
+
+    {% for error in form.vars.errors.form.getErrors(true) %}          
+      <div class="alert bg-danger" role="alert">
+        <svg class="glyph stroked cancel">
+          <use xlink:href="#stroked-cancel"></use></svg>  {{ error.message }} 
+        <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
+      </div>
+    {% endfor %}
+
+    {% for error in rechercheForm.vars.errors.form.getErrors(true) %}          
+      <div class="alert bg-danger" role="alert">
+        <svg class="glyph stroked cancel">
+          <use xlink:href="#stroked-cancel"></use></svg>  {{ error.message }} 
+        <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
+      </div>
     {% endfor %}
  
         <div class="col-md-12" >
