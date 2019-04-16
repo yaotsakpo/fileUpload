@@ -90,10 +90,10 @@ class __TwigTemplate_ff5a931080054eb23951b15ee1734ff850f661d54ebbaba2308479dabb6
         // line 12
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("homepage");
         echo "\" style=\"margin:2%\">retour</a>
-      <a class=\"btn btn-primary pull-right\" href=\"";
+      <a onclick=\"return confirm('confirmez?')\" class=\"btn btn-success pull-right\" href=\"";
         // line 13
         echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("exportationJournal", ["importation" => ($context["importation"] ?? $this->getContext($context, "importation"))]), "html", null, true);
-        echo "\" style=\"margin:2%\">Exporter le journan en format CSV</a>
+        echo "\" style=\"margin:2%\">Exporter le journal en format CSV</a>
               <div class=\"panel panel-default\">
                      <div class=\"panel panel-default\">
                                 <div class=\"panel-body\">
@@ -255,7 +255,7 @@ class __TwigTemplate_ff5a931080054eb23951b15ee1734ff850f661d54ebbaba2308479dabb6
 
     <div class=\"col-lg-12\">
       <a class=\"btn btn-primary\" href=\"{{ path('homepage')}}\" style=\"margin:2%\">retour</a>
-      <a class=\"btn btn-primary pull-right\" href=\"{{ path('exportationJournal',{'importation':importation}) }}\" style=\"margin:2%\">Exporter le journan en format CSV</a>
+      <a onclick=\"return confirm('confirmez?')\" class=\"btn btn-success pull-right\" href=\"{{ path('exportationJournal',{'importation':importation}) }}\" style=\"margin:2%\">Exporter le journal en format CSV</a>
               <div class=\"panel panel-default\">
                      <div class=\"panel panel-default\">
                                 <div class=\"panel-body\">

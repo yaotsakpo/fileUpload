@@ -128,7 +128,7 @@ class __TwigTemplate_3c124a80077d6fd3516df6a42e29d27d1cd106533f798905336f7446a44
         echo "
                                                  ";
         // line 30
-        echo $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock($this->getAttribute(($context["editForm"] ?? $this->getContext($context, "editForm")), "nomProduit", []), 'widget', ["attr" => ["class" => "form-control"]]);
+        echo $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock($this->getAttribute(($context["editForm"] ?? $this->getContext($context, "editForm")), "nomProduit", []), 'widget', ["attr" => ["class" => "form-control", "autocomplete" => "off"]]);
         echo " 
                                                 </div>
                                             </div>
@@ -142,7 +142,7 @@ class __TwigTemplate_3c124a80077d6fd3516df6a42e29d27d1cd106533f798905336f7446a44
         echo "
                                                  ";
         // line 38
-        echo $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock($this->getAttribute(($context["editForm"] ?? $this->getContext($context, "editForm")), "numeroDeCodeProduit", []), 'widget', ["attr" => ["class" => "form-control"]]);
+        echo $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock($this->getAttribute(($context["editForm"] ?? $this->getContext($context, "editForm")), "numeroDeCodeProduit", []), 'widget', ["attr" => ["class" => "form-control", "autocomplete" => "off"]]);
         echo "  
                                                 </div>
                                             </div>
@@ -269,7 +269,7 @@ class __TwigTemplate_3c124a80077d6fd3516df6a42e29d27d1cd106533f798905336f7446a44
                                               <label class=\"col-sm-2 col-sm-2 control-label\">Nom du produit:</label>
                                                 <div class=\"col-sm-10\">
                                                 {{ form_errors(editForm.nomProduit) }}
-                                                 {{ form_widget(editForm.nomProduit,{'attr':{'class':'form-control'}}) }} 
+                                                 {{ form_widget(editForm.nomProduit,{'attr':{'class':'form-control','autocomplete': 'off'}}) }} 
                                                 </div>
                                             </div>
                                             <br>
@@ -277,7 +277,7 @@ class __TwigTemplate_3c124a80077d6fd3516df6a42e29d27d1cd106533f798905336f7446a44
                                               <label class=\"col-sm-2 col-sm-2 control-label\">Numero de code du produit:</label>
                                                 <div class=\"col-sm-10\">
                                                 {{ form_errors(editForm.numeroDeCodeProduit) }}
-                                                 {{ form_widget(editForm.numeroDeCodeProduit,{'attr':{'class':'form-control'}}) }}  
+                                                 {{ form_widget(editForm.numeroDeCodeProduit,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}  
                                                 </div>
                                             </div>
                                             <br>
