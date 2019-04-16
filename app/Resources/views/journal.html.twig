@@ -10,7 +10,9 @@
 
     <div class="col-lg-12">
       <a class="btn btn-primary" href="{{ path('homepage')}}" style="margin:2%">retour</a>
+      {% if journalArray[0].dispatch != 1 %}
       <a onclick="return confirm('confirmez?')" class="btn btn-success pull-right" href="{{ path('exportationJournal',{'importation':importation}) }}" style="margin:2%">Exporter le journal en format CSV</a>
+        {% endif %}
               <div class="panel panel-default">
                      <div class="panel panel-default">
                                 <div class="panel-body">
@@ -28,6 +30,8 @@
                                             <th data-field="PositionJournal">Position Journal</th>
                                             <th data-field="debit">Debit</th>
                                             <th data-field="Credit">Credit</th>
+                                            <th data-field="action">Action</th>
+
                                         </tr>                           
                                         </thead>
                                         <tbody>
@@ -44,6 +48,12 @@
                                                 <td>{{ journal.positionJournal }}</td> 
                                                 <td>{{ journal.montantDebit }}</td> 
                                                 <td>{{ journal.montantCredit }}</td> 
+                                                <td>
+                                                    {% if journal.cumul==null %}
+                                                        <a href="{{ path('dispatch',{'ligneJournal':journal.id}) }}" >
+                                                        <button class="btn btn-primary waves-effect" type="submit" >Dispatcher</button></a>
+                                                    {% endif %}
+                                                </td> 
                                             </tr>
                                             {% endfor %}
                                         </tbody>

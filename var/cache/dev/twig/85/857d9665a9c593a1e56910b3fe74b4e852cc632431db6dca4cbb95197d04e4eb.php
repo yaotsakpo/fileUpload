@@ -90,11 +90,17 @@ class __TwigTemplate_ff5a931080054eb23951b15ee1734ff850f661d54ebbaba2308479dabb6
         // line 12
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("homepage");
         echo "\" style=\"margin:2%\">retour</a>
-      <a onclick=\"return confirm('confirmez?')\" class=\"btn btn-success pull-right\" href=\"";
+      ";
         // line 13
-        echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("exportationJournal", ["importation" => ($context["importation"] ?? $this->getContext($context, "importation"))]), "html", null, true);
-        echo "\" style=\"margin:2%\">Exporter le journal en format CSV</a>
-              <div class=\"panel panel-default\">
+        if (($this->getAttribute($this->getAttribute(($context["journalArray"] ?? $this->getContext($context, "journalArray")), 0, [], "array"), "dispatch", []) != 1)) {
+            // line 14
+            echo "      <a onclick=\"return confirm('confirmez?')\" class=\"btn btn-success pull-right\" href=\"";
+            echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("exportationJournal", ["importation" => ($context["importation"] ?? $this->getContext($context, "importation"))]), "html", null, true);
+            echo "\" style=\"margin:2%\">Exporter le journal en format CSV</a>
+        ";
+        }
+        // line 16
+        echo "              <div class=\"panel panel-default\">
                      <div class=\"panel panel-default\">
                                 <div class=\"panel-body\">
                                      <table data-toggle=\"table\" data-show-refresh=\"true\" data-show-toggle=\"true\" data-show-columns=\"true\" data-search=\"true\" data-select-item-name=\"toolbar1\" data-pagination=\"true\" data-sort-name=\"name\" data-sort-order=\"desc\">
@@ -111,67 +117,82 @@ class __TwigTemplate_ff5a931080054eb23951b15ee1734ff850f661d54ebbaba2308479dabb6
                                             <th data-field=\"PositionJournal\">Position Journal</th>
                                             <th data-field=\"debit\">Debit</th>
                                             <th data-field=\"Credit\">Credit</th>
+                                            <th data-field=\"action\">Action</th>
+
                                         </tr>                           
                                         </thead>
                                         <tbody>
                                             ";
-        // line 34
+        // line 38
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["journalArray"] ?? $this->getContext($context, "journalArray")));
         foreach ($context['_seq'] as $context["_key"] => $context["journal"]) {
-            // line 35
+            // line 39
             echo "                                            <tr>
                                                 <td>";
-            // line 36
+            // line 40
             echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($context["journal"], "jour", []), "d-m-Y H:m:s"), "html", null, true);
             echo "</td> 
                                                 <td>";
-            // line 37
+            // line 41
             echo twig_escape_filter($this->env, $this->getAttribute($context["journal"], "numPiece", []), "html", null, true);
             echo "</td> 
                                                 <td>";
-            // line 38
+            // line 42
             echo twig_escape_filter($this->env, $this->getAttribute($context["journal"], "numFacture", []), "html", null, true);
             echo "</td> 
                                                 <td>";
-            // line 39
+            // line 43
             echo twig_escape_filter($this->env, $this->getAttribute($context["journal"], "reference", []), "html", null, true);
             echo "</td> 
                                                 <td>";
-            // line 40
+            // line 44
             echo twig_escape_filter($this->env, $this->getAttribute($context["journal"], "numCompteGeneral", []), "html", null, true);
             echo "</td> 
                                                 <td>";
-            // line 41
+            // line 45
             echo twig_escape_filter($this->env, $this->getAttribute($context["journal"], "numComptTiers", []), "html", null, true);
             echo "</td> 
                                                 <td>";
-            // line 42
+            // line 46
             echo twig_escape_filter($this->env, $this->getAttribute($context["journal"], "libelleEcriture", []), "html", null, true);
             echo "</td> 
                                                 <td>";
-            // line 43
+            // line 47
             echo twig_escape_filter($this->env, $this->getAttribute($context["journal"], "dateEcheance", []), "html", null, true);
             echo "</td> 
                                                 <td>";
-            // line 44
+            // line 48
             echo twig_escape_filter($this->env, $this->getAttribute($context["journal"], "positionJournal", []), "html", null, true);
             echo "</td> 
                                                 <td>";
-            // line 45
+            // line 49
             echo twig_escape_filter($this->env, $this->getAttribute($context["journal"], "montantDebit", []), "html", null, true);
             echo "</td> 
                                                 <td>";
-            // line 46
+            // line 50
             echo twig_escape_filter($this->env, $this->getAttribute($context["journal"], "montantCredit", []), "html", null, true);
             echo "</td> 
+                                                <td>
+                                                    ";
+            // line 52
+            if (($this->getAttribute($context["journal"], "cumul", []) == null)) {
+                // line 53
+                echo "                                                        <a href=\"";
+                echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("dispatch", ["ligneJournal" => $this->getAttribute($context["journal"], "id", [])]), "html", null, true);
+                echo "\" >
+                                                        <button class=\"btn btn-primary waves-effect\" type=\"submit\" >Dispatcher</button></a>
+                                                    ";
+            }
+            // line 56
+            echo "                                                </td> 
                                             </tr>
                                             ";
         }
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['journal'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 49
+        // line 59
         echo "                                        </tbody>
                                     </table>
                                     
@@ -188,7 +209,7 @@ class __TwigTemplate_ff5a931080054eb23951b15ee1734ff850f661d54ebbaba2308479dabb6
 
     }
 
-    // line 58
+    // line 68
     public function block_javascripts($context, array $blocks = [])
     {
         $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
@@ -197,11 +218,11 @@ class __TwigTemplate_ff5a931080054eb23951b15ee1734ff850f661d54ebbaba2308479dabb6
         $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
         $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->enter($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "javascripts"));
 
-        // line 59
+        // line 69
         echo "
 
 <script src=\"";
-        // line 61
+        // line 71
         echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\AssetExtension')->getAssetUrl("js/bootstrap-table.js"), "html", null, true);
         echo "\"></script>
 
@@ -230,7 +251,7 @@ class __TwigTemplate_ff5a931080054eb23951b15ee1734ff850f661d54ebbaba2308479dabb6
 
     public function getDebugInfo()
     {
-        return array (  205 => 61,  201 => 59,  192 => 58,  175 => 49,  166 => 46,  162 => 45,  158 => 44,  154 => 43,  150 => 42,  146 => 41,  142 => 40,  138 => 39,  134 => 38,  130 => 37,  126 => 36,  123 => 35,  119 => 34,  95 => 13,  91 => 12,  87 => 10,  78 => 9,  65 => 5,  62 => 4,  53 => 3,  22 => 1,);
+        return array (  226 => 71,  222 => 69,  213 => 68,  196 => 59,  188 => 56,  181 => 53,  179 => 52,  174 => 50,  170 => 49,  166 => 48,  162 => 47,  158 => 46,  154 => 45,  150 => 44,  146 => 43,  142 => 42,  138 => 41,  134 => 40,  131 => 39,  127 => 38,  103 => 16,  97 => 14,  95 => 13,  91 => 12,  87 => 10,  78 => 9,  65 => 5,  62 => 4,  53 => 3,  22 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -255,7 +276,9 @@ class __TwigTemplate_ff5a931080054eb23951b15ee1734ff850f661d54ebbaba2308479dabb6
 
     <div class=\"col-lg-12\">
       <a class=\"btn btn-primary\" href=\"{{ path('homepage')}}\" style=\"margin:2%\">retour</a>
+      {% if journalArray[0].dispatch != 1 %}
       <a onclick=\"return confirm('confirmez?')\" class=\"btn btn-success pull-right\" href=\"{{ path('exportationJournal',{'importation':importation}) }}\" style=\"margin:2%\">Exporter le journal en format CSV</a>
+        {% endif %}
               <div class=\"panel panel-default\">
                      <div class=\"panel panel-default\">
                                 <div class=\"panel-body\">
@@ -273,6 +296,8 @@ class __TwigTemplate_ff5a931080054eb23951b15ee1734ff850f661d54ebbaba2308479dabb6
                                             <th data-field=\"PositionJournal\">Position Journal</th>
                                             <th data-field=\"debit\">Debit</th>
                                             <th data-field=\"Credit\">Credit</th>
+                                            <th data-field=\"action\">Action</th>
+
                                         </tr>                           
                                         </thead>
                                         <tbody>
@@ -289,6 +314,12 @@ class __TwigTemplate_ff5a931080054eb23951b15ee1734ff850f661d54ebbaba2308479dabb6
                                                 <td>{{ journal.positionJournal }}</td> 
                                                 <td>{{ journal.montantDebit }}</td> 
                                                 <td>{{ journal.montantCredit }}</td> 
+                                                <td>
+                                                    {% if journal.cumul==null %}
+                                                        <a href=\"{{ path('dispatch',{'ligneJournal':journal.id}) }}\" >
+                                                        <button class=\"btn btn-primary waves-effect\" type=\"submit\" >Dispatcher</button></a>
+                                                    {% endif %}
+                                                </td> 
                                             </tr>
                                             {% endfor %}
                                         </tbody>

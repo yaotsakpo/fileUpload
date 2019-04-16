@@ -99,6 +99,14 @@ class Journal
     private $montantCredit;
 
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="dispatch", type="integer",nullable=true)
+     */
+    private $dispatch;
+
+
 
     /**
      *
@@ -135,4 +143,340 @@ class Journal
         return $this->id;
     }
 
+
+    /**
+     * Set jour
+     *
+     * @param \DateTime $jour
+     *
+     * @return Journal
+     */
+    public function setJour($jour)
+    {
+        $this->jour = $jour;
+
+        return $this;
+    }
+
+    /**
+     * Get jour
+     *
+     * @return \DateTime
+     */
+    public function getJour()
+    {
+        return $this->jour;
+    }
+
+    /**
+     * Set numPiece
+     *
+     * @param string $numPiece
+     *
+     * @return Journal
+     */
+    public function setNumPiece($numPiece)
+    {
+        $this->numPiece = $numPiece;
+
+        return $this;
+    }
+
+    /**
+     * Get numPiece
+     *
+     * @return string
+     */
+    public function getNumPiece()
+    {
+        return $this->numPiece;
+    }
+
+    /**
+     * Set numFacture
+     *
+     * @param string $numFacture
+     *
+     * @return Journal
+     */
+    public function setNumFacture($numFacture)
+    {
+        $this->numFacture = $numFacture;
+
+        return $this;
+    }
+
+    /**
+     * Get numFacture
+     *
+     * @return string
+     */
+    public function getNumFacture()
+    {
+        return $this->numFacture;
+    }
+
+    /**
+     * Set reference
+     *
+     * @param string $reference
+     *
+     * @return Journal
+     */
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * Get reference
+     *
+     * @return string
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
+     * Set numCompteGeneral
+     *
+     * @param string $numCompteGeneral
+     *
+     * @return Journal
+     */
+    public function setNumCompteGeneral($numCompteGeneral)
+    {
+        $this->numCompteGeneral = $numCompteGeneral;
+
+        return $this;
+    }
+
+    /**
+     * Get numCompteGeneral
+     *
+     * @return string
+     */
+    public function getNumCompteGeneral()
+    {
+        return $this->numCompteGeneral;
+    }
+
+    /**
+     * Set numComptTiers
+     *
+     * @param string $numComptTiers
+     *
+     * @return Journal
+     */
+    public function setNumComptTiers($numComptTiers)
+    {
+        $this->numComptTiers = $numComptTiers;
+
+        return $this;
+    }
+
+    /**
+     * Get numComptTiers
+     *
+     * @return string
+     */
+    public function getNumComptTiers()
+    {
+        return $this->numComptTiers;
+    }
+
+    /**
+     * Set libelleEcriture
+     *
+     * @param string $libelleEcriture
+     *
+     * @return Journal
+     */
+    public function setLibelleEcriture($libelleEcriture)
+    {
+        $this->libelleEcriture = $libelleEcriture;
+
+        return $this;
+    }
+
+    /**
+     * Get libelleEcriture
+     *
+     * @return string
+     */
+    public function getLibelleEcriture()
+    {
+        return $this->libelleEcriture;
+    }
+
+    /**
+     * Set dateEcheance
+     *
+     * @param \DateTime $dateEcheance
+     *
+     * @return Journal
+     */
+    public function setDateEcheance($dateEcheance)
+    {
+        $this->dateEcheance = $dateEcheance;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEcheance
+     *
+     * @return \DateTime
+     */
+    public function getDateEcheance()
+    {
+        return $this->dateEcheance;
+    }
+
+    /**
+     * Set positionJournal
+     *
+     * @param string $positionJournal
+     *
+     * @return Journal
+     */
+    public function setPositionJournal($positionJournal)
+    {
+        $this->positionJournal = $positionJournal;
+
+        return $this;
+    }
+
+    /**
+     * Get positionJournal
+     *
+     * @return string
+     */
+    public function getPositionJournal()
+    {
+        return $this->positionJournal;
+    }
+
+    /**
+     * Set montantDebit
+     *
+     * @param integer $montantDebit
+     *
+     * @return Journal
+     */
+    public function setMontantDebit($montantDebit)
+    {
+        $this->montantDebit = $montantDebit;
+
+        return $this;
+    }
+
+    /**
+     * Get montantDebit
+     *
+     * @return integer
+     */
+    public function getMontantDebit()
+    {
+        return $this->montantDebit;
+    }
+
+    /**
+     * Set montantCredit
+     *
+     * @param integer $montantCredit
+     *
+     * @return Journal
+     */
+    public function setMontantCredit($montantCredit)
+    {
+        $this->montantCredit = $montantCredit;
+
+        return $this;
+    }
+
+    /**
+     * Get montantCredit
+     *
+     * @return integer
+     */
+    public function getMontantCredit()
+    {
+        return $this->montantCredit;
+    }
+
+    /**
+     * Set importation
+     *
+     * @param \AppBundle\Entity\Importation $importation
+     *
+     * @return Journal
+     */
+    public function setImportation(\AppBundle\Entity\Importation $importation = null)
+    {
+        $this->importation = $importation;
+
+        return $this;
+    }
+
+    /**
+     * Get importation
+     *
+     * @return \AppBundle\Entity\Importation
+     */
+    public function getImportation()
+    {
+        return $this->importation;
+    }
+
+    /**
+     * Set detailsCumul
+     *
+     * @param \AppBundle\Entity\Journal $detailsCumul
+     *
+     * @return Journal
+     */
+    public function setDetailsCumul(\AppBundle\Entity\Journal $detailsCumul = null)
+    {
+        $this->detailsCumul = $detailsCumul;
+
+        return $this;
+    }
+
+    /**
+     * Get detailsCumul
+     *
+     * @return \AppBundle\Entity\Journal
+     */
+    public function getDetailsCumul()
+    {
+        return $this->detailsCumul;
+    }
+
+    /**
+     * Set cumul
+     *
+     * @param \AppBundle\Entity\Journal $cumul
+     *
+     * @return Journal
+     */
+    public function setCumul(\AppBundle\Entity\Journal $cumul = null)
+    {
+        $this->cumul = $cumul;
+
+        return $this;
+    }
+
+    /**
+     * Get cumul
+     *
+     * @return \AppBundle\Entity\Journal
+     */
+    public function getCumul()
+    {
+        return $this->cumul;
+    }
 }

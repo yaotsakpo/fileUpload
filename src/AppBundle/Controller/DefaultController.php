@@ -334,7 +334,7 @@ class DefaultController extends Controller
     public function rechercheImportationAction(Request $request,Importation $importation)
     {
         $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
-        $import= $repository->findBy(['id'=>$importation]);;
+        $import= $repository->findBy(['id'=>$importation]);
 
       return $this->render('recherche.html.twig', [
             'importation' => $import
@@ -348,7 +348,7 @@ class DefaultController extends Controller
     public function exportationJournalAction(Request $request,Importation $importation)
     {
         $repository= $this->getDoctrine()->getRepository('AppBundle:Journal');
-        $import= $repository->findBy(['importation'=>$importation]);;
+        $import= $repository->findBy(['importation'=>$importation],['id' => 'ASC']);
 
          $lignes = [];
 
@@ -393,6 +393,78 @@ class DefaultController extends Controller
             fclose($fp);    
         }    
         ob_flush();
+    }
+
+
+   /**
+     * @Route("/dispatch/{ligneJournal}", name="dispatch")
+     */
+    public function dispatchAction(Request $request,Journal $ligneJournal)
+    {
+
+         $form= $this->createformBuilder()
+        ->add('numCptDebiter',EntityType::class,array(
+                    'class'=>'AppBundle\Entity\Banque',
+                    'choice_label'=>'nomDeLaBanque',
+                    'choice_value'=>'numCptDispatch',
+                    'placeholder'=>'-Selectionner-',
+                    'expanded'=>false,
+                    'mapped'=>false,
+                    'attr'=> ['class'=>'form-control'],
+                ))
+                ->add('montant',IntegerType::class,array('attr'=>['class'=>'form-control']))
+                ->getform();
+
+        $em = $this->getDoctrine()->getManager(); 
+        $query = $em->createQuery(
+        'SELECT SUM(j.montantDebit) FROM AppBundle:Journal j WHERE j.dispatch = 1 and j.cumul = :ligneCumul'
+        )->setParameter('ligneCumul', $ligneJournal->getId());
+         
+        $dispatchsMontantTotal = $query->getResult(); 
+
+        //var_dump( ((int) ($dispatchsMontantTotal[0])[1]) + 1 );
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            if( (((int) ($dispatchsMontantTotal[0])[1]) + $form['montant']->getdata()) <= $ligneJournal->getmontantDebit() )
+
+            {
+
+            $dispatch= new Journal();
+
+              $em = $this->getDoctrine()->getManager();
+                    $dispatch->setJour(new \DateTime());
+                    $dispatch->setMontantDebit($form['montant']->getdata());
+                    $dispatch->setLibelleEcriture($ligneJournal->getLibelleEcriture());
+                    $dispatch->setNumCompteGeneral($form['numCptDebiter']->getdata()->getnumCptDispatch());
+                    $dispatch->setCumul($ligneJournal);
+                    $dispatch->setImportation($ligneJournal->getImportation());
+                    $dispatch->setDispatch(1);
+                $em->persist($dispatch);
+                $ligneJournal->setDispatch(1);
+                $em->flush();
+
+            $this->addFlash('notice','Dispatch effectue avec succes');
+
+
+            return $this->redirectToRoute('dispatch',['ligneJournal'=>$ligneJournal->getId()]);
+
+            }
+            else
+            {
+            $form->addError(new FormError("Le montant à saisir devrait etre inferieur "));
+            }
+
+
+        }
+
+        return $this->render('dispatch.html.twig', [
+            'ligneJournal' => $ligneJournal,
+            'form' => $form->createView(),
+        ]);   
+        
     }
 
 

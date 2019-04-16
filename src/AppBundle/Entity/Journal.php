@@ -99,6 +99,13 @@ class Journal
     private $montantCredit;
 
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="dispatch", type="integer",nullable=true)
+     */
+    private $dispatch;
+
 
     /**
      *
@@ -470,5 +477,29 @@ class Journal
     public function getCumul()
     {
         return $this->cumul;
+    }
+
+    /**
+     * Set dispatch
+     *
+     * @param integer $dispatch
+     *
+     * @return Journal
+     */
+    public function setDispatch($dispatch)
+    {
+        $this->dispatch = $dispatch;
+
+        return $this;
+    }
+
+    /**
+     * Get dispatch
+     *
+     * @return integer
+     */
+    public function getDispatch()
+    {
+        return $this->dispatch;
     }
 }

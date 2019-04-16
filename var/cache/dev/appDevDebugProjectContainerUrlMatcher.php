@@ -286,7 +286,12 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
-        elseif (0 === strpos($pathinfo, '/login')) {
+        // dispatch
+        if (0 === strpos($pathinfo, '/dispatch') && preg_match('#^/dispatch/(?P<ligneJournal>[^/]++)$#sD', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, ['_route' => 'dispatch']), array (  '_controller' => 'AppBundle\\Controller\\DefaultController::dispatchAction',));
+        }
+
+        if (0 === strpos($pathinfo, '/login')) {
             // fos_user_security_login
             if ('/login' === $pathinfo) {
                 $ret = array (  '_controller' => 'fos_user.security.controller:loginAction',  '_route' => 'fos_user_security_login',);
