@@ -123,7 +123,7 @@ class __TwigTemplate_ff5a931080054eb23951b15ee1734ff850f661d54ebbaba2308479dabb6
             echo "                                            <tr>
                                                 <td>";
             // line 36
-            echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($context["journal"], "jour", []), "d-m-Y"), "html", null, true);
+            echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($context["journal"], "jour", []), "d-m-Y H:m:s"), "html", null, true);
             echo "</td> 
                                                 <td>";
             // line 37
@@ -278,7 +278,7 @@ class __TwigTemplate_ff5a931080054eb23951b15ee1734ff850f661d54ebbaba2308479dabb6
                                         <tbody>
                                             {% for journal in journalArray %}
                                             <tr>
-                                                <td>{{ journal.jour|date('d-m-Y') }}</td> 
+                                                <td>{{ journal.jour|date('d-m-Y H:m:s') }}</td> 
                                                 <td>{{ journal.numPiece }}</td> 
                                                 <td>{{ journal.numFacture }}</td> 
                                                 <td>{{ journal.reference }}</td> 

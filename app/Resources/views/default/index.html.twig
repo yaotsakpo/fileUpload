@@ -125,7 +125,7 @@
                                         <tbody>
                                             {% for importation in importations %}
                                             <tr>
-                                                <td>{{ importation.dateCreation|date('d-m-Y') }}</td> 
+                                                <td>{{ importation.dateCreation|date('d-m-Y H:m:s') }}</td> 
                                                 <td>{{ importation.mois|date('m') }} - {{ importation.annee|date('Y') }}</td> 
                                                 <td>{{ importation.typeOperation.libelletypeOperation }} </td> 
                                              

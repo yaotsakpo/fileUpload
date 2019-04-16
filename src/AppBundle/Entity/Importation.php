@@ -24,7 +24,7 @@ class Importation
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dateCreation", type="date")
+     * @ORM\Column(name="dateCreation", type="datetime")
      */
     private $dateCreation;
 
@@ -97,6 +97,15 @@ class Importation
     }
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->operations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->journals = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Set dateCreation
      *
      * @param \DateTime $dateCreation
@@ -123,7 +132,7 @@ class Importation
     /**
      * Set mois
      *
-     * @param integer $mois
+     * @param \DateTime $mois
      *
      * @return Importation
      */
@@ -137,7 +146,7 @@ class Importation
     /**
      * Get mois
      *
-     * @return int
+     * @return \DateTime
      */
     public function getMois()
     {
@@ -147,7 +156,7 @@ class Importation
     /**
      * Set annee
      *
-     * @param integer $annee
+     * @param \DateTime $annee
      *
      * @return Importation
      */
@@ -161,7 +170,7 @@ class Importation
     /**
      * Get annee
      *
-     * @return int
+     * @return \DateTime
      */
     public function getAnnee()
     {
@@ -209,18 +218,11 @@ class Importation
     /**
      * Get status
      *
-     * @return int
+     * @return integer
      */
     public function getStatus()
     {
         return $this->status;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->operations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

@@ -33,7 +33,7 @@
                                         <tbody>
                                             {% for journal in journalArray %}
                                             <tr>
-                                                <td>{{ journal.jour|date('d-m-Y') }}</td> 
+                                                <td>{{ journal.jour|date('d-m-Y H:m:s') }}</td> 
                                                 <td>{{ journal.numPiece }}</td> 
                                                 <td>{{ journal.numFacture }}</td> 
                                                 <td>{{ journal.reference }}</td> 

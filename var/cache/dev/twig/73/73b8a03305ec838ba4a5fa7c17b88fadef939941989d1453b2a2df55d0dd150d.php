@@ -304,7 +304,7 @@ class __TwigTemplate_c4ca287658dc4c3eca411bbbe04133e0758daca179d90eb775b4203fa33
             echo "                                            <tr>
                                                 <td>";
             // line 128
-            echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($context["importation"], "dateCreation", []), "d-m-Y"), "html", null, true);
+            echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($context["importation"], "dateCreation", []), "d-m-Y H:m:s"), "html", null, true);
             echo "</td> 
                                                 <td>";
             // line 129
@@ -846,7 +846,7 @@ class __TwigTemplate_c4ca287658dc4c3eca411bbbe04133e0758daca179d90eb775b4203fa33
                                         <tbody>
                                             {% for importation in importations %}
                                             <tr>
-                                                <td>{{ importation.dateCreation|date('d-m-Y') }}</td> 
+                                                <td>{{ importation.dateCreation|date('d-m-Y H:m:s') }}</td> 
                                                 <td>{{ importation.mois|date('m') }} - {{ importation.annee|date('Y') }}</td> 
                                                 <td>{{ importation.typeOperation.libelletypeOperation }} </td> 
                                              

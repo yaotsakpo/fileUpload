@@ -24,7 +24,7 @@ class Journal
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="jour", type="date")
+     * @ORM\Column(name="jour", type="datetime")
      */
     private $jour;
 
@@ -134,6 +134,7 @@ class Journal
     {
         return $this->id;
     }
+
 
     /**
      * Set jour
@@ -368,7 +369,7 @@ class Journal
     /**
      * Get montantDebit
      *
-     * @return int
+     * @return integer
      */
     public function getMontantDebit()
     {
@@ -392,7 +393,7 @@ class Journal
     /**
      * Get montantCredit
      *
-     * @return int
+     * @return integer
      */
     public function getMontantCredit()
     {
@@ -400,29 +401,27 @@ class Journal
     }
 
     /**
-     * Set operationCaisse
+     * Set importation
      *
-     * @param \AppBundle\Entity\OperationCaisse $operationCaisse
+     * @param \AppBundle\Entity\Importation $importation
      *
      * @return Journal
      */
-    public function setOperationCaisse(\AppBundle\Entity\OperationCaisse $operationCaisse = null)
+    public function setImportation(\AppBundle\Entity\Importation $importation = null)
     {
-        $this->operationCaisse = $operationCaisse;
+        $this->importation = $importation;
 
         return $this;
     }
 
-
-
     /**
-     * Get operationCaisse
+     * Get importation
      *
-     * @return \AppBundle\Entity\OperationCaisse
+     * @return \AppBundle\Entity\Importation
      */
-    public function getOperationCaisse()
+    public function getImportation()
     {
-        return $this->operationCaisse;
+        return $this->importation;
     }
 
     /**
@@ -471,29 +470,5 @@ class Journal
     public function getCumul()
     {
         return $this->cumul;
-    }
-
-    /**
-     * Set importation
-     *
-     * @param \AppBundle\Entity\Importation $importation
-     *
-     * @return Journal
-     */
-    public function setImportation(\AppBundle\Entity\Importation $importation = null)
-    {
-        $this->importation = $importation;
-
-        return $this;
-    }
-
-    /**
-     * Get importation
-     *
-     * @return \AppBundle\Entity\Importation
-     */
-    public function getImportation()
-    {
-        return $this->importation;
     }
 }
