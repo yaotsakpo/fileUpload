@@ -110,6 +110,7 @@
     <parameter key="mailer_user">null</parameter>
     <parameter key="mailer_password">null</parameter>
     <parameter key="secret">585bdab39428fa457e30c29939e8cc173173f096</parameter>
+    <parameter key="fichier_directory">C:\wamp\www\fileUpload/web/uploads/</parameter>
     <parameter key="locale">fr</parameter>
     <parameter key="fragment.renderer.hinclude.global_template"></parameter>
     <parameter key="fragment.path">/_fragment</parameter>

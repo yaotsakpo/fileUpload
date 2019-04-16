@@ -37,10 +37,12 @@ class DefaultController extends Controller
 
         $form->handleRequest($request);
 
-        $repertoire=realpath('../web');
+        $repertoire=$this->getParameter('fichier_directory');
         $row = 1;
         $tableau=[];
         $temp="";
+
+        
 
         $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
         $importations= $repository->findBy([],['id' => 'DESC']);
@@ -65,7 +67,7 @@ class DefaultController extends Controller
 
                     $ext = $file->guessExtension();
                     $fileName = "datacsv_".uniqid().".".$ext ;
-                    $file->move( $repertoire."/uploads", $fileName );
+                    $file->move( $repertoire, $fileName );
 
                     $em = $this->getDoctrine()->getManager();
                     $importation->setDateCreation(new \Datetime());
@@ -227,8 +229,8 @@ class DefaultController extends Controller
     {
         $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
         $import= $repository->findOneBy(['id'=>$importation]);
-        $repertoire=realpath('../web/uploads');
-        $file=$repertoire.'\\'.$import->getSource();
+        $repertoire=$this->getParameter('fichier_directory');
+        $file=$repertoire.$import->getSource();
        
         $contenu_du_fichier=file($file);
         $em = $this->getDoctrine()->getManager();
@@ -266,32 +268,39 @@ class DefaultController extends Controller
 
         $cumul= $repository->cumul($importation);
 
+        //dump($cumul);
+        //exit();
+
+        foreach ($cumul as $key => $positionCumul) {
+
+        $repository= $this->getDoctrine()->getRepository('AppBundle:OperationCaisse');
+        $operations= $repository->findBy(['importation'=>$import,'dateDeReglement'=>$positionCumul['dateReglement']]);
 
         $journal= new Journal();
 
         $em = $this->getDoctrine()->getManager();
         $journal->setJour(new \DateTime());
-        $journal->setMontantDebit($cumul[0]['prime']);
-        $journal->setLibelleEcriture('Remboursement'.' - '.$cumul[0]['type']);
-        $journal->setNumCompteGeneral($cumul[0]['numeroCompteDebit']);
+        $journal->setMontantDebit($positionCumul['prime']);
+        $journal->setLibelleEcriture('Remboursement'.' - '.$positionCumul['type']);
+        $journal->setNumCompteGeneral($positionCumul['numeroCompteDebit']);
         $journal->setImportation($import);
         $em->persist($journal);
         $em->flush();
 
+            foreach ($operations as $key => $operation) {
+                $detailsJournal= new Journal();
+                $em = $this->getDoctrine()->getManager();
+                    $detailsJournal->setJour(new \DateTime());
+                    $detailsJournal->setMontantCredit($operation->getPrime());
+                    $detailsJournal->setLibelleEcriture('Remboursement'.' - '.$positionCumul['type']);
+                    $detailsJournal->setNumCompteGeneral($operation->getProduit()->getnumCptCredit());
+                    $detailsJournal->setCumul($journal);
+                    $detailsJournal->setImportation($operation->getImportation());
+                $em->persist($detailsJournal);
+                $em->flush();
+            }
 
-        foreach ($operations as $key => $operation) {
-            $detailsJournal= new Journal();
-            $em = $this->getDoctrine()->getManager();
-                $detailsJournal->setJour(new \DateTime());
-                $detailsJournal->setMontantCredit($operation->getPrime());
-                $detailsJournal->setLibelleEcriture('Remboursement'.' - '.$cumul[0]['type']);
-                $detailsJournal->setNumCompteGeneral($operation->getProduit()->getnumCptCredit());
-                $detailsJournal->setCumul($journal);
-                $detailsJournal->setImportation($operation->getImportation());
-            $em->persist($detailsJournal);
-            $em->flush();
         }
-
     
         $em = $this->getDoctrine()->getManager();
         $import->setStatus(2);
@@ -310,8 +319,8 @@ class DefaultController extends Controller
     {
 
     $repository= $this->getDoctrine()->getRepository('AppBundle:Journal');
-    $journalArray= $repository->findBy(['importation'=>$importation]);;
-        
+    $journalArray= $repository->findBy(['importation'=>$importation],['id' => 'ASC']);
+
       return $this->render('journal.html.twig', [
             'journalArray' => $journalArray,
             'importation' => $importation

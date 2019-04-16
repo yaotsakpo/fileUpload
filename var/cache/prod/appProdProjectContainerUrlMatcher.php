@@ -179,6 +179,34 @@ class appProdProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBundle\R
 
         }
 
+        elseif (0 === strpos($pathinfo, '/e')) {
+            // exportationJournal
+            if (0 === strpos($pathinfo, '/exportationJournal') && preg_match('#^/exportationJournal/(?P<importation>[^/]++)$#sD', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, ['_route' => 'exportationJournal']), array (  '_controller' => 'AppBundle\\Controller\\DefaultController::exportationJournalAction',));
+            }
+
+            // editProduit
+            if (0 === strpos($pathinfo, '/editProduit') && preg_match('#^/editProduit/(?P<produit>[^/]++)$#sD', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, ['_route' => 'editProduit']), array (  '_controller' => 'AppBundle\\Controller\\ProduitController::editProduitAction',));
+            }
+
+            // editTypeOperation
+            if (0 === strpos($pathinfo, '/editTypeOperation') && preg_match('#^/editTypeOperation/(?P<typeOperation>[^/]++)$#sD', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, ['_route' => 'editTypeOperation']), array (  '_controller' => 'AppBundle\\Controller\\TypeOperationController::editTypeOperationAction',));
+            }
+
+            // effacerProduit
+            if (0 === strpos($pathinfo, '/effacerProduit') && preg_match('#^/effacerProduit/(?P<produit>[^/]++)$#sD', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, ['_route' => 'effacerProduit']), array (  '_controller' => 'AppBundle\\Controller\\ProduitController::sAction',));
+            }
+
+            // effacerTypeOperation
+            if (0 === strpos($pathinfo, '/effacerTypeOperation') && preg_match('#^/effacerTypeOperation/(?P<typeOperation>[^/]++)$#sD', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, ['_route' => 'effacerTypeOperation']), array (  '_controller' => 'AppBundle\\Controller\\TypeOperationController::supressionAction',));
+            }
+
+        }
+
         elseif (0 === strpos($pathinfo, '/login')) {
             // fos_user_security_login
             if ('/login' === $pathinfo) {

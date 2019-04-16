@@ -23,9 +23,10 @@ class OperationCaisseRepository extends \Doctrine\ORM\EntityRepository
     public function cumul($id)
     {
         $query="
-        SELECT  SUM(o.prime) as prime, t.numCptDebit as numeroCompteDebit, t.libelleTypeOperation as type
+        SELECT  SUM(o.prime) as prime, t.numCptDebit as numeroCompteDebit, t.libelleTypeOperation as type, o.dateDeReglement as dateReglement
         FROM AppBundle:OperationCaisse o, AppBundle:TypeOperation t,AppBundle:Importation i  
-        WHERE i.typeOperation=t.id and o.importation =i.id and i.id='$id' ";
+        WHERE i.typeOperation=t.id and o.importation =i.id and i.id='$id'
+        GROUP BY o.dateDeReglement ";
         return $this->getEntityManager()->createQuery($query)->getResult();
     }
 
