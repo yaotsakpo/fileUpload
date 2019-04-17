@@ -413,14 +413,23 @@ class DefaultController extends Controller
                     'attr'=> ['class'=>'form-control'],
                 ))
                 ->add('montant',IntegerType::class,array('attr'=>['class'=>'form-control']))
+                ->add('libelle',TextType::class,array('attr'=>['class'=>'form-control']))
                 ->getform();
 
         $em = $this->getDoctrine()->getManager(); 
         $query = $em->createQuery(
-        'SELECT SUM(j.montantDebit) FROM AppBundle:Journal j WHERE j.dispatch = 1 and j.cumul = :ligneCumul'
+        'SELECT SUM(j.montantCredit) FROM AppBundle:Journal j WHERE j.dispatch = 1 and j.cumul = :ligneCumul'
         )->setParameter('ligneCumul', $ligneJournal->getId());
          
         $dispatchsMontantTotal = $query->getResult(); 
+
+
+        $em = $this->getDoctrine()->getManager(); 
+        $query = $em->createQuery(
+        'SELECT j FROM AppBundle:Journal j WHERE j.dispatch = 1 and j.cumul = :ligneCumul'
+        )->setParameter('ligneCumul', $ligneJournal->getId());
+         
+        $dispatchs = $query->getResult(); 
 
         //var_dump( ((int) ($dispatchsMontantTotal[0])[1]) + 1 );
 
@@ -432,17 +441,28 @@ class DefaultController extends Controller
 
             {
 
-            $dispatch= new Journal();
+              $dispatchCredit= new Journal();
+              $dispatchDebit= new Journal();
 
               $em = $this->getDoctrine()->getManager();
-                    $dispatch->setJour(new \DateTime());
-                    $dispatch->setMontantDebit($form['montant']->getdata());
-                    $dispatch->setLibelleEcriture($ligneJournal->getLibelleEcriture());
-                    $dispatch->setNumCompteGeneral($form['numCptDebiter']->getdata()->getnumCptDispatch());
-                    $dispatch->setCumul($ligneJournal);
-                    $dispatch->setImportation($ligneJournal->getImportation());
-                    $dispatch->setDispatch(1);
-                $em->persist($dispatch);
+                    /******Insertion de la ligne de debit du dispatch*****/
+                    $dispatchDebit->setJour(new \DateTime());
+                    $dispatchDebit->setMontantDebit($form['montant']->getdata());
+                    $dispatchDebit->setLibelleEcriture($form['libelle']->getdata());
+                    $dispatchDebit->setNumCompteGeneral($form['numCptDebiter']->getdata()->getnumCptDispatch());
+                    $dispatchDebit->setCumul($ligneJournal);
+                    $dispatchDebit->setImportation($ligneJournal->getImportation());
+                    $dispatchDebit->setDispatch(1);
+                    /******Insertion de la ligne de credit du dispatch*****/
+                    $dispatchCredit->setJour(new \DateTime());
+                    $dispatchCredit->setMontantCredit($form['montant']->getdata());
+                    $dispatchCredit->setLibelleEcriture($form['libelle']->getdata());
+                    $dispatchCredit->setNumCompteGeneral($ligneJournal->getImportation()->gettypeOperation()->getnumCptDebit());
+                    $dispatchCredit->setCumul($ligneJournal);
+                    $dispatchCredit->setImportation($ligneJournal->getImportation());
+                    $dispatchCredit->setDispatch(1);
+                $em->persist($dispatchDebit);
+                $em->persist($dispatchCredit);
                 $ligneJournal->setDispatch(1);
                 $em->flush();
 
@@ -454,7 +474,7 @@ class DefaultController extends Controller
             }
             else
             {
-            $form->addError(new FormError("Le montant à saisir devrait etre inferieur "));
+            $form->addError(new FormError("Erreur de montant saisie "));
             }
 
 
@@ -462,6 +482,8 @@ class DefaultController extends Controller
 
         return $this->render('dispatch.html.twig', [
             'ligneJournal' => $ligneJournal,
+            'dispatch' => ((int) ($dispatchsMontantTotal[0])[1]),
+            'dispatchs' => $dispatchs,
             'form' => $form->createView(),
         ]);   
         
