@@ -19,6 +19,7 @@ use AppBundle\Form\ProduitType;
 use AppBundle\Entity\Journal;
 use AppBundle\Form\TypeOperationType;
 use AppBundle\Entity\TypeOperation;
+use AppBundle\Entity\Exportation;
 use Symfony\Component\Form\FormError as FormError;
 
 
@@ -321,8 +322,22 @@ class DefaultController extends Controller
     $repository= $this->getDoctrine()->getRepository('AppBundle:Journal');
     $journalArray= $repository->findBy(['importation'=>$importation],['id' => 'ASC']);
 
+     $em = $this->getDoctrine()->getManager(); 
+        $query = $em->createQuery(
+        'SELECT j 
+         FROM AppBundle:Journal j 
+         WHERE j.cumul IS NOT NULL AND j.dispatch=1 AND j.importation= :importation'
+        )->setParameter('importation', $importation);
+   
+         
+    $dispatchs = $query->getResult(); 
+
+    //var_dump($dispatchs);
+    //exit();
+
       return $this->render('journal.html.twig', [
             'journalArray' => $journalArray,
+            'dispatchs' => $dispatchs,
             'importation' => $importation
         ]);
     }
@@ -354,18 +369,35 @@ class DefaultController extends Controller
 
          foreach ($import as $ligne) {
 
+           $exportation = new Exportation();
+           $em = $this->getDoctrine()->getManager();
+           $exportation->setJournal($ligne);
+           $exportation->setJourExportation(new \DateTime());
            $c['jour'] = $ligne->getjour()->format('d-m-Y');
+           $exportation->setJourJournal($ligne->getjour());
            $c['Numero Piece'] = $ligne->getnumPiece();
+           $exportation->setnumPiece($ligne->getnumPiece());
            $c['Numero Facture'] = $ligne->getnumFacture();
+           $exportation->setnumFacture($ligne->getnumFacture());
            $c['Reference'] = $ligne->getreference();
+           $exportation->setreference($ligne->getreference());
            $c['Numero de Compte General'] = $ligne->getnumCompteGeneral();
+           $exportation->setnumCompteGeneral($ligne->getnumCompteGeneral());
            $c['Numero Compte Tiers'] = $ligne->getnumComptTiers();
+           $exportation->setnumCompteTiers($ligne->getnumComptTiers());
            $c['Libelle Ecriture'] = $ligne->getlibelleEcriture();
+           $exportation->setlibelleEcriture($ligne->getlibelleEcriture());
            $c['Date Echeance'] = $ligne->getdateEcheance();
+           $exportation->setdateEcheance($ligne->getdateEcheance());
            $c['Position Journal'] = $ligne->getpositionJournal();
+           $exportation->setpositionJournal($ligne->getpositionJournal());
            $c['Debit'] = $ligne->getmontantDebit();
+           $exportation->setmontantDebit($ligne->getmontantDebit());
            $c['Credit'] = $ligne->getmontantCredit();
-            $lignes[] = $c;
+           $exportation->setmontantCredit($ligne->getmontantCredit());
+           $em->persist($exportation);
+           $em->flush();
+           $lignes[] = $c;
         }
 
         $filename = "datacsv_". date('d-m-Y') . "_" . date('H:i:s') . ".csv";        
@@ -426,12 +458,14 @@ class DefaultController extends Controller
 
         $em = $this->getDoctrine()->getManager(); 
         $query = $em->createQuery(
-        'SELECT j FROM AppBundle:Journal j WHERE j.dispatch = 1 and j.cumul = :ligneCumul'
+        'SELECT j FROM AppBundle:Journal j WHERE j.dispatch = 1 and j.cumul = :ligneCumul ORDER BY j.jour DESC' 
         )->setParameter('ligneCumul', $ligneJournal->getId());
+
+
          
         $dispatchs = $query->getResult(); 
 
-        //var_dump( ((int) ($dispatchsMontantTotal[0])[1]) + 1 );
+       //var_dump( $dispatchs );
 
         $form->handleRequest($request);
 
@@ -486,6 +520,27 @@ class DefaultController extends Controller
             'dispatchs' => $dispatchs,
             'form' => $form->createView(),
         ]);   
+        
+    }
+
+
+     /**
+     * @Route("/finDispatch/{ligneJournal}", name="finDispatch")
+     */
+    public function finDispatchAction(Request $request,Journal $ligneJournal)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $ligneJournal->setDispatch(0);
+
+        $em->flush();
+
+        $this->addFlash('notice','Dispatch cloturé avec succes');
+
+
+        return $this->redirectToRoute('visualisationDeJournal',['importation'=>$ligneJournal->getImportation()->getId()]);
+
+            
         
     }
 

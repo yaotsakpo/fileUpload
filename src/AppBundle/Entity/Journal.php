@@ -502,4 +502,6 @@ class Journal
     {
         return $this->dispatch;
     }
+
+
 }

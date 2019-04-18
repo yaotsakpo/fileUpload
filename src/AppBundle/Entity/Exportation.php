@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Journal
+ * Exportation
  *
- * @ORM\Table(name="journal")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\JournalRepository")
+ * @ORM\Table(name="exportation")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ExportationRepository")
  */
-class Journal
+class Exportation
 {
     /**
      * @var int
@@ -21,121 +21,96 @@ class Journal
      */
     private $id;
 
+   /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="jourExportation", type="datetime", nullable=true)
+     */
+    private $jourExportation;
+
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="jour", type="datetime")
+     * @ORM\Column(name="jourJournal", type="datetime", nullable=true)
      */
-    private $jour;
+    private $jourJournal;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numPiece", type="string", length=255,nullable=true)
+     * @ORM\Column(name="numPiece", type="string", length=255, nullable=true)
      */
     private $numPiece;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numFacture", type="string", length=255,nullable=true)
+     * @ORM\Column(name="numFacture", type="string", length=255, nullable=true)
      */
     private $numFacture;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="reference", type="string", length=255,nullable=true)
+     * @ORM\Column(name="reference", type="string", length=255, nullable=true)
      */
     private $reference;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numCompteGeneral", type="string", length=255,nullable=true)
+     * @ORM\Column(name="numCompteGeneral", type="string", length=255, nullable=true)
      */
     private $numCompteGeneral;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numComptTiers", type="string", length=255,nullable=true)
+     * @ORM\Column(name="numCompteTiers", type="string", length=255, nullable=true)
      */
-    private $numComptTiers;
+    private $numCompteTiers;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="libelleEcriture", type="string", length=255)
+     * @ORM\Column(name="libelleEcriture", type="string", length=255, nullable=true)
      */
     private $libelleEcriture;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dateEcheance", type="date",nullable=true)
+     * @ORM\Column(name="dateEcheance", type="datetime", nullable=true)
      */
     private $dateEcheance;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="positionJournal", type="string", length=255,nullable=true)
+     * @ORM\Column(name="positionJournal", type="string", length=255, nullable=true)
      */
     private $positionJournal;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="montantDebit", type="integer",nullable=true)
+     * @ORM\Column(name="montantDebit", type="integer", nullable=true)
      */
     private $montantDebit;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="montantCredit", type="integer",nullable=true)
+     * @ORM\Column(name="montantCredit", type="integer", nullable=true)
      */
     private $montantCredit;
 
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="dispatch", type="integer",nullable=true)
-     */
-    private $dispatch;
-
-
-    /**
-     *
-     * @var Importation $importation
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Importation",inversedBy="journals",cascade={"all"})
-     *
-     * @ORM\JoinColumn(nullable=true,onDelete="CASCADE",unique=false)
-     */
-
-    Private $importation;
-
-
-    /**                                     
-    * @ORM\OneToOne(targetEntity="Journal", mappedBy="cumul")                                     
-    */                                     
-    private $detailsCumul;   
-
-
-    /**                               
-    * @ORM\ManyToOne(targetEntity="Journal", inversedBy="detailsCumul",cascade={"all"})                                     
-    * @ORM\JoinColumn(name="cumul", referencedColumnName="id",nullable=true,unique=false)                                     
-    */                                     
-    private $cumul;
-
-    /**
-    * @ORM\OneToOne(targetEntity=Exportation::class, mappedBy="journal")
+    * @ORM\OneToOne(targetEntity=Journal::class, cascade={"persist", "remove"})
     * @ORM\JoinColumn(nullable=true) 
     */
-    protected $exportation;
+    private $journal;
 
 
     /**
@@ -148,29 +123,28 @@ class Journal
         return $this->id;
     }
 
-
     /**
-     * Set jour
+     * Set jourJournal
      *
-     * @param \DateTime $jour
+     * @param \DateTime $jourJournal
      *
-     * @return Journal
+     * @return Exportation
      */
-    public function setJour($jour)
+    public function setJourJournal($jourJournal)
     {
-        $this->jour = $jour;
+        $this->jourJournal = $jourJournal;
 
         return $this;
     }
 
     /**
-     * Get jour
+     * Get jourJournal
      *
      * @return \DateTime
      */
-    public function getJour()
+    public function getJourJournal()
     {
-        return $this->jour;
+        return $this->jourJournal;
     }
 
     /**
@@ -178,7 +152,7 @@ class Journal
      *
      * @param string $numPiece
      *
-     * @return Journal
+     * @return Exportation
      */
     public function setNumPiece($numPiece)
     {
@@ -202,7 +176,7 @@ class Journal
      *
      * @param string $numFacture
      *
-     * @return Journal
+     * @return Exportation
      */
     public function setNumFacture($numFacture)
     {
@@ -226,7 +200,7 @@ class Journal
      *
      * @param string $reference
      *
-     * @return Journal
+     * @return Exportation
      */
     public function setReference($reference)
     {
@@ -250,7 +224,7 @@ class Journal
      *
      * @param string $numCompteGeneral
      *
-     * @return Journal
+     * @return Exportation
      */
     public function setNumCompteGeneral($numCompteGeneral)
     {
@@ -270,27 +244,27 @@ class Journal
     }
 
     /**
-     * Set numComptTiers
+     * Set numCompteTiers
      *
-     * @param string $numComptTiers
+     * @param string $numCompteTiers
      *
-     * @return Journal
+     * @return Exportation
      */
-    public function setNumComptTiers($numComptTiers)
+    public function setNumCompteTiers($numCompteTiers)
     {
-        $this->numComptTiers = $numComptTiers;
+        $this->numCompteTiers = $numCompteTiers;
 
         return $this;
     }
 
     /**
-     * Get numComptTiers
+     * Get numCompteTiers
      *
      * @return string
      */
-    public function getNumComptTiers()
+    public function getNumCompteTiers()
     {
-        return $this->numComptTiers;
+        return $this->numCompteTiers;
     }
 
     /**
@@ -298,7 +272,7 @@ class Journal
      *
      * @param string $libelleEcriture
      *
-     * @return Journal
+     * @return Exportation
      */
     public function setLibelleEcriture($libelleEcriture)
     {
@@ -322,7 +296,7 @@ class Journal
      *
      * @param \DateTime $dateEcheance
      *
-     * @return Journal
+     * @return Exportation
      */
     public function setDateEcheance($dateEcheance)
     {
@@ -346,7 +320,7 @@ class Journal
      *
      * @param string $positionJournal
      *
-     * @return Journal
+     * @return Exportation
      */
     public function setPositionJournal($positionJournal)
     {
@@ -370,7 +344,7 @@ class Journal
      *
      * @param integer $montantDebit
      *
-     * @return Journal
+     * @return Exportation
      */
     public function setMontantDebit($montantDebit)
     {
@@ -382,7 +356,7 @@ class Journal
     /**
      * Get montantDebit
      *
-     * @return integer
+     * @return int
      */
     public function getMontantDebit()
     {
@@ -394,7 +368,7 @@ class Journal
      *
      * @param integer $montantCredit
      *
-     * @return Journal
+     * @return Exportation
      */
     public function setMontantCredit($montantCredit)
     {
@@ -406,7 +380,7 @@ class Journal
     /**
      * Get montantCredit
      *
-     * @return integer
+     * @return int
      */
     public function getMontantCredit()
     {
@@ -414,98 +388,50 @@ class Journal
     }
 
     /**
-     * Set importation
+     * Set jourExportation
      *
-     * @param \AppBundle\Entity\Importation $importation
+     * @param \DateTime $jourExportation
      *
-     * @return Journal
+     * @return Exportation
      */
-    public function setImportation(\AppBundle\Entity\Importation $importation = null)
+    public function setJourExportation($jourExportation)
     {
-        $this->importation = $importation;
+        $this->jourExportation = $jourExportation;
 
         return $this;
     }
 
     /**
-     * Get importation
+     * Get jourExportation
      *
-     * @return \AppBundle\Entity\Importation
+     * @return \DateTime
      */
-    public function getImportation()
+    public function getJourExportation()
     {
-        return $this->importation;
+        return $this->jourExportation;
     }
 
     /**
-     * Set detailsCumul
+     * Set journal
      *
-     * @param \AppBundle\Entity\Journal $detailsCumul
+     * @param \AppBundle\Entity\Journal $journal
      *
-     * @return Journal
+     * @return Exportation
      */
-    public function setDetailsCumul(\AppBundle\Entity\Journal $detailsCumul = null)
+    public function setJournal(\AppBundle\Entity\Journal $journal = null)
     {
-        $this->detailsCumul = $detailsCumul;
+        $this->journal = $journal;
 
         return $this;
     }
 
     /**
-     * Get detailsCumul
+     * Get journal
      *
      * @return \AppBundle\Entity\Journal
      */
-    public function getDetailsCumul()
+    public function getJournal()
     {
-        return $this->detailsCumul;
-    }
-
-    /**
-     * Set cumul
-     *
-     * @param \AppBundle\Entity\Journal $cumul
-     *
-     * @return Journal
-     */
-    public function setCumul(\AppBundle\Entity\Journal $cumul = null)
-    {
-        $this->cumul = $cumul;
-
-        return $this;
-    }
-
-    /**
-     * Get cumul
-     *
-     * @return \AppBundle\Entity\Journal
-     */
-    public function getCumul()
-    {
-        return $this->cumul;
-    }
-
-    /**
-     * Set dispatch
-     *
-     * @param integer $dispatch
-     *
-     * @return Journal
-     */
-    public function setDispatch($dispatch)
-    {
-        $this->dispatch = $dispatch;
-
-        return $this;
-    }
-
-    /**
-     * Get dispatch
-     *
-     * @return integer
-     */
-    public function getDispatch()
-    {
-        return $this->dispatch;
+        return $this->journal;
     }
 }

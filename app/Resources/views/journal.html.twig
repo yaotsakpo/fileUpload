@@ -7,7 +7,16 @@
 {% endblock %}
 
 {% block body %}
+    {% for message in app.flashes('notice') %}
 
+    <div class="alert bg-success" role="alert">
+      <svg class="glyph stroked checkmark">
+        <use xlink:href="#stroked-checkmark"></use></svg> {{ message }}  
+      <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
+    </div>
+
+    {% endfor %}
+     {% set etat = 0 %}
     <div class="col-lg-12">
       <a class="btn btn-primary" href="{{ path('homepage')}}" style="margin:2%">retour</a>
       {% if journalArray[0].dispatch != 1 %}
@@ -46,13 +55,39 @@
                                                 <td>{{ journal.libelleEcriture }}</td> 
                                                 <td>{{ journal.dateEcheance }}</td> 
                                                 <td>{{ journal.positionJournal }}</td> 
-                                                <td>{{ journal.montantDebit }}</td> 
-                                                <td>{{ journal.montantCredit }}</td> 
                                                 <td>
-                                                    {% if journal.cumul==null %}
+                                                  {% if journal.montantDebit != null %}
+                                                    {{ journal.montantDebit|number_format(2, '.', ' ') }}
+                                                  {% endif %}
+                                                </td> 
+                                                <td>
+                                                  {% if journal.montantCredit != null %}
+                                                    {{ journal.montantCredit|number_format(2, '.', ' ') }}
+                                                  {% endif %}
+                                                </td> 
+                                                <td>
+                                                    {% if journal.cumul == null  and dispatchs == null %}
                                                         <a href="{{ path('dispatch',{'ligneJournal':journal.id}) }}" >
                                                         <button class="btn btn-primary waves-effect" type="submit" >Dispatcher</button></a>
                                                     {% endif %}
+
+                                                    {% if journal.cumul == null  and dispatchs != null and journal.dispatch != null  %}
+                                                        {% if journal.dispatch == 0 or journal.dispatch == 1 %}
+                                                            {% set etat = 1 %}
+                                                    <a href="{{ path('dispatch',{'ligneJournal':journal.id}) }}" >
+                                                    <button class="btn btn-primary waves-effect" type="submit" >Dispatcher</button></a>
+                                                        {% endif %}
+                                                    {% endif %}
+
+
+                                                    {% if journal.cumul == null  and dispatchs != null and etat == 0 %}
+                                                        {% if journal.dispatch == 1 or journal.dispatch == null %}
+                                                    <a href="{{ path('dispatch',{'ligneJournal':journal.id}) }}" >
+                                                    <button class="btn btn-primary waves-effect" type="submit" >Dispatcher</button></a>
+                                                        {% endif %}
+                                                    {% endif %}
+
+
                                                 </td> 
                                             </tr>
                                             {% endfor %}
