@@ -17,6 +17,50 @@ use Symfony\Component\Form\FormError as FormError;
 
 class ProduitController extends Controller
 {
+
+    /**
+     * @Route("/produit/", name="produit")
+     */
+    public function produitAction(Request $request)
+    {
+        $produit= new Produit();
+
+        $produitForm= $this->createform(ProduitType::class,$produit);
+
+        $produitForm->handleRequest($request);
+
+        if ($produitForm->isSubmitted() && $produitForm->isValid()) {
+
+            $repository= $this->getDoctrine()->getRepository('AppBundle:Produit');
+            $pdt= $repository->findOneBy(['nomProduit'=>$produitForm['nomProduit']->getdata(),'numeroDeCodeProduit'=>$produitForm['numeroDeCodeProduit']->getdata(),'numCptCredit'=>$produitForm['numCptCredit']->getdata()]);
+
+            if(empty($pdt))
+            {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($produit);
+                $em->flush();
+
+                $this->addFlash('notice','Produit enregistré avec success');
+
+                return $this->redirectToRoute('produit');
+
+            }else
+            {
+                $produitForm->addError(new FormError("Il existe deja un produit avec ces informations! veuillez ressaisir"));
+            }
+            
+        }
+
+
+        $repository= $this->getDoctrine()->getRepository('AppBundle:Produit');
+        $produits= $repository->findAll();
+        
+       return $this->render('produit.html.twig', [
+        'produitForm'=>$produitForm->createView(),
+        'produits'=>$produits,
+        ]); 
+    }
+    
     /**
      * @Route("/editProduit/{produit}", name="editProduit")
      */
@@ -38,7 +82,7 @@ class ProduitController extends Controller
                 $em = $this ->getDoctrine()->getManager();
                 $em->flush();
                 $this->addFlash('notice','Modification reussie');
-                return $this ->redirectToRoute('homepage');
+                return $this ->redirectToRoute('produit');
             }else
             {
                 if($pdt!= $produit)
@@ -48,7 +92,7 @@ class ProduitController extends Controller
                 }else
                 {
                     $this->addFlash('notice','Modification reussie');
-                    return $this ->redirectToRoute('homepage');
+                    return $this ->redirectToRoute('produit');
                 }
             }
 
@@ -86,7 +130,7 @@ class ProduitController extends Controller
             $this->addFlash('notice','Impossible de supprimer ce produit! il existe des importations en relation avec ce produit');
         }
 
-        return $this->redirectToRoute('homepage');
+        return $this->redirectToRoute('produit');
 
     }
     

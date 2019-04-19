@@ -29,15 +29,12 @@ class ImportationType extends AbstractType
                         'multiple'=>false,
                         'attr'=> ['class'=>'form-control','multiple'=>false],
                     ))
-                ->add('mois',DateType::class,array('widget' => 'single_text',
-                        'html5'=>true,
-                            // this is actually the default format for single_text
-                            'format' => 'MM'
-                        ))
-                ->add('annee',DateType::class,array('widget' => 'single_text',
-                        'html5'=>true,
-                            // this is actually the default format for single_text
-                            'format' => 'yyyy'
+            ->add('mois',DateType::class,array('widget' => 'single_text',
+                        'invalid_message' => 'Le mois saisit ne correspond pas veuillez la corriger',
+                        'html5'=>true,'format' => 'MM'))
+            ->add('annee',DateType::class,array('widget' => 'single_text',
+                        'html5'=>true,'format' => 'yyyy',
+                        'invalid_message' => 'L\'année saisie ne correspond pas veuillez la corriger',
                         ));
     }/**
      * {@inheritdoc}

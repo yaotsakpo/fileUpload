@@ -3,57 +3,129 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Journal-GENERATOR{% endblock %}</title>
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <link href="{{ asset ('css/bootstrap.min.css') }}" rel="stylesheet">
-        <link href="{{ asset ('css/datepicker3.css') }}" rel="stylesheet">
-        {% block stylesheets %}{% endblock %}
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-        <link href="{{ asset ('css/styles.css') }}" rel="stylesheet">
-        <script src="{{ asset ('js/lumino.glyphs.js') }}"></script>
+        {% block stylesheets %}
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+       <!-- Font Awesome -->
+        <link rel="stylesheet" href="{{ asset('fontawesome/css/all.css') }}">
+        <!-- Bootstrap core CSS -->
+        <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        <!-- Material Design Bootstrap -->
+        <link href="{{ asset('mdb/css/mdb.min.css') }}" rel="stylesheet">
+        <link href="{{ asset ('css/datepicker3.css') }}" rel="stylesheet">
+        {#<link href="{{ asset ('css/styles.css') }}" rel="stylesheet">#}
+        <link href="{{ asset ('fontawesome/css/all.css') }}" rel="stylesheet">
+       
+        <link rel="stylesheet" href="{{ asset ('css/atlantis.min.css') }}">
+
+            
+
+        {% endblock %}
+
+       
+       
     </head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="{{path('homepage')}}"><span>Journal-</span>GENERATOR</a>
-                <a href="#" class="user-menu pull-right" ><svg class="glyph stroked cancel" ><use xlink:href="#stroked-cancel"/></svg></a>
-            </div>               
-        </div><!-- /.container-fluid -->
-        </nav>
+       
+{#<nav class="navbar fixed-top navbar-dark ">
+ <a class="navbar-brand" href="{{path('homepage')}}"><span style="color:">JOURNAL-</span>GENERATOR</a>
+<a href="{{ path("fos_user_security_logout") }}" onclick="return confirm('Attention vous êtes sur le point d\'être déconnecté')" class="nav-link pull-right" style="color:white"> <i class="fas fa-power-off"></i> 
+</a>
+</nav>#}
+<!--Navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark  p-1" style="background-color: #0082bb">
+
+  <!-- Navbar brand -->
+  <a class="navbar-brand" href="{{path('homepage')}}">JOURNAL-GENERATOR</a>
+
+  <!-- Collapse button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+    aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+
+
+  <a href="{{ path("fos_user_security_logout") }}" onclick="return confirm('Attention vous êtes sur le point d\'être déconnecté')" class="nav-link ml-auto" style="color:white"> <i class="fas fa-power-off"></i> 
+</a>
+
+</nav>
+
+<div class="container-fluid pl-2">
         {% block body %}
 
 
 
         {% endblock %}
+</div>
+        {% block javascripts %}
 
-        
-        <script src="{{ asset ('js/jquery-1.11.1.min.js') }}"></script>
-        <script src="{{ asset ('js/bootstrap.min.js') }}"></script>
-        <script src="{{ asset ('js/chart.min.js') }}"></script>
-        <script src="{{ asset ('js/chart-data.js') }}"></script>
-        <script src="{{ asset ('js/easypiechart.js') }}"></script>
-        <script src="{{ asset ('js/easypiechart-data.js') }}"></script>
-        <script src="{{ asset ('js/bootstrap-datepicker.js') }}"></script>
-        
-        {% block javascripts %}{% endblock %}
+               <!-- JQuery -->
+        <script type="text/javascript" src="{{ asset ('mdb/js/jquery-3.3.1.min.js') }}"></script>
+        <!-- Bootstrap tooltips -->
+        <script type="text/javascript" src="{{ asset ('mdb/js/popper.min.js') }}"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="{{ asset ('mdb/js/bootstrap.min.js') }}"></script>
+        <!-- MDB core JavaScript -->
+        <script type="text/javascript" src="{{ asset ('mdb/js/mdb.min.js') }}"></script>
+        <script src="{{ asset ('js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
+
+        <script src="{{ asset ('js/plugin/datatables/datatables.min.js') }}"></script>
 
         <script>
-        $('#calendar').datepicker({
-        });
+
+        {% for message in app.flashes('notice') %}
+
+            var placementFrom = 'top';
+            var placementAlign = 'right';
+            var state = 'success';
+            var style = 'withicon';
+            var content = {};
+
+            content.message = '{{ message }}';
+            content.title = 'notification';
+            if (style == "withicon") {
+                content.icon = 'fa fa-bell';
+            } else {
+                content.icon = 'none';
+            }
+            content.url = '#';
+            
+
+            $.notify(content,{
+                type: state,
+                placement: {
+                    from: placementFrom,
+                    align: placementAlign
+                },
+                time: 1000,
+                delay: 0,
+            });
+        {% endfor %}
+
 
         !function ($) {
             $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
                 $(this).find('em:first').toggleClass("glyphicon-minus");      
             }); 
-            $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
         }(window.jQuery);
 
         $(window).on('resize', function () {
           if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
-        })
+        });
+
         $(window).on('resize', function () {
-          if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')})
+          if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+        });
+
         </script>
+
+        {% endblock %}
+
+        
 
     </body>
 </html>

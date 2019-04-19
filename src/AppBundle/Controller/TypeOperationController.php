@@ -17,6 +17,49 @@ use Symfony\Component\Form\FormError as FormError;
 
 class TypeOperationController extends Controller
 {
+
+    /**
+     * @Route("/typeOperation/", name="typeOperation")
+     */
+    public function typeOperationAction(Request $request)
+    {
+       $typeOperation= new TypeOperation();
+
+        $typeOperationForm= $this->createform(TypeOperationType::class,$typeOperation);
+
+        $typeOperationForm->handleRequest($request);
+
+        if ($typeOperationForm->isSubmitted() && $typeOperationForm->isValid()) {
+
+            $repository= $this->getDoctrine()->getRepository('AppBundle:TypeOperation');
+            $typeOpe= $repository->findOneBy(['libelleTypeOperation'=>$typeOperationForm['libelleTypeOperation']->getdata(),'numCptDebit'=>$typeOperationForm['numCptDebit']->getdata()]);
+
+            if(empty($typeOpe))
+            {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($typeOperation);
+                $em->flush();
+
+                $this->addFlash('notice','Type d\'operation enregistré avec success');
+
+                return $this->redirectToRoute('typeOperation');
+
+            }else
+            {
+                $typeOperationForm->addError(new FormError("Il existe deja un type d'operation existant avec ces informations! veuillez ressaisir"));
+            }
+
+        }
+
+        $repository= $this->getDoctrine()->getRepository('AppBundle:TypeOperation');
+        $typeOperations= $repository->findAll();
+
+        return $this->render('typeOperation.html.twig', [
+        'typeOperationForm'=>$typeOperationForm->createView(),
+        'typeOperations'=>$typeOperations,
+        ]); 
+    }
+
     /**
      * @Route("/editTypeOperation/{typeOperation}", name="editTypeOperation")
      */
@@ -37,7 +80,7 @@ class TypeOperationController extends Controller
             $em = $this ->getDoctrine()->getManager();
             $em->flush();
             $this->addFlash('notice','Modification reussie');
-            return $this ->redirectToRoute('homepage');
+            return $this ->redirectToRoute('typeOperation');
             }
             else
             {
@@ -48,7 +91,7 @@ class TypeOperationController extends Controller
                 else
                 {
                     $this->addFlash('notice','Modification reussie');
-                    return $this ->redirectToRoute('homepage');
+                    return $this ->redirectToRoute('typeOperation');
                 }
             }
         }
@@ -85,7 +128,7 @@ class TypeOperationController extends Controller
             $this->addFlash('notice','Impossible de supprimer ce type d\'operation! il existe des importations en relation avec ce type d\'operation');
         }
 
-        return $this->redirectToRoute('homepage');
+        return $this->redirectToRoute('typeOperation');
 
     }
     

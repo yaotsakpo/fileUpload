@@ -2,198 +2,189 @@
 
 {% block stylesheets %}
 
-<link href="{{ asset ('css/bootstrap-table.css') }}" rel="stylesheet">
+{{ parent() }}
 
 {% endblock %}
 
 {% block body %}
-
-    {% for message in app.flashes('notice') %}
-
-    <div class="alert bg-success" role="alert">
-      <svg class="glyph stroked checkmark">
-        <use xlink:href="#stroked-checkmark"></use></svg> {{ message }}  
-      <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
-    </div>
-
-    {% endfor %}
-
- {% for error in form.vars.errors.form.getErrors(true) %}          
-  <div class="alert bg-danger" role="alert">
-    <svg class="glyph stroked cancel">
-      <use xlink:href="#stroked-cancel"></use></svg>  {{ error.message }} 
-    <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
+<br>
+{% set etat = 0 %}
+<div class="row">
+  
+  <div class="col-sm-10 col-md-10">
+  <a class="btn btn-primary" href="{{ path('visualisationDeJournal',{'importation':ligneJournal.importation.id}) }}" style="margin:0.5%">retour</a>
   </div>
-{% endfor %}
-
-<a class="btn btn-primary" href="{{ path('visualisationDeJournal',{'importation':ligneJournal.importation.id}) }}" style="margin:2%">retour</a>
-{% if dispatchs != null and ligneJournal.dispatch == 1 %}
+  <div class="col-sm-2 col-md-2 ">
+  {% if dispatchs != null and ligneJournal.dispatch == 1 %}
 <a class="btn btn-danger pull-right" style="margin:2%" onclick=" valider()"> Cloturer le dispatch</a>
 {% endif %}
-<div class="col-lg-12" style="margin-bottom:2%">
-<table data-toggle="table" data-url="" >
-              <thead>
-              <tr>
-                  <th data-field="total">Montant Total à dispatcher</th>
-                  <th data-field="dispatch">Montant montant deja dispatché</th>
-                  <th data-field="restant">Montant restant à dispatcher</th>
-              </tr>
-              </thead>
-              <tbody>
-                  <tr> 
-                      <td>{{ ligneJournal.montantDebit|number_format(2, '.', ' ') }}</td> 
-                      <td>{{ dispatch|number_format(2, '.', ' ') }}</td> 
-                      <td id="TotalRestant">{{ (ligneJournal.montantDebit  -  dispatch)|number_format(2, '.', ' ') }}</td> 
-                  </tr>
-              </tbody>
-</table>
+  </div>
 </div>
 
-<div class="col-lg-12">
-        <div class="col-lg-8">
-              <div class="panel panel-default ">
-                     <div class="panel panel-default">
-                          <div class="row-fluid">
-                                <div class="span2">
-                                  <div class="panel-body">
-                                    
-                                        <h3>Dispatch de la ligne journal ci dessous</h3>
-                                        <table data-toggle="table" data-show-refresh="false" data-show-toggle="true" data-show-columns="false" data-search="false" data-select-item-name="toolbar1" data-pagination="false" data-sort-name="name" data-sort-order="desc">
-                                            <thead>
-                                            <tr>
-                                                <th data-field="jour"  >Jour</th>
-                                                <th data-field="NumCompteGen">Numero de Compte General</th>
-                                                <th data-field="Libecriture">Libelle Ecriture</th>
-                                                <th data-field="DateEcheance">Date Echeance</th>
-                                                <th data-field="debit">Debit</th>
-                                                <th data-field="Credit">Credit</th>
-                                            </tr>                           
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>{{ ligneJournal.jour|date('d-m-Y H:m:s') }}</td> 
-                                                    <td>{{ ligneJournal.numCompteGeneral }}</td> 
-                                                    <td>{{ ligneJournal.libelleEcriture }}</td> 
-                                                    <td>{{ ligneJournal.dateEcheance }}</td> 
-                                                     <td>
-                                                  {% if ligneJournal.montantDebit != null %}
-                                                    {{ ligneJournal.montantDebit|number_format(2, '.', ' ') }}
-                                                  {% endif %}
-                                                </td> 
-                                                <td>
-                                                  {% if ligneJournal.montantCredit != null %}
-                                                    {{ ligneJournal.montantCredit|number_format(2, '.', ' ') }}
-                                                  {% endif %}
-                                                </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="span2">
+ <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Ligne cumul choisie</div>
+                </div>
+                <div class="card-body">
+                  <table class="display table table-striped table-hover" >
+                      <thead>
+                      <tr>
+                          <th data-field="total">Montant Total à dispatcher</th>
+                          <th data-field="dispatch">Montant montant deja dispatché</th>
+                          <th data-field="restant">Montant restant à dispatcher</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                          <tr> 
+                              <td>{{ ligneJournal.montantDebit|number_format(2, '.', ' ') }}</td> 
+                              <td>{{ dispatch|number_format(2, '.', ' ') }}</td> 
+                              <td id="TotalRestant">{{ (ligneJournal.montantDebit  -  dispatch)|number_format(2, '.', ' ') }}</td> 
+                          </tr>
+                      </tbody>
+                  </table>
 
-                                      <div class="panel-body">
-                                    
-                                        <h3>Dispatchs deja realisés</h3>
-                                        <table data-toggle="table" data-show-refresh="false" data-show-toggle="true" data-show-columns="false" data-search="false" data-select-item-name="toolbar1" data-pagination="false" data-sort-name="name" data-sort-order="desc">
-                                            <thead>
-                                            <tr>
-                                                <th data-field="jour"  >Jour</th>
-                                                <th data-field="NumCompteGen">Numero de Compte General</th>
-                                                <th data-field="Libecriture">Libelle Ecriture</th>
-                                                <th data-field="debit">Debit</th>
-                                                <th data-field="Credit">Credit</th>
-                                            </tr>                           
-                                            </thead>
-                                            <tbody>
-                                                {% for dispatch in dispatchs %}
-                                                <tr>
-                                                <td>{{ dispatch.jour|date('d-m-Y H:m:s') }}</td> 
-                                                <td>{{ dispatch.numCompteGeneral }}</td> 
-                                                <td>{{ dispatch.libelleEcriture }}</td> 
-                                                <td>
-                                                  {% if dispatch.montantDebit != null %}
-                                                    {{ dispatch.montantDebit|number_format(2, '.', ' ') }}
-                                                  {% endif %}
-                                                </td> 
-                                                <td>
-                                                  {% if dispatch.montantCredit != null %}
-                                                    {{ dispatch.montantCredit|number_format(2, '.', ' ') }}
-                                                  {% endif %}
-                                                </td> 
-                                                </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    </div>
-                                </div>
-                            </div>
-              </div>
-          </div>
-        </div>
-         <div class="col-lg-4">
-              <div class="panel panel-default ">
-                     <div class="panel panel-default">
-                            <div class="panel-body">
-                              <h3>Formulaire pour effectuer un dispatch de la ligne choisie</h3>
-                              <br>
-                                {{ form_start(form,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
-                              <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Credit:</label>
-                                  <div class="col-sm-10">
-                                 <input type="text" name="numeroType"  class="form-control" value="{{ligneJournal.importation.typeOperation.numCptDebit}}" disabled>
-                                  </div>
-                              </div>
-                              <br>
-                              <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Banque:</label>
-                                <div class="col-sm-10">
-                                 {{ form_errors(form.numCptDebiter) }}
-                                 {{ form_widget(form.numCptDebiter,{'attr':{'class':'form-control' ,'autocomplete': 'off'}}) }}
-                                </div>
-                              </div>
-                             <br>
-                              <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">Libelle ecriture: </label>
-                                <div class="col-sm-10">
-                                 {{ form_errors(form.libelle) }}
-                                 {{ form_widget(form.libelle,{'attr':{'class':'form-control', 'autocomplete': 'off'}}) }}
-                                </div>
-                              </div>
-                              <br>
-                              <div class="form-group">
-                                <label class="col-sm-2 col-sm-2 control-label">montant: </label>
-                                <div class="col-sm-10">
-                                 {{ form_errors(form.montant) }}
-                                 {{ form_widget(form.montant,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
-                                </div>
-                              </div>
-                              <br>
-                              <br>
-                              <div class="form-group">
-                                <center>
-                                <button type="submit" class="btn btn-primary">valider</button>
-                                  <button type="reset" class="btn btn-default">annuler</button> 
-                                </center>
-                              </div>
-                              {{ form_end(form) }}    
-                        </div>
-                  </div>
-              </div>
-
-
+                </div>     
             </div>
-    </div>
- 
-    {% endblock %}
+      </div>
+</div>
+<br><br>
+<div class="row col-12" >
+          <div class="col-8">
+            <div class="card ">
+               <div class="card-header" > 
+               <h3>Dispatchs deja realisés</h3>
+              </div>
+              <div class="card-body" >
+               <table id="basic-datatables" class="display table table-striped table-hover">
+                  <thead>
+                  <tr>
+                      <th data-field="jour"  >Jour</th>
+                      <th data-field="NumCompteGen">Numero de Compte General</th>
+                      <th data-field="Libecriture">Libelle Ecriture</th>
+                      <th data-field="debit">Debit</th>
+                      <th data-field="Credit">Credit</th>
+                  </tr>                           
+                  </thead>
+                  <tbody>
+                      {% for dispatch in dispatchs %}
+                      <tr>
+                      <td>{{ dispatch.jour|date('d-m-Y H:m:s') }}</td> 
+                      <td>{{ dispatch.numCompteGeneral }}</td> 
+                      <td>{{ dispatch.libelleEcriture }}</td> 
+                      <td>
+                        {% if dispatch.montantDebit != null %}
+                          {{ dispatch.montantDebit|number_format(2, '.', ' ') }}
+                        {% endif %}
+                      </td> 
+                      <td>
+                        {% if dispatch.montantCredit != null %}
+                          {{ dispatch.montantCredit|number_format(2, '.', ' ') }}
+                        {% endif %}
+                      </td> 
+                      </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-4">
+            <div class="card ">
+               <div class="card-header" > 
+                <h3>Formulaire pour effectuer un dispatch de la ligne choisie</h3>
+              </div>
+              <div class="card-body" >
+               {{ form_start(form,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
+                  <div class="form-group">
+                    <label class="col-sm-2 col-sm-2 control-label">Credit:</label>
+                      <div class="col-sm-10">
+                     <input type="text" name="numeroType"  class="form-control" value="{{ligneJournal.importation.typeOperation.numCptDebit}}" disabled>
+                      </div>
+                  </div>
+                  <br>
+                  <div class="form-group">
+                    <label class="col-sm-2 col-sm-2 control-label">Banque:</label>
+                    <div class="col-sm-10">
+                     {{ form_errors(form.numCptDebiter) }}
+                     {{ form_widget(form.numCptDebiter,{'attr':{'class':'form-control' ,'autocomplete': 'off'}}) }}
+                    </div>
+                  </div>
+                 <br>
+                  <div class="form-group">
+                    <label class="col-sm-2 col-sm-2 control-label">Libelle ecriture: </label>
+                    <div class="col-sm-10">
+                     {{ form_errors(form.libelle) }}
+                     {{ form_widget(form.libelle,{'attr':{'class':'form-control', 'autocomplete': 'off'}}) }}
+                    </div>
+                  </div>
+                  <br>
+                  <div class="form-group">
+                    <label class="col-sm-2 col-sm-2 control-label">montant: </label>
+                    <div class="col-sm-10">
+                     {{ form_errors(form.montant) }}
+                     {{ form_widget(form.montant,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
+                    </div>
+                  </div>
+                  <br>
+                  <br>
+                  <div class="form-group">
+                    <center>
+                    <button type="submit" class="btn btn-primary">valider</button>
+                      <button type="reset" class="btn btn-danger">annuler</button> 
+                    </center>
+                  </div>
+                  {{ form_end(form) }} 
+              </div>
+            </div>
+          </div>
+
+           
+      </div>
+
+
+{% endblock %}
 
 {% block javascripts %}
 
-
-<script src="{{ asset ('js/bootstrap-table.js') }}"></script>
+{{ parent() }}
 
 <script type="text/javascript">
+
+
+$('#basic-datatables').DataTable({
+    });
+
+{% for error in form.vars.errors.form.getErrors(true) %} 
+
+      var placementFrom = 'top';
+      var placementAlign = 'right';
+      var state = 'danger';
+      var style = 'withicon';
+      var content = {};
+
+      content.message = '{ error.message }}   ';
+      content.title = 'notification';
+      if (style == "withicon") {
+          content.icon = 'fa fa-bell';
+      } else {
+          content.icon = 'none';
+      }
+      content.url = '#';
+      
+
+      $.notify(content,{
+          type: state,
+          placement: {
+              from: placementFrom,
+              align: placementAlign
+          },
+          time: 1000,
+          delay: 0,
+      });
+{% endfor %}
 
 function valider() {
   var choice=confirm("confirmez");
@@ -210,5 +201,4 @@ function valider() {
 }
 
 </script>
-
 {% endblock %}

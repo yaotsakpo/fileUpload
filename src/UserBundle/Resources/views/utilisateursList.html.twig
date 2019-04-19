@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+
+{{ parent() }}
+
+{% endblock %}
+
+{% block body %}
+   <a class="btn btn-primary" href="{{ path('homepage')}}" style="margin:1%">retour</a>
+   <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Entrez les informations du nouveau utilisateur</div>
+                </div>
+                <div class="card-body">
+                  {{ form_start(form,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <div class="form-group">
+                        <label>username:</label>
+                        {{ form_errors(form.username) }}
+                       {{ form_widget(form.username,{'attr':{'placeholder':'Username','autocomplete': 'off','class':'form-control'}}) }}
+                      </div>
+                    </div>
+                     <div class="col-lg-3">
+                      <div class="form-group">
+                        <label >Email:</label>
+                         {{ form_errors(form.email) }}
+                        {{ form_widget(form.email,{'attr': {'autocomplete': 'off', 'placeholder':'Email','class':'form-control' }}) }}
+                      </div>
+                    </div>
+                    <div class="col-lg-3">
+                      <div class="form-group">
+                        <label >Mot de passe:</label>
+                       {{ form_widget(form.plainPassword.first,{'attr':{'placeholder':'Mot de passe','autocomplete': 'off','class':'form-control'}} ) }}
+                      </div>
+                    </div>
+                     <div class="col-lg-3">
+                      <div class="form-group">
+                        <label >Repetez le mot de passe s'il vous plait:</label>
+                       {{ form_widget(form.plainPassword.second,{'attr':{'placeholder':'Mot de passe','autocomplete': 'off','class':'form-control'}} ) }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <center>
+                    <button type="submit" class="btn btn-primary">valider</button>
+                    <button type="reset" class="btn btn-danger">annuler</button> 
+                    </center>
+                  </div>
+                  {{ form_end(form) }}
+
+                </div>     
+            </div>
+      </div>
+</div>
+
+<div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Resultat de la recherche</div>
+                </div>
+                <div class="card-body">
+                  <table id="basic-datatables" class="display table table-striped table-hover">
+                      <thead>
+                      <tr>
+                                <th>Username</th>
+                                <th>email</th>
+                                <th>Roles</th>
+                                <th>Action</th>
+                      </tr>                           
+                      </thead>
+                      <tbody>
+                         {% for user in users %} <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{% for role in user.roles %}
+                                        {{ role }}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    
+                                    <a href="{{ path('modUser',{'id':user.id}) }}" class="btn btn-primary" style="color:white">Modifer</a>
+                                    {% if user.id != app.user.id %}
+                                    <a href="{{ path('effacerUser',{'id':user.id}) }}" onclick="return confirm('confirmez?')" class="btn btn-danger" style="color:white"> Supprimer</button></a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                          
+                      </tbody>
+                  </table>
+                </div>     
+            </div>
+      </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<script type="text/javascript">
+
+$('#basic-datatables').DataTable({
+    });
+
+
+{% for error in form.vars.errors.form.getErrors(true) %} 
+
+      var placementFrom = 'top';
+      var placementAlign = 'right';
+      var state = 'danger';
+      var style = 'withicon';
+      var content = {};
+
+      content.message = '{{ error.message }}';
+      content.title = 'notification';
+      if (style == "withicon") {
+          content.icon = 'fa fa-bell';
+      } else {
+          content.icon = 'none';
+      }
+      content.url = '#';
+      
+
+      $.notify(content,{
+          type: state,
+          placement: {
+              from: placementFrom,
+              align: placementAlign
+          },
+          time: 1000,
+          delay: 0,
+      });
+{% endfor %}
+
+</script>
+
+
+{% endblock %}

@@ -2,71 +2,93 @@
 
 {% block stylesheets %}
 
-<link href="{{ asset ('css/bootstrap-table.css') }}" rel="stylesheet">
+{{ parent() }}
 
 {% endblock %}
 
 {% block body %}
-  
-     {% for error in editForm.vars.errors.form.getErrors(true) %}          
-      <div class="alert bg-danger" role="alert">
-        <svg class="glyph stroked cancel">
-          <use xlink:href="#stroked-cancel"></use></svg>  {{ error.message }} 
-        <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
-      </div>
-    {% endfor %}
- <center><h3>Modification d'un produit</h3></center>
-
-    <div class="col-lg-12">
-      <a class="btn btn-primary" href="{{ path('homepage')}}" style="margin:2%">retour</a>
-              <div class="panel panel-default">
-                     <div class="panel panel-default">
-                                <div class="panel-body">
-                                  {{ form_start(editForm,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
-                                            <div class="form-group">
-                                              <label class="col-sm-2 col-sm-2 control-label">Nom du produit:</label>
-                                                <div class="col-sm-10">
-                                                {{ form_errors(editForm.nomProduit) }}
-                                                 {{ form_widget(editForm.nomProduit,{'attr':{'class':'form-control','autocomplete': 'off'}}) }} 
-                                                </div>
-                                            </div>
-                                            <br>
-                                            <div class="form-group">
-                                              <label class="col-sm-2 col-sm-2 control-label">Numero de code du produit:</label>
-                                                <div class="col-sm-10">
-                                                {{ form_errors(editForm.numeroDeCodeProduit) }}
-                                                 {{ form_widget(editForm.numeroDeCodeProduit,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}  
-                                                </div>
-                                            </div>
-                                            <br>
-                                            <div class="form-group">
-                                              <label class="col-sm-2 col-sm-2 control-label">Numero de compte du produit: </label>
-                                              <div class="col-sm-10">
-                                               {{ form_errors(editForm.numCptCredit) }}
-                                               {{ form_widget(editForm.numCptCredit,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
-                                              </div>
-                                            </div>
-                                            <br>
-                                            <br>
-                                            <div class="form-group">
-                                              <center>
-                                              <button type="submit" class="btn btn-primary">valider</button>
-                                                <button type="reset" class="btn btn-default">annuler</button> 
-                                              </center>
-                                            </div>
-                                {{ form_end(editForm) }}           
-                        </div>
+<br>
+   <a class="btn btn-primary" href="{{ path('produit')}}" style="margin:1%">retour</a>
+   <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Modification de Produit</div>
+                </div>
+                <div class="card-body">
+                  {{ form_start(editForm,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label>Nom du produit:</label>
+                        {{ form_errors(editForm.nomProduit) }}
+                        {{ form_widget(editForm.nomProduit,{'attr':{'class':'form-control'}}) }} 
+                      </div>
                     </div>
-              </div>
-          </div>
-    {% endblock %}
+                     <div class="col-lg-4">
+                      <div class="form-group">
+                        <label >Numero de code du produit:</label>
+                         {{ form_errors(editForm.numeroDeCodeProduit) }}
+                         {{ form_widget(editForm.numeroDeCodeProduit,{'attr':{'class':'form-control'}}) }}  
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label >Numero de compte du produit:</label>
+                         {{ form_errors(editForm.numCptCredit) }}
+                         {{ form_widget(editForm.numCptCredit,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <center>
+                    <button type="submit" class="btn btn-primary">valider</button>
+                    <button type="reset" class="btn btn-danger">annuler</button> 
+                    </center>
+                  </div>
+                  {{ form_end(editForm) }}
+
+                </div>     
+            </div>
+      </div>
+</div>
+
+{% endblock %}
 
 {% block javascripts %}
 
-
-<script src="{{ asset ('js/bootstrap-table.js') }}"></script>
+{{ parent() }}
 
 <script type="text/javascript">
+
+{% for error in editForm.vars.errors.form.getErrors(true) %} 
+
+      var placementFrom = 'top';
+      var placementAlign = 'right';
+      var state = 'danger';
+      var style = 'withicon';
+      var content = {};
+
+      content.message = '{{ error.message }}';
+      content.title = 'notification';
+      if (style == "withicon") {
+          content.icon = 'fa fa-bell';
+      } else {
+          content.icon = 'none';
+      }
+      content.url = '#';
+      
+
+      $.notify(content,{
+          type: state,
+          placement: {
+              from: placementFrom,
+              align: placementAlign
+          },
+          time: 1000,
+          delay: 0,
+      });
+{% endfor %}
 
 </script>
 
