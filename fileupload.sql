@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 16 avr. 2019 à 15:14
+-- Généré le :  ven. 19 avr. 2019 à 14:40
 -- Version du serveur :  5.7.19
 -- Version de PHP :  7.1.9
 
@@ -21,6 +21,74 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `fileupload`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `banque`
+--
+
+DROP TABLE IF EXISTS `banque`;
+CREATE TABLE IF NOT EXISTS `banque` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nomDeLaBanque` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `numCptDispatch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Déchargement des données de la table `banque`
+--
+
+INSERT INTO `banque` (`id`, `nomDeLaBanque`, `numCptDispatch`) VALUES
+(1, 'ECOBANK', 2531),
+(2, 'BSIC', 8921);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `exportation`
+--
+
+DROP TABLE IF EXISTS `exportation`;
+CREATE TABLE IF NOT EXISTS `exportation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `journal_id` int(11) DEFAULT NULL,
+  `jourExportation` datetime DEFAULT NULL,
+  `jourJournal` datetime DEFAULT NULL,
+  `numPiece` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `numFacture` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `reference` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `numCompteGeneral` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `numCompteTiers` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `libelleEcriture` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `dateEcheance` datetime DEFAULT NULL,
+  `positionJournal` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `montantDebit` int(11) DEFAULT NULL,
+  `montantCredit` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_F2D01343478E8802` (`journal_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Déchargement des données de la table `exportation`
+--
+
+INSERT INTO `exportation` (`id`, `journal_id`, `jourExportation`, `jourJournal`, `numPiece`, `numFacture`, `reference`, `numCompteGeneral`, `numCompteTiers`, `libelleEcriture`, `dateEcheance`, `positionJournal`, `montantDebit`, `montantCredit`) VALUES
+(29, 101, '2019-04-19 12:39:32', '2019-04-16 15:09:40', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 74283, NULL),
+(30, 102, '2019-04-19 12:39:35', '2019-04-16 15:09:40', NULL, NULL, NULL, '65010', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 19700),
+(31, 103, '2019-04-19 12:39:35', '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583),
+(32, 104, '2019-04-19 12:39:35', '2019-04-16 15:09:41', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 109166, NULL),
+(33, 105, '2019-04-19 12:39:35', '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583),
+(34, 106, '2019-04-19 12:39:35', '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583),
+(35, 107, '2019-04-19 12:39:36', '2019-04-16 15:09:41', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 54583, NULL),
+(36, 108, '2019-04-19 12:39:36', '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583),
+(37, 117, '2019-04-19 12:39:36', '2019-04-18 11:22:40', NULL, NULL, NULL, '2531', NULL, 'test1', NULL, NULL, 10000, NULL),
+(38, 118, '2019-04-19 12:39:36', '2019-04-18 11:22:40', NULL, NULL, NULL, '3030', NULL, 'test1', NULL, NULL, NULL, 10000),
+(39, 119, '2019-04-19 12:39:36', '2019-04-18 11:23:32', NULL, NULL, NULL, '8921', NULL, 'test2', NULL, NULL, 20000, NULL),
+(40, 120, '2019-04-19 12:39:36', '2019-04-18 11:23:32', NULL, NULL, NULL, '3030', NULL, 'test2', NULL, NULL, NULL, 20000),
+(41, 121, '2019-04-19 12:39:36', '2019-04-18 11:26:11', NULL, NULL, NULL, '8921', NULL, 'test3', NULL, NULL, 44283, NULL),
+(42, 122, '2019-04-19 12:39:36', '2019-04-18 11:26:11', NULL, NULL, NULL, '3030', NULL, 'test3', NULL, NULL, NULL, 44283);
 
 -- --------------------------------------------------------
 
@@ -46,7 +114,14 @@ CREATE TABLE IF NOT EXISTS `fos_user` (
   UNIQUE KEY `UNIQ_957A647992FC23A8` (`username_canonical`),
   UNIQUE KEY `UNIQ_957A6479A0D96FBF` (`email_canonical`),
   UNIQUE KEY `UNIQ_957A6479C05FB297` (`confirmation_token`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Déchargement des données de la table `fos_user`
+--
+
+INSERT INTO `fos_user` (`id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`) VALUES
+(1, 'yaotsakpo', 'yaotsakpo', 'emmanueltsakpo5@gmail.com', 'emmanueltsakpo5@gmail.com', 1, NULL, '$2y$13$eeki4MIzQdEjnK9d3ZRDjO1fhrMf7mMgllvkAPoQs4RSLeLSN7w/6', '2019-04-19 14:32:35', NULL, NULL, 'a:1:{i:0;s:16:\"ROLE_SUPER_ADMIN\";}');
 
 -- --------------------------------------------------------
 
@@ -96,24 +171,31 @@ CREATE TABLE IF NOT EXISTS `journal` (
   `montantDebit` int(11) DEFAULT NULL,
   `montantCredit` int(11) DEFAULT NULL,
   `cumul` int(11) DEFAULT NULL,
+  `dispatch` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_C1A7E74D1212529D` (`cumul`),
   KEY `IDX_C1A7E74D707CE1F9` (`importation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `journal`
 --
 
-INSERT INTO `journal` (`id`, `importation_id`, `jour`, `numPiece`, `numFacture`, `reference`, `numCompteGeneral`, `numComptTiers`, `libelleEcriture`, `dateEcheance`, `positionJournal`, `montantDebit`, `montantCredit`, `cumul`) VALUES
-(101, 24, '2019-04-16 15:09:40', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 74283, NULL, NULL),
-(102, 24, '2019-04-16 15:09:40', NULL, NULL, NULL, '65010', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 19700, 101),
-(103, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583, 101),
-(104, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 109166, NULL, NULL),
-(105, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583, 104),
-(106, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583, 104),
-(107, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 54583, NULL, NULL),
-(108, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583, 107);
+INSERT INTO `journal` (`id`, `importation_id`, `jour`, `numPiece`, `numFacture`, `reference`, `numCompteGeneral`, `numComptTiers`, `libelleEcriture`, `dateEcheance`, `positionJournal`, `montantDebit`, `montantCredit`, `cumul`, `dispatch`) VALUES
+(101, 24, '2019-04-16 15:09:40', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 74283, NULL, NULL, 0),
+(102, 24, '2019-04-16 15:09:40', NULL, NULL, NULL, '65010', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 19700, 101, NULL),
+(103, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583, 101, NULL),
+(104, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 109166, NULL, NULL, NULL),
+(105, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583, 104, NULL),
+(106, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583, 104, NULL),
+(107, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 54583, NULL, NULL, NULL),
+(108, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583, 107, NULL),
+(117, 24, '2019-04-18 11:22:40', NULL, NULL, NULL, '2531', NULL, 'test1', NULL, NULL, 10000, NULL, 101, 1),
+(118, 24, '2019-04-18 11:22:40', NULL, NULL, NULL, '3030', NULL, 'test1', NULL, NULL, NULL, 10000, 101, 1),
+(119, 24, '2019-04-18 11:23:32', NULL, NULL, NULL, '8921', NULL, 'test2', NULL, NULL, 20000, NULL, 101, 1),
+(120, 24, '2019-04-18 11:23:32', NULL, NULL, NULL, '3030', NULL, 'test2', NULL, NULL, NULL, 20000, 101, 1),
+(121, 24, '2019-04-18 11:26:11', NULL, NULL, NULL, '8921', NULL, 'test3', NULL, NULL, 44283, NULL, 101, 1),
+(122, 24, '2019-04-18 11:26:11', NULL, NULL, NULL, '3030', NULL, 'test3', NULL, NULL, NULL, 44283, 101, 1);
 
 -- --------------------------------------------------------
 
@@ -223,20 +305,26 @@ CREATE TABLE IF NOT EXISTS `type_operation` (
   `LibelleTypeOperation` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `numCptDebit` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `type_operation`
 --
 
 INSERT INTO `type_operation` (`id`, `LibelleTypeOperation`, `numCptDebit`) VALUES
-(1, 'Espèce', '1010'),
 (2, 'Chèque', '2020'),
-(3, 'Virement', '3030');
+(3, 'Virement', '3030'),
+(4, 'Espèce', '1010');
 
 --
 -- Contraintes pour les tables déchargées
 --
+
+--
+-- Contraintes pour la table `exportation`
+--
+ALTER TABLE `exportation`
+  ADD CONSTRAINT `FK_F2D01343478E8802` FOREIGN KEY (`journal_id`) REFERENCES `journal` (`id`);
 
 --
 -- Contraintes pour la table `importation`
