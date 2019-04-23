@@ -36,6 +36,14 @@ class DemandePermission
     private $etat;
 
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    private $status;
+
+
    /**
      *
      * @var UserBundle\Entity\User $demandeur
@@ -213,5 +221,29 @@ class DemandePermission
     public function getAccordsPermissions()
     {
         return $this->accordsPermissions;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     *
+     * @return DemandePermission
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

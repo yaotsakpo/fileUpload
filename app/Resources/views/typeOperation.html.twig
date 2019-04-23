@@ -69,8 +69,11 @@
                                 <td>{{ typeOperation.numCptDebit }}</td> 
                              
                                 <td>
+
                                 <a  href="{{ path('editTypeOperation',{'typeOperation':typeOperation.id}) }}"><button class="btn btn-primary waves-effect" type="submit" >Modifier</button></a>
+                                
                                 <a  href="{{ path('effacerTypeOperation',{'typeOperation':typeOperation.id}) }}"><button class="btn btn-danger waves-effect" type="submit" onclick="return confirm('confirmez?')" >Supprimer</button></a>
+
                                 </td>  
 
                             </tr>

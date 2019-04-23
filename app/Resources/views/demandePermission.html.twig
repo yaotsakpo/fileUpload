@@ -36,9 +36,16 @@
                                   <td>
                                     {% if demande.etat == 1 %}
                                       demande autorisée
-                                    {% else %}
+                                    {% endif %}
+
+                                     {% if demande.etat == 0 and demande.status == 0 %}
                                       demande en cours
                                     {% endif %}
+
+                                    {% if demande.etat  == 0 and demande.status == 1 %}
+                                      demande refusé
+                                    {% endif %}
+
                                     </td> 
                                   <td>
                                       <a href="{{path('visualiastionLigneJournal',{'id':demande.journal.id}) }}" >

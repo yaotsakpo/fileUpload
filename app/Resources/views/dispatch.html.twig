@@ -86,8 +86,8 @@
                       </td> 
                       <td>
                          {% if dispatch.montantCredit == null %}
-                           <a href="{{ path('envoieDemandePermission',{'journal':journal.id} ) }}" >
-                                      <button class="btn btn-success waves-effect" type="submit" >Modifier</button></a>
+                           <a href="{{ path('envoieDemandePermission',{'journal':dispatch.id} ) }}" >
+                            <button class="btn btn-success waves-effect" type="submit" >Modifier</button></a>
                         {% endif %}
                        
                       </td> 

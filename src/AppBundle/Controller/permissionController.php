@@ -35,6 +35,7 @@ class permissionController extends Controller
            $em = $this->getDoctrine()->getManager();
            $demandePermission->setDate(new \DateTime());
            $demandePermission->setEtat(0);
+           $demandePermission->setstatus(0);
            $demandePermission->setDemandeur($this->getUser());
            $demandePermission->setJournal($journal);
 
@@ -48,10 +49,26 @@ class permissionController extends Controller
         {
            if($demande->getEtat()==0)
            {
-            $this->addFlash('notice','Demande de permission pour modification de la ligne dispatch deja envoyé et en cous de traitement ');
+
+            $repository= $this->getDoctrine()->getRepository('AppBundle:AccordPermission');
+            $accord= $repository->findOneBy(['demande'=>$demande,'valeur'=>0]);
+
+            if(empty($accord))
+            {
+          $this->addFlash('notice','Demande de permission pour modification de la ligne dispatch deja envoyé et en cous de traitement '); 
+            }
+
+            if(!empty($accord) && $demande->getstatus()==1)
+            {
+          $this->addFlash('notice','Votre demande de modification de la ligne dispatch a été refusée par l\'administrateur '); 
+            }
+            
            }else
            {
             ///code pour renvoyer vers la modification
+
+            return $this->redirectToRoute('editDispatch',['journal'=>$journal->getId()]);
+
            }
          }
         
@@ -108,6 +125,7 @@ class permissionController extends Controller
        $accordPermission->setdateAccordPermission(new \DateTime());
        $accordPermission->setvaleur(1);
        $id->setEtat(1);
+       $id->setstatus(1);
        $accordPermission->setaccordeur($this->getUser());
        $accordPermission->setdemande($id);
 
@@ -132,6 +150,7 @@ class permissionController extends Controller
        $accordPermission->setdateAccordPermission(new \DateTime());
        $accordPermission->setvaleur(0);
        $id->setEtat(0);
+       $id->setstatus(1);
        $accordPermission->setaccordeur($this->getUser());
        $accordPermission->setdemande($id);
 

@@ -36,6 +36,14 @@ class DemandePermission
     private $etat;
 
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    private $status;
+
+
    /**
      *
      * @var UserBundle\Entity\User $demandeur
@@ -172,5 +180,46 @@ class DemandePermission
     public function getJournal()
     {
         return $this->journal;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->accordsPermissions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add accordsPermission
+     *
+     * @param \AppBundle\Entity\AccordPermission $accordsPermission
+     *
+     * @return DemandePermission
+     */
+    public function addAccordsPermission(\AppBundle\Entity\AccordPermission $accordsPermission)
+    {
+        $this->accordsPermissions[] = $accordsPermission;
+
+        return $this;
+    }
+
+    /**
+     * Remove accordsPermission
+     *
+     * @param \AppBundle\Entity\AccordPermission $accordsPermission
+     */
+    public function removeAccordsPermission(\AppBundle\Entity\AccordPermission $accordsPermission)
+    {
+        $this->accordsPermissions->removeElement($accordsPermission);
+    }
+
+    /**
+     * Get accordsPermissions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAccordsPermissions()
+    {
+        return $this->accordsPermissions;
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 23 avr. 2019 à 18:03
+-- Généré le :  mar. 23 avr. 2019 à 20:06
 -- Version du serveur :  5.7.19
 -- Version de PHP :  7.1.9
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `accord_permission` (
   PRIMARY KEY (`id`),
   KEY `IDX_BD560D4680E95E18` (`demande_id`),
   KEY `IDX_BD560D4618AF9C4F` (`accordeur_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -75,17 +75,11 @@ CREATE TABLE IF NOT EXISTS `demande_permission` (
   `journal_id` int(11) NOT NULL,
   `date` datetime NOT NULL,
   `Etat` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_1685980B95A6EE59` (`demandeur_id`),
   KEY `IDX_1685980B478E8802` (`journal_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Déchargement des données de la table `demande_permission`
---
-
-INSERT INTO `demande_permission` (`id`, `demandeur_id`, `journal_id`, `date`, `Etat`) VALUES
-(2, 1, 397, '2019-04-23 16:44:02', 1);
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
