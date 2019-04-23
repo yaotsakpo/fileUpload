@@ -31,194 +31,9 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
 
-        $importation= new Importation();
-
-        $form= $this->createform(ImportationType::class,$importation)
-                   ->add('datacsv',FileType::class, array("required"=>true,'label' => ' ',"mapped"=>false));
-
-        $form->handleRequest($request);
-
-        $repertoire=$this->getParameter('fichier_directory');
-        $row = 1;
-        $tableau=[];
-        $temp="";
-
-        
-
-        $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
-        $importations= $repository->findBy([],['id' => 'DESC']);
-
-        $bool=0;
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-                foreach ($importations as $key => $import) {
-                    if($import->getmois()->format('MM') == $importation->getmois()->format('MM') && 
-                        $import->getannee()->format('YYYY') == $importation->getannee()->format('YYYY') &&
-                        $import->gettypeOperation() == $importation->gettypeOperation() )
-                    {
-                        $bool=1;
-                    }
-                }
-
-                if($bool==0)
-                {
-                     $file = $form["datacsv"]->getData();
-                if( $file != NULL && $file != "" ){
-
-                    $ext = $file->guessExtension();
-                    $fileName = "datacsv_".uniqid().".".$ext ;
-                    $file->move( $repertoire, $fileName );
-
-                    $em = $this->getDoctrine()->getManager();
-                    $importation->setDateCreation(new \Datetime());
-                    $importation->setStatus(0);
-                    $importation->setSource($fileName);
-                    $em->persist($importation);
-                    $em->flush();
-                    $this->addFlash('notice','Importation effectué avec succes');
-
-                    }
-
-                    return $this->redirectToRoute('homepage');
-
-                }else
-                {
-                   $form->addError(new FormError("Il existe deja une importation avec ce mois,cette annee et ce type d'operation.Veuillez changer la date ou le mois des operations"));
-
-                }
-            
-            }
-
-
-        /********Formulaire de recherche*******/
-
-        $rechercheForm= $this->createformBuilder()
-         ->add('typeOperation',EntityType::class,array(
-                        'class'=>'AppBundle\Entity\TypeOperation',
-                        'choice_label'=>'libelleTypeOperation',
-                        'choice_value'=>'id',
-                        'placeholder'=>'-Selectionner-',
-                        'expanded'=>false,
-                        'mapped'=>false,
-                        'attr'=> ['class'=>'form-control','multiple'=>false],
-                    ))
-            ->add('mois',DateType::class,array('widget' => 'single_text',
-                        'html5'=>true,'format' => 'MM'))
-                ->add('annee',DateType::class,array('widget' => 'single_text',
-                        'html5'=>true,'format' => 'yyyy'
-                        ))
-            ->getform();
-
-        $rechercheForm->handleRequest($request);
-
-        if ($rechercheForm->isSubmitted() && $rechercheForm->isValid()) {
-
-            $recherche=null;
-
-                foreach ($importations as $key => $import) {
-                    if($import->getmois()->format('MM') == $rechercheForm['mois']->getdata()->format('MM') && 
-                        $import->getannee()->format('YYYY') == $rechercheForm['annee']->getdata()->format('YYYY') &&
-                        $import->gettypeOperation() ==$rechercheForm['typeOperation']->getdata() )
-                    {
-                        $bool=1;
-                        $recherche=$import;
-                    }
-                }
-
-                if($bool==0)
-                {
-
-                    $rechercheForm->addError(new FormError("Il n'existe aucune importation correspondate à votre demande"));
-
-                }else
-                {
-
-                    return $this->redirectToRoute('rechercheImportation',['importation'=>$recherche->getId()]);
-
-                }
-            
-        }
-
-
-        /********Formulaire de produit*******/
-
-        $produit= new Produit();
-
-        $produitForm= $this->createform(ProduitType::class,$produit);
-
-        $produitForm->handleRequest($request);
-
-        if ($produitForm->isSubmitted() && $produitForm->isValid()) {
-
-            $repository= $this->getDoctrine()->getRepository('AppBundle:Produit');
-            $pdt= $repository->findOneBy(['nomProduit'=>$produitForm['nomProduit']->getdata(),'numeroDeCodeProduit'=>$produitForm['numeroDeCodeProduit']->getdata(),'numCptCredit'=>$produitForm['numCptCredit']->getdata()]);
-
-            if(empty($pdt))
-            {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($produit);
-                $em->flush();
-
-                $this->addFlash('notice','Produit enregistré avec success');
-
-                return $this->redirectToRoute('homepage');
-
-            }else
-            {
-                $produitForm->addError(new FormError("Il existe deja un produit avec ces informations! veuillez ressaisir"));
-            }
-            
-        }
-
-
-        $repository= $this->getDoctrine()->getRepository('AppBundle:Produit');
-        $produits= $repository->findAll();
-
-
-        /********Formulaire de type operation*******/
-
-        $typeOperation= new TypeOperation();
-
-        $typeOperationForm= $this->createform(TypeOperationType::class,$typeOperation);
-
-        $typeOperationForm->handleRequest($request);
-
-        if ($typeOperationForm->isSubmitted() && $typeOperationForm->isValid()) {
-
-            $repository= $this->getDoctrine()->getRepository('AppBundle:TypeOperation');
-            $typeOpe= $repository->findOneBy(['libelleTypeOperation'=>$typeOperationForm['libelleTypeOperation']->getdata(),'numCptDebit'=>$typeOperationForm['numCptDebit']->getdata()]);
-
-            if(empty($typeOpe))
-            {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($typeOperation);
-                $em->flush();
-
-                $this->addFlash('notice','Type d\'operation enregistré avec success');
-
-                return $this->redirectToRoute('homepage');
-
-            }else
-            {
-                $typeOperationForm->addError(new FormError("Il existe deja un type d'operation existant avec ces informations! veuillez ressaisir"));
-            }
-
-        }
-
-        $repository= $this->getDoctrine()->getRepository('AppBundle:TypeOperation');
-        $typeOperations= $repository->findAll();
-            
 
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-            'form' => $form->createView(),
-            'rechercheForm' => $rechercheForm->createView(),
-            'produitForm' => $produitForm->createView(),
-            'typeOperationForm' => $typeOperationForm->createView(),
-            'importations' => $importations,
-            'produits' => $produits,
-            'typeOperations' => $typeOperations,
         ]);
     }
 
@@ -285,9 +100,9 @@ class DefaultController extends Controller
         $journal->setLibelleEcriture('Remboursement'.' - '.$positionCumul['type']);
         $journal->setNumCompteGeneral($positionCumul['numeroCompteDebit']);
         $journal->setImportation($import);
+        $journal->setsuppression(0);
         $em->persist($journal);
         $em->flush();
-
             foreach ($operations as $key => $operation) {
                 $detailsJournal= new Journal();
                 $em = $this->getDoctrine()->getManager();
@@ -297,6 +112,7 @@ class DefaultController extends Controller
                     $detailsJournal->setNumCompteGeneral($operation->getProduit()->getnumCptCredit());
                     $detailsJournal->setCumul($journal);
                     $detailsJournal->setImportation($operation->getImportation());
+                    $detailsJournal->setsuppression(0);
                 $em->persist($detailsJournal);
                 $em->flush();
             }
@@ -320,13 +136,13 @@ class DefaultController extends Controller
     {
 
     $repository= $this->getDoctrine()->getRepository('AppBundle:Journal');
-    $journalArray= $repository->findBy(['importation'=>$importation],['id' => 'ASC']);
+    $journalArray= $repository->findBy(['importation'=>$importation,'suppression'=>0],['id' => 'ASC']);
 
      $em = $this->getDoctrine()->getManager(); 
         $query = $em->createQuery(
         'SELECT j 
          FROM AppBundle:Journal j 
-         WHERE j.cumul IS NOT NULL AND j.dispatch=1 AND j.importation= :importation'
+         WHERE j.cumul IS NOT NULL AND j.dispatch=1 AND j.suppression=0 AND j.importation= :importation '
         )->setParameter('importation', $importation);
    
          
@@ -363,7 +179,7 @@ class DefaultController extends Controller
     public function exportationJournalAction(Request $request,Importation $importation)
     {
         $repository= $this->getDoctrine()->getRepository('AppBundle:Journal');
-        $import= $repository->findBy(['importation'=>$importation],['id' => 'ASC']);
+        $import= $repository->findBy(['importation'=>$importation,'suppression'=>0],['id' => 'ASC']);
 
          $lignes = [];
 
@@ -450,7 +266,7 @@ class DefaultController extends Controller
 
         $em = $this->getDoctrine()->getManager(); 
         $query = $em->createQuery(
-        'SELECT SUM(j.montantCredit) FROM AppBundle:Journal j WHERE j.dispatch = 1 and j.cumul = :ligneCumul'
+        'SELECT SUM(j.montantCredit) FROM AppBundle:Journal j WHERE j.dispatch = 1 and j.suppression = 0 and j.cumul = :ligneCumul'
         )->setParameter('ligneCumul', $ligneJournal->getId());
          
         $dispatchsMontantTotal = $query->getResult(); 
@@ -458,14 +274,15 @@ class DefaultController extends Controller
 
         $em = $this->getDoctrine()->getManager(); 
         $query = $em->createQuery(
-        'SELECT j FROM AppBundle:Journal j WHERE j.dispatch = 1 and j.cumul = :ligneCumul ORDER BY j.jour DESC' 
+        'SELECT j FROM AppBundle:Journal j WHERE j.dispatch = 1 and j.suppression = 0 and j.cumul = :ligneCumul'
         )->setParameter('ligneCumul', $ligneJournal->getId());
-
 
          
         $dispatchs = $query->getResult(); 
 
-       //var_dump( $dispatchs );
+        //dump($dispatchs);
+
+        //exit();
 
         $form->handleRequest($request);
 
@@ -477,6 +294,7 @@ class DefaultController extends Controller
 
               $dispatchCredit= new Journal();
               $dispatchDebit= new Journal();
+              $code = uniqid();
 
               $em = $this->getDoctrine()->getManager();
                     /******Insertion de la ligne de debit du dispatch*****/
@@ -487,6 +305,8 @@ class DefaultController extends Controller
                     $dispatchDebit->setCumul($ligneJournal);
                     $dispatchDebit->setImportation($ligneJournal->getImportation());
                     $dispatchDebit->setDispatch(1);
+                    $dispatchDebit->setCodeOperation($code);
+                    $dispatchDebit->setsuppression(0);
                     /******Insertion de la ligne de credit du dispatch*****/
                     $dispatchCredit->setJour(new \DateTime());
                     $dispatchCredit->setMontantCredit($form['montant']->getdata());
@@ -495,6 +315,8 @@ class DefaultController extends Controller
                     $dispatchCredit->setCumul($ligneJournal);
                     $dispatchCredit->setImportation($ligneJournal->getImportation());
                     $dispatchCredit->setDispatch(1);
+                    $dispatchCredit->setCodeOperation($code);
+                    $dispatchCredit->setsuppression(0);
                 $em->persist($dispatchDebit);
                 $em->persist($dispatchCredit);
                 $ligneJournal->setDispatch(1);

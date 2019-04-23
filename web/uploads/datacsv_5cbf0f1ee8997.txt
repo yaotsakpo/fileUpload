@@ -1,0 +1,39 @@
+Journal des encaissements saisis entre le 09/04/2019 et le 09/04/2019;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Code Produit;Produit;Mode de comptabilisation;Categorie;Classification ;Code Apporteur;Apporteur;Numero Police;Statut Police;Numero Souscripteur;Souscripteur;Numero Assuré;Assuré;Date de naissance assuré;Compte;Date de sousciption;Date effet;Date echeance;Accessoires;Cout SMS;Prime DC;Prime Epargne/Mixte;Periodicite;Prime;K DC;K terme;Etat police;Date de sortie eventuelle (date de réglement si prestations/date de dépot si demande);PM actuelle;Date de la PM;Type de Reglement;Mode de Paiement;Source de bordereau;banque de remise;Reference regt;NCLE;Date de reglement;Date de saisie;Utilisateur ayant saisie;Mt reglement;Mt reglement HT; Cout de police;Taxe ;Net à payer ;Utilisateur ayant validé;Date de validation;Beneficiaires en cas de décés
+811.;VISA ETUDES PLUS-VEP BIS;EMISSION;INDIVIDUEL;MIXTES CLASSIQUES;1785;1785-13-KOFFI KODJO OGNANDON YVES LAURENT;811052X;EN COURS;14167;KAWANA;141607;KAWAN;31/12/1979;0 0 0;22/06/2018;01/07/2018;30/06/2035;0;0;0;14235;M;14235;300000;3000000;10; ;0;01/07/2018;ENCAISSEMENT DE PRIME;ESPECE;ESPECES;;CTA-CAP-20194-35365;591867;09/04/2019;09/04/2019;MIMI;14235;14235;0;0;14235;GEMEG;09/04/2019;OTAKA UDUNMA PATIENCE
+811.;VISA ETUDES PLUS-VEP BIS;EMISSION;INDIVIDUEL;MIXTES CLASSIQUES;1737;1737-04-SALAMI;811070Q;EN COURS;16018;AKAKPO KODJO;160218;AKAKPO KODJO;07/03/1983;0 0 0;28/11/2018;01/12/2018;30/11/2038;0;0;0;19700;M;19700;500000;5000000;10; ;0;01/12/2018;ENCAISSEMENT DE PRIME;ESPECE;ESPECES;;CTA-CAP-20194-35366;727390;09/04/2019;09/04/2019;MIMI;19700;19700;0;0;19700;GEMEG;09/04/2019;AKAKPO AKOFALA ESTRELLA EVGENIYA
+655.;SERENITE BIS;ENCAISSEMENT;INDIVIDUEL;FAUSSES MIXTES INDIVIDUELLES;1829;1829-06-koffi;6550071C;EN COURS;141865;TOSSOU ;141865;TOSSOU AKOUAVI B ;08/10/1969;0 0 0;29/06/2018;01/07/2018;30/06/2028;0;0;4583;50000;M;54583;5000000;6532807;10; ;0;01/07/2018;ENCAISSEMENT DE PRIME;ESPECE;ESPECES;;CTA-CAP-20194-35367;931904;09/04/2019;09/04/2019;MIMI;54583;54583;0;0;54583;GEMEG;09/04/2019;AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU
+655.;SERENITE BIS;ENCAISSEMENT;INDIVIDUEL;FAUSSES MIXTES INDIVIDUELLES;1829;1829-06-koffi;6550071C;EN COURS;141865;TOSSOU ;141865;TOSSOU AKOUAVI B ;08/10/1969;0 0 0;29/06/2018;01/07/2018;30/06/2028;0;0;4583;50000;M;54583;5000000;6532807;10; ;0;01/07/2018;ENCAISSEMENT DE PRIME;ESPECE;ESPECES;;CTA-CAP-20194-35367;931904;10/04/2019;09/04/2019;MIMI;54583;54583;0;0;54583;GEMEG;09/04/2019;AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU
+655.;SERENITE BIS;ENCAISSEMENT;INDIVIDUEL;FAUSSES MIXTES INDIVIDUELLES;1829;1829-06-koffi;6550071C;EN COURS;141865;TOSSOU ;141865;TOSSOU AKOUAVI B ;08/10/1969;0 0 0;29/06/2018;01/07/2018;30/06/2028;0;0;4583;50000;M;54583;5000000;6532807;10; ;0;01/07/2018;ENCAISSEMENT DE PRIME;ESPECE;ESPECES;;CTA-CAP-20194-35367;931904;10/04/2019;09/04/2019;MIMI;54583;54583;0;0;54583;GEMEG;09/04/2019;AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU
+655.;SERENITE BIS;ENCAISSEMENT;INDIVIDUEL;FAUSSES MIXTES INDIVIDUELLES;1829;1829-06-koffi;6550071C;EN COURS;141865;TOSSOU ;141865;TOSSOU AKOUAVI B ;08/10/1969;0 0 0;29/06/2018;01/07/2018;30/06/2028;0;0;4583;50000;M;54583;5000000;6532807;10; ;0;01/07/2018;ENCAISSEMENT DE PRIME;ESPECE;ESPECES;;CTA-CAP-20194-35367;931904;11/04/2019;09/04/2019;MIMI;54583;54583;0;0;54583;GEMEG;09/04/2019;AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+FIN DU FICHIER;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

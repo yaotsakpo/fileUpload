@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 19 avr. 2019 à 14:40
+-- Généré le :  mar. 23 avr. 2019 à 15:47
 -- Version du serveur :  5.7.19
 -- Version de PHP :  7.1.9
 
@@ -53,7 +53,6 @@ INSERT INTO `banque` (`id`, `nomDeLaBanque`, `numCptDispatch`) VALUES
 DROP TABLE IF EXISTS `exportation`;
 CREATE TABLE IF NOT EXISTS `exportation` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `journal_id` int(11) DEFAULT NULL,
   `jourExportation` datetime DEFAULT NULL,
   `jourJournal` datetime DEFAULT NULL,
   `numPiece` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -66,29 +65,10 @@ CREATE TABLE IF NOT EXISTS `exportation` (
   `positionJournal` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `montantDebit` int(11) DEFAULT NULL,
   `montantCredit` int(11) DEFAULT NULL,
+  `journal_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_F2D01343478E8802` (`journal_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Déchargement des données de la table `exportation`
---
-
-INSERT INTO `exportation` (`id`, `journal_id`, `jourExportation`, `jourJournal`, `numPiece`, `numFacture`, `reference`, `numCompteGeneral`, `numCompteTiers`, `libelleEcriture`, `dateEcheance`, `positionJournal`, `montantDebit`, `montantCredit`) VALUES
-(29, 101, '2019-04-19 12:39:32', '2019-04-16 15:09:40', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 74283, NULL),
-(30, 102, '2019-04-19 12:39:35', '2019-04-16 15:09:40', NULL, NULL, NULL, '65010', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 19700),
-(31, 103, '2019-04-19 12:39:35', '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583),
-(32, 104, '2019-04-19 12:39:35', '2019-04-16 15:09:41', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 109166, NULL),
-(33, 105, '2019-04-19 12:39:35', '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583),
-(34, 106, '2019-04-19 12:39:35', '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583),
-(35, 107, '2019-04-19 12:39:36', '2019-04-16 15:09:41', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 54583, NULL),
-(36, 108, '2019-04-19 12:39:36', '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583),
-(37, 117, '2019-04-19 12:39:36', '2019-04-18 11:22:40', NULL, NULL, NULL, '2531', NULL, 'test1', NULL, NULL, 10000, NULL),
-(38, 118, '2019-04-19 12:39:36', '2019-04-18 11:22:40', NULL, NULL, NULL, '3030', NULL, 'test1', NULL, NULL, NULL, 10000),
-(39, 119, '2019-04-19 12:39:36', '2019-04-18 11:23:32', NULL, NULL, NULL, '8921', NULL, 'test2', NULL, NULL, 20000, NULL),
-(40, 120, '2019-04-19 12:39:36', '2019-04-18 11:23:32', NULL, NULL, NULL, '3030', NULL, 'test2', NULL, NULL, NULL, 20000),
-(41, 121, '2019-04-19 12:39:36', '2019-04-18 11:26:11', NULL, NULL, NULL, '8921', NULL, 'test3', NULL, NULL, 44283, NULL),
-(42, 122, '2019-04-19 12:39:36', '2019-04-18 11:26:11', NULL, NULL, NULL, '3030', NULL, 'test3', NULL, NULL, NULL, 44283);
+  KEY `IDX_F2D01343478E8802` (`journal_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -114,14 +94,14 @@ CREATE TABLE IF NOT EXISTS `fos_user` (
   UNIQUE KEY `UNIQ_957A647992FC23A8` (`username_canonical`),
   UNIQUE KEY `UNIQ_957A6479A0D96FBF` (`email_canonical`),
   UNIQUE KEY `UNIQ_957A6479C05FB297` (`confirmation_token`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `fos_user`
 --
 
 INSERT INTO `fos_user` (`id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`) VALUES
-(1, 'yaotsakpo', 'yaotsakpo', 'emmanueltsakpo5@gmail.com', 'emmanueltsakpo5@gmail.com', 1, NULL, '$2y$13$eeki4MIzQdEjnK9d3ZRDjO1fhrMf7mMgllvkAPoQs4RSLeLSN7w/6', '2019-04-19 14:32:35', NULL, NULL, 'a:1:{i:0;s:16:\"ROLE_SUPER_ADMIN\";}');
+(1, 'yaotsakpo', 'yaotsakpo', 'emmanueltsakpo5@gmail.com', 'emmanueltsakpo5@gmail.com', 1, NULL, '$2y$13$eeki4MIzQdEjnK9d3ZRDjO1fhrMf7mMgllvkAPoQs4RSLeLSN7w/6', '2019-04-23 12:06:25', NULL, NULL, 'a:1:{i:0;s:16:\"ROLE_SUPER_ADMIN\";}');
 
 -- --------------------------------------------------------
 
@@ -140,14 +120,14 @@ CREATE TABLE IF NOT EXISTS `importation` (
   `type_operation_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_394DCB28C3EF8F86` (`type_operation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `importation`
 --
 
 INSERT INTO `importation` (`id`, `dateCreation`, `mois`, `annee`, `source`, `status`, `type_operation_id`) VALUES
-(24, '2019-04-16 15:09:24', '1970-04-01', '2019-01-01', 'datacsv_5cb5f02401c2d.txt', 2, 3);
+(34, '2019-04-23 13:11:58', '1970-04-01', '2019-01-01', 'datacsv_5cbf0f1ee8997.txt', 2, 2);
 
 -- --------------------------------------------------------
 
@@ -172,30 +152,28 @@ CREATE TABLE IF NOT EXISTS `journal` (
   `montantCredit` int(11) DEFAULT NULL,
   `cumul` int(11) DEFAULT NULL,
   `dispatch` int(11) DEFAULT NULL,
+  `codeOperation` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `suppression` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_C1A7E74D1212529D` (`cumul`),
   KEY `IDX_C1A7E74D707CE1F9` (`importation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=399 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `journal`
 --
 
-INSERT INTO `journal` (`id`, `importation_id`, `jour`, `numPiece`, `numFacture`, `reference`, `numCompteGeneral`, `numComptTiers`, `libelleEcriture`, `dateEcheance`, `positionJournal`, `montantDebit`, `montantCredit`, `cumul`, `dispatch`) VALUES
-(101, 24, '2019-04-16 15:09:40', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 74283, NULL, NULL, 0),
-(102, 24, '2019-04-16 15:09:40', NULL, NULL, NULL, '65010', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 19700, 101, NULL),
-(103, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583, 101, NULL),
-(104, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 109166, NULL, NULL, NULL),
-(105, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583, 104, NULL),
-(106, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583, 104, NULL),
-(107, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '3030', NULL, 'Remboursement - Virement', NULL, NULL, 54583, NULL, NULL, NULL),
-(108, 24, '2019-04-16 15:09:41', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Virement', NULL, NULL, NULL, 54583, 107, NULL),
-(117, 24, '2019-04-18 11:22:40', NULL, NULL, NULL, '2531', NULL, 'test1', NULL, NULL, 10000, NULL, 101, 1),
-(118, 24, '2019-04-18 11:22:40', NULL, NULL, NULL, '3030', NULL, 'test1', NULL, NULL, NULL, 10000, 101, 1),
-(119, 24, '2019-04-18 11:23:32', NULL, NULL, NULL, '8921', NULL, 'test2', NULL, NULL, 20000, NULL, 101, 1),
-(120, 24, '2019-04-18 11:23:32', NULL, NULL, NULL, '3030', NULL, 'test2', NULL, NULL, NULL, 20000, 101, 1),
-(121, 24, '2019-04-18 11:26:11', NULL, NULL, NULL, '8921', NULL, 'test3', NULL, NULL, 44283, NULL, 101, 1),
-(122, 24, '2019-04-18 11:26:11', NULL, NULL, NULL, '3030', NULL, 'test3', NULL, NULL, NULL, 44283, 101, 1);
+INSERT INTO `journal` (`id`, `importation_id`, `jour`, `numPiece`, `numFacture`, `reference`, `numCompteGeneral`, `numComptTiers`, `libelleEcriture`, `dateEcheance`, `positionJournal`, `montantDebit`, `montantCredit`, `cumul`, `dispatch`, `codeOperation`, `suppression`) VALUES
+(327, 34, '2019-04-23 14:21:15', NULL, NULL, NULL, '2020', NULL, 'Remboursement - Chèque', NULL, NULL, 74283, NULL, NULL, 0, NULL, 0),
+(328, 34, '2019-04-23 14:21:15', NULL, NULL, NULL, '65010', NULL, 'Remboursement - Chèque', NULL, NULL, NULL, 19700, 327, NULL, NULL, 0),
+(329, 34, '2019-04-23 14:21:15', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Chèque', NULL, NULL, NULL, 54583, 327, NULL, NULL, 0),
+(330, 34, '2019-04-23 14:21:15', NULL, NULL, NULL, '2020', NULL, 'Remboursement - Chèque', NULL, NULL, 109166, NULL, NULL, NULL, NULL, 0),
+(331, 34, '2019-04-23 14:21:15', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Chèque', NULL, NULL, NULL, 54583, 330, NULL, NULL, 0),
+(332, 34, '2019-04-23 14:21:15', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Chèque', NULL, NULL, NULL, 54583, 330, NULL, NULL, 0),
+(333, 34, '2019-04-23 14:21:16', NULL, NULL, NULL, '2020', NULL, 'Remboursement - Chèque', NULL, NULL, 54583, NULL, NULL, NULL, NULL, 0),
+(334, 34, '2019-04-23 14:21:16', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Chèque', NULL, NULL, NULL, 54583, 333, NULL, NULL, 0),
+(397, 34, '2019-04-23 15:45:51', NULL, NULL, NULL, '2531', NULL, 'test', NULL, NULL, 74283, NULL, 327, 1, '5cbf332f1fd2f', 0),
+(398, 34, '2019-04-23 15:45:51', NULL, NULL, NULL, '2020', NULL, 'test', NULL, NULL, NULL, 74283, 327, 1, '5cbf332f1fd2f', 0);
 
 -- --------------------------------------------------------
 
@@ -257,18 +235,18 @@ CREATE TABLE IF NOT EXISTS `operation_caisse` (
   PRIMARY KEY (`id`),
   KEY `IDX_CF23EAAAF347EFB` (`produit_id`),
   KEY `IDX_CF23EAAA707CE1F9` (`importation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=185 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `operation_caisse`
 --
 
 INSERT INTO `operation_caisse` (`id`, `CodeProduit`, `ModeDeComptabilisation`, `Categorie`, `Classification`, `CodeApporteur`, `Apporteur`, `NumeroPolice`, `StatutPolice`, `NumeroSouscripteur`, `Souscripteur`, `NumeroAssure`, `Assure`, `DateNaissanceAssure`, `Compte`, `DateSouscription`, `DateEffet`, `DateEcheance`, `Accessoires`, `CoutSms`, `PrimeDC`, `PrimeEpargne`, `Periodicite`, `Prime`, `KDC`, `KTerme`, `EtatPolice`, `DateSort`, `PMActuelle`, `DateDeLaPM`, `TypeDeReglement`, `ModeDePaiement`, `SourceDeBordereau`, `BanqueDeRemise`, `ReferenceRegt`, `NCLE`, `DateDeReglement`, `DateDeSaisie`, `UtilisateurAyantSaisie`, `MtReglement`, `MtReglementHt`, `CoutDePolice`, `Taxe`, `NetAPayer`, `Utilisateur`, `DateDeValidation`, `BeneficiaireEnCasDeDeces`, `produit_id`, `importation_id`) VALUES
-(125, '811.', 'EMISSION', 'INDIVIDUEL', 'MIXTES CLASSIQUES', '1737', '1737-04-SALAMI', '811070Q', 'EN COURS', '16018', 'AKAKPO KODJO', '160218', 'AKAKPO KODJO', '1983-03-07', '0 0 0', '2018-11-28', '2018-12-01', '2038-11-30', '0', '0', 0, 19700, 'M', 19700, '500000', '5000000', '10', '2019-04-16', 0, '2018-12-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35366', 727390, '2019-04-09', '2019-04-09', 'MIMI', 19700, 19700, '0', '0', 19700, 'GEMEG', '2019-04-09', 'AKAKPO AKOFALA ESTRELLA EVGENIYA\r\n', 1, 24),
-(126, '655.', 'ENCAISSEMENT', 'INDIVIDUEL', 'FAUSSES MIXTES INDIVIDUELLES', '1829', '1829-06-koffi', '6550071C', 'EN COURS', '141865', 'TOSSOU ', '141865', 'TOSSOU AKOUAVI B ', '1969-10-08', '0 0 0', '2018-06-29', '2018-07-01', '2028-06-30', '0', '0', 4583, 50000, 'M', 54583, '5000000', '6532807', '10', '2019-04-16', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35367', 931904, '2019-04-09', '2019-04-09', 'MIMI', 54583, 54583, '0', '0', 54583, 'GEMEG', '2019-04-09', 'AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU\r\n', 2, 24),
-(127, '655.', 'ENCAISSEMENT', 'INDIVIDUEL', 'FAUSSES MIXTES INDIVIDUELLES', '1829', '1829-06-koffi', '6550071C', 'EN COURS', '141865', 'TOSSOU ', '141865', 'TOSSOU AKOUAVI B ', '1969-10-08', '0 0 0', '2018-06-29', '2018-07-01', '2028-06-30', '0', '0', 4583, 50000, 'M', 54583, '5000000', '6532807', '10', '2019-04-16', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35367', 931904, '2019-04-10', '2019-04-09', 'MIMI', 54583, 54583, '0', '0', 54583, 'GEMEG', '2019-04-09', 'AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU\r\n', 2, 24),
-(128, '655.', 'ENCAISSEMENT', 'INDIVIDUEL', 'FAUSSES MIXTES INDIVIDUELLES', '1829', '1829-06-koffi', '6550071C', 'EN COURS', '141865', 'TOSSOU ', '141865', 'TOSSOU AKOUAVI B ', '1969-10-08', '0 0 0', '2018-06-29', '2018-07-01', '2028-06-30', '0', '0', 4583, 50000, 'M', 54583, '5000000', '6532807', '10', '2019-04-16', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35367', 931904, '2019-04-10', '2019-04-09', 'MIMI', 54583, 54583, '0', '0', 54583, 'GEMEG', '2019-04-09', 'AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU\r\n', 2, 24),
-(129, '655.', 'ENCAISSEMENT', 'INDIVIDUEL', 'FAUSSES MIXTES INDIVIDUELLES', '1829', '1829-06-koffi', '6550071C', 'EN COURS', '141865', 'TOSSOU ', '141865', 'TOSSOU AKOUAVI B ', '1969-10-08', '0 0 0', '2018-06-29', '2018-07-01', '2028-06-30', '0', '0', 4583, 50000, 'M', 54583, '5000000', '6532807', '10', '2019-04-16', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35367', 931904, '2019-04-11', '2019-04-09', 'MIMI', 54583, 54583, '0', '0', 54583, 'GEMEG', '2019-04-09', 'AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU\r\n', 2, 24);
+(180, '811.', 'EMISSION', 'INDIVIDUEL', 'MIXTES CLASSIQUES', '1737', '1737-04-SALAMI', '811070Q', 'EN COURS', '16018', 'AKAKPO KODJO', '160218', 'AKAKPO KODJO', '1983-03-07', '0 0 0', '2018-11-28', '2018-12-01', '2038-11-30', '0', '0', 0, 19700, 'M', 19700, '500000', '5000000', '10', '2019-04-23', 0, '2018-12-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35366', 727390, '2019-04-09', '2019-04-09', 'MIMI', 19700, 19700, '0', '0', 19700, 'GEMEG', '2019-04-09', 'AKAKPO AKOFALA ESTRELLA EVGENIYA\r\n', 1, 34),
+(181, '655.', 'ENCAISSEMENT', 'INDIVIDUEL', 'FAUSSES MIXTES INDIVIDUELLES', '1829', '1829-06-koffi', '6550071C', 'EN COURS', '141865', 'TOSSOU ', '141865', 'TOSSOU AKOUAVI B ', '1969-10-08', '0 0 0', '2018-06-29', '2018-07-01', '2028-06-30', '0', '0', 4583, 50000, 'M', 54583, '5000000', '6532807', '10', '2019-04-23', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35367', 931904, '2019-04-09', '2019-04-09', 'MIMI', 54583, 54583, '0', '0', 54583, 'GEMEG', '2019-04-09', 'AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU\r\n', 2, 34),
+(182, '655.', 'ENCAISSEMENT', 'INDIVIDUEL', 'FAUSSES MIXTES INDIVIDUELLES', '1829', '1829-06-koffi', '6550071C', 'EN COURS', '141865', 'TOSSOU ', '141865', 'TOSSOU AKOUAVI B ', '1969-10-08', '0 0 0', '2018-06-29', '2018-07-01', '2028-06-30', '0', '0', 4583, 50000, 'M', 54583, '5000000', '6532807', '10', '2019-04-23', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35367', 931904, '2019-04-10', '2019-04-09', 'MIMI', 54583, 54583, '0', '0', 54583, 'GEMEG', '2019-04-09', 'AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU\r\n', 2, 34),
+(183, '655.', 'ENCAISSEMENT', 'INDIVIDUEL', 'FAUSSES MIXTES INDIVIDUELLES', '1829', '1829-06-koffi', '6550071C', 'EN COURS', '141865', 'TOSSOU ', '141865', 'TOSSOU AKOUAVI B ', '1969-10-08', '0 0 0', '2018-06-29', '2018-07-01', '2028-06-30', '0', '0', 4583, 50000, 'M', 54583, '5000000', '6532807', '10', '2019-04-23', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35367', 931904, '2019-04-10', '2019-04-09', 'MIMI', 54583, 54583, '0', '0', 54583, 'GEMEG', '2019-04-09', 'AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU\r\n', 2, 34),
+(184, '655.', 'ENCAISSEMENT', 'INDIVIDUEL', 'FAUSSES MIXTES INDIVIDUELLES', '1829', '1829-06-koffi', '6550071C', 'EN COURS', '141865', 'TOSSOU ', '141865', 'TOSSOU AKOUAVI B ', '1969-10-08', '0 0 0', '2018-06-29', '2018-07-01', '2028-06-30', '0', '0', 4583, 50000, 'M', 54583, '5000000', '6532807', '10', '2019-04-23', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35367', 931904, '2019-04-11', '2019-04-09', 'MIMI', 54583, 54583, '0', '0', 54583, 'GEMEG', '2019-04-09', 'AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU\r\n', 2, 34);
 
 -- --------------------------------------------------------
 
@@ -336,8 +314,8 @@ ALTER TABLE `importation`
 -- Contraintes pour la table `journal`
 --
 ALTER TABLE `journal`
-  ADD CONSTRAINT `FK_C1A7E74D1212529D` FOREIGN KEY (`cumul`) REFERENCES `journal` (`id`),
-  ADD CONSTRAINT `FK_C1A7E74D707CE1F9` FOREIGN KEY (`importation_id`) REFERENCES `importation` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `FK_C1A7E74D1212529D` FOREIGN KEY (`cumul`) REFERENCES `journal` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `FK_C1A7E74D707CE1F9` FOREIGN KEY (`importation_id`) REFERENCES `importation` (`id`);
 
 --
 -- Contraintes pour la table `operation_caisse`

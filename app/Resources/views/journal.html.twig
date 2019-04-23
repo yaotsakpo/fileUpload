@@ -29,7 +29,7 @@
             <table id="basic-datatables" class="display table table-striped table-hover" >
                           <thead>
                           <tr>
-                              <th data-field="jour"  >Jour</th>
+                              <th data-field="jour">Jour</th>
                               <th ddata-field="NumPiece">Numero Piece</th>
                               <th data-field="NumFact">Numero Facture</th>
                               <th data-field="Ref">Reference</th>
@@ -87,18 +87,21 @@
                                           {% endif %}
                                       {% endif %}
 
+                                       {% if journal.cumul != null  and journal.dispatch == 1 and journal.montantCredit == null  %}
+                                         
+                                      <a href="{{ path('editDispatch',{'journal':journal.id} ) }}" >
+                                      <button class="btn btn-success waves-effect" type="submit" >Modifier</button></a>
+                                          
+                                      {% endif %}
+
                                   </td> 
                               </tr>
                               {% endfor %}
                           </tbody>
             </table>
           </div>
-
-
-
-           
+          
 </div>
-
 
 
 {% endblock %}

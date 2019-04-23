@@ -65,6 +65,7 @@
                       <th data-field="Libecriture">Libelle Ecriture</th>
                       <th data-field="debit">Debit</th>
                       <th data-field="Credit">Credit</th>
+                      <th data-field="Action">Action</th>
                   </tr>                           
                   </thead>
                   <tbody>
@@ -83,6 +84,13 @@
                           {{ dispatch.montantCredit|number_format(2, '.', ' ') }}
                         {% endif %}
                       </td> 
+                      <td>
+                         {% if dispatch.montantCredit == null %}
+                          <a href="{{ path('editDispatch',{'journal':dispatch.id} ) }}" >
+                          <button class="btn btn-success waves-effect" type="submit" >Modifier</button></a>
+                        {% endif %}
+                       
+                      </td> 
                       </tr>
                   {% endfor %}
                   </tbody>
@@ -90,6 +98,8 @@
               </div>
             </div>
           </div>
+
+
 
           <div class="col-4">
             <div class="card ">

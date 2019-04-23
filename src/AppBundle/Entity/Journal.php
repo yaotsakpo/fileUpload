@@ -108,26 +108,42 @@ class Journal
 
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="suppression", type="integer",nullable=true)
+     */
+    private $suppression;
+
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="codeOperation",type="string", length=255,nullable=true)
+     */
+    private $codeOperation;
+
+
+    /**
      *
      * @var Importation $importation
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Importation",inversedBy="journals",cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Importation",inversedBy="journals",cascade={"persist"})
      *
-     * @ORM\JoinColumn(nullable=true,onDelete="CASCADE",unique=false)
+     * @ORM\JoinColumn(nullable=true,unique=false)
      */
 
     Private $importation;
 
 
     /**                                     
-    * @ORM\OneToOne(targetEntity="Journal", mappedBy="cumul")                                     
+    * @ORM\OneToMany(targetEntity="Journal", mappedBy="cumul",cascade={"persist"})                                     
     */                                     
     private $detailsCumul;   
 
 
     /**                               
-    * @ORM\ManyToOne(targetEntity="Journal", inversedBy="detailsCumul",cascade={"all"})                                     
-    * @ORM\JoinColumn(name="cumul", referencedColumnName="id",nullable=true,unique=false)                                     
+    * @ORM\ManyToOne(targetEntity="Journal", inversedBy="detailsCumul")                                
+    * @ORM\JoinColumn(name="cumul", referencedColumnName="id",nullable=true,unique=false,onDelete="SET NULL")                                     
     */                                     
     private $cumul;
 
@@ -431,24 +447,94 @@ class Journal
         return $this->importation;
     }
 
+
+
     /**
-     * Set detailsCumul
+     * Set dispatch
      *
-     * @param \AppBundle\Entity\Journal $detailsCumul
+     * @param integer $dispatch
      *
      * @return Journal
      */
-    public function setDetailsCumul(\AppBundle\Entity\Journal $detailsCumul = null)
+    public function setDispatch($dispatch)
     {
-        $this->detailsCumul = $detailsCumul;
+        $this->dispatch = $dispatch;
 
         return $this;
     }
 
     /**
+     * Get dispatch
+     *
+     * @return integer
+     */
+    public function getDispatch()
+    {
+        return $this->dispatch;
+    }
+
+
+    /**
+     * Set codeOperation
+     *
+     * @param string $codeOperation
+     *
+     * @return Journal
+     */
+    public function setCodeOperation($codeOperation)
+    {
+        $this->codeOperation = $codeOperation;
+
+        return $this;
+    }
+
+    /**
+     * Get codeOperation
+     *
+     * @return string
+     */
+    public function getCodeOperation()
+    {
+        return $this->codeOperation;
+    }
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->detailsCumul = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add detailsCumul
+     *
+     * @param \AppBundle\Entity\Journal $detailsCumul
+     *
+     * @return Journal
+     */
+    public function addDetailsCumul(\AppBundle\Entity\Journal $detailsCumul)
+    {
+        $this->detailsCumul[] = $detailsCumul;
+
+        return $this;
+    }
+
+    /**
+     * Remove detailsCumul
+     *
+     * @param \AppBundle\Entity\Journal $detailsCumul
+     */
+    public function removeDetailsCumul(\AppBundle\Entity\Journal $detailsCumul)
+    {
+        $this->detailsCumul->removeElement($detailsCumul);
+    }
+
+    /**
      * Get detailsCumul
      *
-     * @return \AppBundle\Entity\Journal
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDetailsCumul()
     {
@@ -480,28 +566,26 @@ class Journal
     }
 
     /**
-     * Set dispatch
+     * Set suppression
      *
-     * @param integer $dispatch
+     * @param integer $suppression
      *
      * @return Journal
      */
-    public function setDispatch($dispatch)
+    public function setSuppression($suppression)
     {
-        $this->dispatch = $dispatch;
+        $this->suppression = $suppression;
 
         return $this;
     }
 
     /**
-     * Get dispatch
+     * Get suppression
      *
      * @return integer
      */
-    public function getDispatch()
+    public function getSuppression()
     {
-        return $this->dispatch;
+        return $this->suppression;
     }
-
-
 }
