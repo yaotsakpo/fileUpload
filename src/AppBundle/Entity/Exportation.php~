@@ -106,12 +106,13 @@ class Exportation
     private $montantCredit;
 
 
+
     /**
-    * @ORM\OneToOne(targetEntity=Journal::class, cascade={"persist", "remove"})
-    * @ORM\JoinColumn(nullable=true) 
+    * @ORM\ManyToOne(targetEntity=Journal::class, cascade={"persist", "remove"})
+    * @ORM\JoinColumn(nullable=true,unique=false) 
     */
     private $journal;
-
+    
 
     /**
      * Get id
@@ -386,5 +387,31 @@ class Exportation
     {
         return $this->montantCredit;
     }
-}
 
+    /**
+     * Set jourExportation
+     *
+     * @param \DateTime $jourExportation
+     *
+     * @return Exportation
+     */
+    public function setJourExportation($jourExportation)
+    {
+        $this->jourExportation = $jourExportation;
+
+        return $this;
+    }
+
+    /**
+     * Get jourExportation
+     *
+     * @return \DateTime
+     */
+    public function getJourExportation()
+    {
+        return $this->jourExportation;
+    }
+
+
+
+}
