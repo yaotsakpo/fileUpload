@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+
+{{ parent() }}
+
+{% endblock %}
+
+{% block body %}
+<br>
+   <a class="btn btn-primary" href="{{ path('demandePermissionListe')}}" style="margin:1%">retour</a>
+
+   <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Ligne concernée par la demande de permission </div>
+                </div>
+                <div class="card-body">
+                     <table id="basic-datatables" class="display table table-striped table-hover" >
+                          <thead>
+                          <tr>
+                              <th data-field="jour">Jour</th>
+                              <th ddata-field="NumPiece">Numero Piece</th>
+                              <th data-field="NumFact">Numero Facture</th>
+                              <th data-field="Ref">Reference</th>
+                              <th data-field="NumCompteGen">Numero de Compte General</th>
+                              <th data-field="NumCptTiers">Numero Compte Tiers</th>
+                              <th data-field="Libecriture">Libelle Ecriture</th>
+                              <th data-field="DateEcheance">Date Echeance</th>
+                              <th data-field="PositionJournal">Position Journal</th>
+                              <th data-field="debit">Debit</th>
+                              <th data-field="Credit">Credit</th>
+                          </tr>                           
+                          </thead>
+                          <tbody>
+                             {% for journal in journalArray %}
+                              <tr>
+                                  <td>{{ journal.jour|date('d-m-Y H:m:s') }}</td> 
+                                  <td>{{ journal.numPiece }}</td> 
+                                  <td>{{ journal.numFacture }}</td> 
+                                  <td>{{ journal.reference }}</td> 
+                                  <td>{{ journal.numCompteGeneral }}</td> 
+                                  <td>{{ journal.numComptTiers }}</td> 
+                                  <td>{{ journal.libelleEcriture }}</td> 
+                                  <td>{{ journal.dateEcheance }}</td> 
+                                  <td>{{ journal.positionJournal }}</td> 
+                                  <td>
+                                    {% if journal.montantDebit != null %}
+                                      {{ journal.montantDebit|number_format(2, '.', ' ') }}
+                                    {% endif %}
+                                  </td> 
+                                  <td>
+                                    {% if journal.montantCredit != null %}
+                                      {{ journal.montantCredit|number_format(2, '.', ' ') }}
+                                    {% endif %}
+                                  </td> 
+                                  <td>
+
+                                       {% if journal.cumul != null  and journal.dispatch == 1 and journal.montantCredit == null  %}
+                                         
+                                      <a href="{{ path('accordDemande',{'id':demande.id})}}" >
+                                      <button class="btn btn-success waves-effect" type="submit" >Accorder</button></a>
+
+                                      <a href="{{ path('rejetDemande',{'id':demande.id})}}" >
+                                      <button class="btn btn-danger waves-effect" type="submit" >Refuser</button></a>
+                                          
+                                      {% endif %}
+
+                                  </td> 
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+            </table>
+                </div>     
+            </div>
+      </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<script type="text/javascript">
+
+  $('#basic-datatables').DataTable({
+      });
+
+</script>
+
+{% endblock %}

@@ -149,6 +149,16 @@ class Journal
 
 
     /**
+     * @var ArrayCollection demandePermissions
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\DemandePermission",mappedBy="journal",cascade={"remove"})
+     */
+
+    private $demandePermissions;
+
+
+
+    /**
      * Get id
      *
      * @return int
@@ -587,5 +597,39 @@ class Journal
     public function getSuppression()
     {
         return $this->suppression;
+    }
+
+    /**
+     * Add demandePermission
+     *
+     * @param \AppBundle\Entity\DemandePermission $demandePermission
+     *
+     * @return Journal
+     */
+    public function addDemandePermission(\AppBundle\Entity\DemandePermission $demandePermission)
+    {
+        $this->demandePermissions[] = $demandePermission;
+
+        return $this;
+    }
+
+    /**
+     * Remove demandePermission
+     *
+     * @param \AppBundle\Entity\DemandePermission $demandePermission
+     */
+    public function removeDemandePermission(\AppBundle\Entity\DemandePermission $demandePermission)
+    {
+        $this->demandePermissions->removeElement($demandePermission);
+    }
+
+    /**
+     * Get demandePermissions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDemandePermissions()
+    {
+        return $this->demandePermissions;
     }
 }

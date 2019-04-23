@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 23 avr. 2019 à 15:47
+-- Généré le :  mar. 23 avr. 2019 à 18:03
 -- Version du serveur :  5.7.19
 -- Version de PHP :  7.1.9
 
@@ -21,6 +21,24 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `fileupload`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `accord_permission`
+--
+
+DROP TABLE IF EXISTS `accord_permission`;
+CREATE TABLE IF NOT EXISTS `accord_permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `demande_id` int(11) NOT NULL,
+  `accordeur_id` int(11) NOT NULL,
+  `dateAccordPermission` datetime NOT NULL,
+  `valeur` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_BD560D4680E95E18` (`demande_id`),
+  KEY `IDX_BD560D4618AF9C4F` (`accordeur_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -43,6 +61,31 @@ CREATE TABLE IF NOT EXISTS `banque` (
 INSERT INTO `banque` (`id`, `nomDeLaBanque`, `numCptDispatch`) VALUES
 (1, 'ECOBANK', 2531),
 (2, 'BSIC', 8921);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `demande_permission`
+--
+
+DROP TABLE IF EXISTS `demande_permission`;
+CREATE TABLE IF NOT EXISTS `demande_permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `demandeur_id` int(11) NOT NULL,
+  `journal_id` int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  `Etat` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_1685980B95A6EE59` (`demandeur_id`),
+  KEY `IDX_1685980B478E8802` (`journal_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Déchargement des données de la table `demande_permission`
+--
+
+INSERT INTO `demande_permission` (`id`, `demandeur_id`, `journal_id`, `date`, `Etat`) VALUES
+(2, 1, 397, '2019-04-23 16:44:02', 1);
 
 -- --------------------------------------------------------
 
@@ -101,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `fos_user` (
 --
 
 INSERT INTO `fos_user` (`id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`) VALUES
-(1, 'yaotsakpo', 'yaotsakpo', 'emmanueltsakpo5@gmail.com', 'emmanueltsakpo5@gmail.com', 1, NULL, '$2y$13$eeki4MIzQdEjnK9d3ZRDjO1fhrMf7mMgllvkAPoQs4RSLeLSN7w/6', '2019-04-23 12:06:25', NULL, NULL, 'a:1:{i:0;s:16:\"ROLE_SUPER_ADMIN\";}');
+(1, 'landogroup', 'landogroup', 'yao.tskapo@landogroup.com', 'yao.tskapo@landogroup.com', 1, NULL, '$2y$13$eeki4MIzQdEjnK9d3ZRDjO1fhrMf7mMgllvkAPoQs4RSLeLSN7w/6', '2019-04-23 12:06:25', NULL, NULL, 'a:1:{i:0;s:16:\"ROLE_SUPER_ADMIN\";}');
 
 -- --------------------------------------------------------
 
@@ -297,6 +340,20 @@ INSERT INTO `type_operation` (`id`, `LibelleTypeOperation`, `numCptDebit`) VALUE
 --
 -- Contraintes pour les tables déchargées
 --
+
+--
+-- Contraintes pour la table `accord_permission`
+--
+ALTER TABLE `accord_permission`
+  ADD CONSTRAINT `FK_BD560D4618AF9C4F` FOREIGN KEY (`accordeur_id`) REFERENCES `fos_user` (`id`),
+  ADD CONSTRAINT `FK_BD560D4680E95E18` FOREIGN KEY (`demande_id`) REFERENCES `demande_permission` (`id`);
+
+--
+-- Contraintes pour la table `demande_permission`
+--
+ALTER TABLE `demande_permission`
+  ADD CONSTRAINT `FK_1685980B478E8802` FOREIGN KEY (`journal_id`) REFERENCES `journal` (`id`),
+  ADD CONSTRAINT `FK_1685980B95A6EE59` FOREIGN KEY (`demandeur_id`) REFERENCES `fos_user` (`id`);
 
 --
 -- Contraintes pour la table `exportation`

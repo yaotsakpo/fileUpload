@@ -149,6 +149,16 @@ class Journal
 
 
     /**
+     * @var ArrayCollection demandePermissions
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\DemandePermission",mappedBy="journal",cascade={"remove"})
+     */
+
+    private $demandePermissions;
+
+
+
+    /**
      * Get id
      *
      * @return int
@@ -563,5 +573,29 @@ class Journal
     public function getCumul()
     {
         return $this->cumul;
+    }
+
+    /**
+     * Set suppression
+     *
+     * @param integer $suppression
+     *
+     * @return Journal
+     */
+    public function setSuppression($suppression)
+    {
+        $this->suppression = $suppression;
+
+        return $this;
+    }
+
+    /**
+     * Get suppression
+     *
+     * @return integer
+     */
+    public function getSuppression()
+    {
+        return $this->suppression;
     }
 }

@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+
+{{ parent() }}
+
+{% endblock %}
+
+{% block body %}
+<br>
+   <a class="btn btn-primary" href="{{ path('homepage')}}" style="margin:1%">retour</a>
+
+
+   <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Liste des demandes de permission pour modification de ligne dispatch</div>
+                </div>
+                <div class="card-body">
+                     <table id="basic-datatables" class="display table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th data-field="date">Date de demande</th>
+                            <th ddata-field="Demandeur">Demandeur</th>
+                            <th ddata-field="ligne">Etat</th>
+                            <th data-field="action">Voir la ligne dispatch</th>
+                           
+                        </tr>                           
+                        </thead>
+                        <tbody>
+                          {% for demande in demandes %}
+                              <tr>
+                                  <td>{{ demande.date|date('d-m-Y H:m:s') }}</td> 
+                                  <td>{{ demande.demandeur.username }}</td> 
+                                  <td>
+                                    {% if demande.etat == 1 %}
+                                      demande autorisée
+                                    {% else %}
+                                      demande en cours
+                                    {% endif %}
+                                    </td> 
+                                  <td>
+                                      <a href="{{path('visualiastionLigneJournal',{'id':demande.journal.id}) }}" >
+                                      <button class="btn btn-success waves-effect" type="submit" >Voir la ligne</button></a> 
+                                  </td> 
+                          {% endfor %}  
+                        </tbody>
+                    </table>
+                </div>     
+            </div>
+      </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<script type="text/javascript">
+
+
+
+  $('#basic-datatables').DataTable({
+      });
+
+
+</script>
+
+{% endblock %}

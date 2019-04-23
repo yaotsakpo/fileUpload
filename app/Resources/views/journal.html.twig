@@ -89,7 +89,7 @@
 
                                        {% if journal.cumul != null  and journal.dispatch == 1 and journal.montantCredit == null  %}
                                          
-                                      <a href="{{ path('editDispatch',{'journal':journal.id} ) }}" >
+                                      <a href="{{ path('envoieDemandePermission',{'journal':journal.id} ) }}" >
                                       <button class="btn btn-success waves-effect" type="submit" >Modifier</button></a>
                                           
                                       {% endif %}
