@@ -143,6 +143,31 @@ class dispatchController extends Controller
         ]); 
   }
 
+
+
+    /**
+     * @Route("/deleteDispatch/{journal}", name="deleteDispatch")
+     */
+    public function deleteDispatchAction(Request $request,Journal $journal)
+    {
+        
+      $repository= $this->getDoctrine()->getRepository('AppBundle:Journal');
+      $lignes= $repository->findBy(['codeOperation'=>$journal->getcodeOperation(),'suppression'=>0]);
+
+
+          foreach ($lignes as $key => $ligne) {
+            $em = $this->getDoctrine()->getManager();
+            $ligne->setsuppression(1);
+            $em->flush();
+            }
+       
+
+      $this->addFlash('notice','Supression de ligne dispatch effectue avec succes');
+
+
+      return $this->redirectToRoute('visualisationDeJournal',['importation'=>$journal->getImportation()->getId()]);
+ 
+  }
      
 
   

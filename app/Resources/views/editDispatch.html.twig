@@ -8,7 +8,13 @@
 
 {% block body %}
 <br>
-   <a class="btn btn-primary" href="{{ path('visualisationDeJournal',{'importation':journal.importation.id}) }}" style="margin:1%">retour</a>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active"><a href="{{ path('homepage')}}">Acceuil</a></li>
+    <li class="breadcrumb-item ">Ligne dispatch</a></li>
+    <li class="breadcrumb-item ">Modification Ligne Dispatch</a></li>
+  </ol>
+</nav>
    <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -18,34 +24,34 @@
                 <div class="card-body">
                   {{ form_start(editForm,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
                   <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                       <div class="form-group">
                         <label>Banque:</label>
                         {{ form_errors(editForm.numCptDebiter) }}
                         {{ form_widget(editForm.numCptDebiter,{'attr':{'class':'form-control'}}) }} 
                       </div>
                     </div>
-                     <div class="col-lg-4">
+                     <div class="col-lg-3">
                       <div class="form-group">
                         <label >Libelle ecriture:</label>
                          {{ form_errors(editForm.libelle) }}
                          {{ form_widget(editForm.libelle,{'attr':{'class':'form-control'}}) }}  
                       </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                       <div class="form-group">
                         <label >montant:</label>
                          {{ form_errors(editForm.montant) }}
                          {{ form_widget(editForm.montant,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
                       </div>
                     </div>
+                    <div class="col-lg-3 pt-4">
+                      <div class="form-group">
+                        <button type="submit" class="btn btn-primary">valider</button>
+                      </div>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <center>
-                    <button type="submit" class="btn btn-primary">valider</button>
-                    <button type="reset" class="btn btn-danger">annuler</button> 
-                    </center>
-                  </div>
+                  
                   {{ form_end(editForm) }}
 
                 </div>     
@@ -64,7 +70,7 @@
 {% for error in editForm.vars.errors.form.getErrors(true) %} 
 
       var placementFrom = 'top';
-      var placementAlign = 'right';
+      var placementAlign = 'center';
       var state = 'danger';
       var style = 'withicon';
       var content = {};

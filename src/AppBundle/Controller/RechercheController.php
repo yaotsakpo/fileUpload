@@ -25,9 +25,9 @@ class RechercheController extends Controller
 {
    
     /**
-     * @Route("/formatageRecherche/", name="formatageRecherche")
+     * @Route("/formatageRecherche/{importation}", name="formatageRecherche" ,defaults={"importation"=0})
      */
-    public function formatageRecherche(Request $request)
+    public function formatageRecherche(Request $request,$importation)
     {        
         $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
         $importations= $repository->findBy([],['id' => 'DESC']);
@@ -74,7 +74,7 @@ class RechercheController extends Controller
                 if($bool==0)
                 {
 
-                    $rechercheForm->addError(new FormError("Il n'existe aucune importation correspondate à votre demande"));
+                    $rechercheForm->addError(new FormError("Il n'existe aucune importation correspondante à votre demande"));
 
                 }else
                 {   
@@ -84,24 +84,40 @@ class RechercheController extends Controller
                     return $this->render('formatage.html.twig', [
                         'rechercheForm' => $rechercheForm->createView(),
                         'importation' => $recherche,
+                        'position'=>'Formatage'
                     ]);
 
                 }
             
         }
 
+
+        if($importation!=0)
+        {
+            $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
+            $recherche= $repository->findOneBy(['id'=>$importation]);
+
+            return $this->render('formatage.html.twig', [
+                        'rechercheForm' => $rechercheForm->createView(),
+                        'importation' => $recherche,
+                        'position'=>'Formatage'
+
+                    ]);
+        }
+
          return $this->render('formatage.html.twig', [
             'rechercheForm' => $rechercheForm->createView(),
             'importation' => $recherche,
+            'position'=>'Formatage'
         ]);
  	}
 
 
 
     /**
-     * @Route("/journalRecherche/", name="journalRecherche")
+     * @Route("/journalRecherche/{importation}", name="journalRecherche",defaults={"importation"=0})
      */
-    public function journalRecherche(Request $request)
+    public function journalRecherche(Request $request,$importation)
     {      
         $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
         $importations= $repository->findBy([],['id' => 'DESC']);  
@@ -147,7 +163,7 @@ class RechercheController extends Controller
                 if($bool==0)
                 {
 
-                    $rechercheForm->addError(new FormError("Il n'existe aucune importation correspondate à votre demande"));
+                    $rechercheForm->addError(new FormError("Il n'existe aucune importation correspondante à votre demande"));
 
                 }else
                 {
@@ -157,23 +173,39 @@ class RechercheController extends Controller
                     return $this->render('formatage.html.twig', [
                         'rechercheForm' => $rechercheForm->createView(),
                         'importation' => $recherche,
+                        'position'=>'Journal'
                     ]);
 
                 }
             
         }
 
+         if($importation!=0)
+        {
+            $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
+            $recherche= $repository->findOneBy(['id'=>$importation]);
+
+            return $this->render('formatage.html.twig', [
+                        'rechercheForm' => $rechercheForm->createView(),
+                        'importation' => $recherche,
+                        'position'=>'Journal'
+                    ]);
+        }
+
+
         return $this->render('formatage.html.twig', [
             'rechercheForm' => $rechercheForm->createView(),
             'importation' => $recherche,
+            'position'=>'Journal'
+
         ]);
     }
 
 
     /**
-     * @Route("/dispatchRecherche/", name="dispatchRecherche")
+     * @Route("/dispatchRecherche/{importation}", name="dispatchRecherche",defaults={"importation"=0})
      */
-    public function dispatchRecherche(Request $request)
+    public function dispatchRecherche(Request $request,$importation)
     {      
         $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
         $importations= $repository->findBy([],['id' => 'DESC']);  
@@ -219,7 +251,7 @@ class RechercheController extends Controller
                 if($bool==0)
                 {
 
-                    $rechercheForm->addError(new FormError("Il n'existe aucune importation correspondate à votre demande"));
+                    $rechercheForm->addError(new FormError("Il n'existe aucune importation correspondante à votre demande"));
 
                 }else
                 {
@@ -230,15 +262,32 @@ class RechercheController extends Controller
                     return $this->render('formatage.html.twig', [
                         'rechercheForm' => $rechercheForm->createView(),
                         'importation' => $recherche,
+                        'position'=>'Dispatch'
+
                     ]);
 
                 }
             
         }
 
+         if($importation!=0)
+        {
+            $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
+            $recherche= $repository->findOneBy(['id'=>$importation]);
+
+            return $this->render('formatage.html.twig', [
+                        'rechercheForm' => $rechercheForm->createView(),
+                        'importation' => $recherche,
+                        'position'=>'Dispatch'
+
+                    ]);
+        }
+
         return $this->render('formatage.html.twig', [
             'rechercheForm' => $rechercheForm->createView(),
             'importation' => $recherche,
+            'position'=>'Dispatch'
+
         ]);
     }
 

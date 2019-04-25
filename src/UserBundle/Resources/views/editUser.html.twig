@@ -7,7 +7,14 @@
 {% endblock %}
 
 {% block body %}
-   <a class="btn btn-primary" href="{{ path('homepage')}}" style="margin:1%">retour</a>
+  <br>
+  <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active"><a href="{{ path('homepage')}}">Acceuil</a></li>
+    <li class="breadcrumb-item "><a href="{{ path('users')}}" >Utilisateurs</a></li>
+    <li class="breadcrumb-item "><a>Modification d'utilisateurs</a></li>
+  </ol>
+</nav>
    <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -17,34 +24,34 @@
                 <div class="card-body">
                   {{ form_start(edit_form,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
                   <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                       <div class="form-group">
                         <label>username:</label>
                         {{ form_errors(edit_form.username) }}
                        {{ form_widget(edit_form.username,{'attr':{'placeholder':'Username','autocomplete': 'off','class':'form-control'}}) }}
                       </div>
                     </div>
-                     <div class="col-lg-4">
+                     <div class="col-lg-3">
                       <div class="form-group">
                         <label >Email:</label>
                          {{ form_errors(edit_form.email) }}
                         {{ form_widget(edit_form.email,{'attr': {'autocomplete': 'off', 'placeholder':'Email','class':'form-control' }}) }}
                       </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                       <div class="form-group">
                         <label>Roles:</label>
                         {{ form_errors(edit_form.roles) }}
                         {{ form_widget(edit_form.roles,{'attr':{'class':'form-control'}} ) }}
                       </div>
                     </div>
+                    <div class="col-lg-3 pt-4">
+                      <div class="form-group">
+                         <button type="submit" class="btn btn-primary">valider</button>
+                      </div>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <center>
-                    <button type="submit" class="btn btn-primary">valider</button>
-                    <button type="reset" class="btn btn-danger">annuler</button> 
-                    </center>
-                  </div>
+                 
                   {{ form_end(edit_form) }}
 
                 </div>     

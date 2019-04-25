@@ -66,6 +66,17 @@ class DemandePermission
 
     private $journal;
 
+   /**
+     *
+     * @var TypeDemande $type
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TypeDemande",inversedBy="demandePermissions")
+     *
+     * @ORM\JoinColumn(nullable=false)
+     */
+
+    private $type;
+
 
     /**
      * @var ArrayCollection accordsPermissions
@@ -74,6 +85,9 @@ class DemandePermission
      */
 
     private $accordsPermissions;
+
+
+
 
 
     /**
@@ -245,5 +259,29 @@ class DemandePermission
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set type
+     *
+     * @param \AppBundle\Entity\TypeDemande $type
+     *
+     * @return DemandePermission
+     */
+    public function setType(\AppBundle\Entity\TypeDemande $type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \AppBundle\Entity\TypeDemande
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

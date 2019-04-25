@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 23 avr. 2019 à 20:06
+-- Généré le :  jeu. 25 avr. 2019 à 08:41
 -- Version du serveur :  5.7.19
 -- Version de PHP :  7.1.9
 
@@ -38,7 +38,14 @@ CREATE TABLE IF NOT EXISTS `accord_permission` (
   PRIMARY KEY (`id`),
   KEY `IDX_BD560D4680E95E18` (`demande_id`),
   KEY `IDX_BD560D4618AF9C4F` (`accordeur_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Déchargement des données de la table `accord_permission`
+--
+
+INSERT INTO `accord_permission` (`id`, `demande_id`, `accordeur_id`, `dateAccordPermission`, `valeur`) VALUES
+(32, 13, 1, '2019-04-25 06:15:19', 0);
 
 -- --------------------------------------------------------
 
@@ -76,10 +83,19 @@ CREATE TABLE IF NOT EXISTS `demande_permission` (
   `date` datetime NOT NULL,
   `Etat` int(11) NOT NULL,
   `status` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_1685980B95A6EE59` (`demandeur_id`),
-  KEY `IDX_1685980B478E8802` (`journal_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `IDX_1685980B478E8802` (`journal_id`),
+  KEY `IDX_1685980BC54C8C93` (`type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Déchargement des données de la table `demande_permission`
+--
+
+INSERT INTO `demande_permission` (`id`, `demandeur_id`, `journal_id`, `date`, `Etat`, `status`, `type_id`) VALUES
+(13, 1, 444, '2019-04-25 06:14:45', 0, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -131,14 +147,14 @@ CREATE TABLE IF NOT EXISTS `fos_user` (
   UNIQUE KEY `UNIQ_957A647992FC23A8` (`username_canonical`),
   UNIQUE KEY `UNIQ_957A6479A0D96FBF` (`email_canonical`),
   UNIQUE KEY `UNIQ_957A6479C05FB297` (`confirmation_token`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `fos_user`
 --
 
 INSERT INTO `fos_user` (`id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`) VALUES
-(1, 'landogroup', 'landogroup', 'yao.tskapo@landogroup.com', 'yao.tskapo@landogroup.com', 1, NULL, '$2y$13$eeki4MIzQdEjnK9d3ZRDjO1fhrMf7mMgllvkAPoQs4RSLeLSN7w/6', '2019-04-23 12:06:25', NULL, NULL, 'a:1:{i:0;s:16:\"ROLE_SUPER_ADMIN\";}');
+(1, 'landogroup', 'landogroup', 'yao.tskapo@landogroup.com', 'yao.tskapo@landogroup.com', 1, NULL, '$2y$13$eeki4MIzQdEjnK9d3ZRDjO1fhrMf7mMgllvkAPoQs4RSLeLSN7w/6', '2019-04-25 06:23:25', NULL, NULL, 'a:1:{i:0;s:10:\"ROLE_ADMIN\";}');
 
 -- --------------------------------------------------------
 
@@ -157,14 +173,14 @@ CREATE TABLE IF NOT EXISTS `importation` (
   `type_operation_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_394DCB28C3EF8F86` (`type_operation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `importation`
 --
 
 INSERT INTO `importation` (`id`, `dateCreation`, `mois`, `annee`, `source`, `status`, `type_operation_id`) VALUES
-(34, '2019-04-23 13:11:58', '1970-04-01', '2019-01-01', 'datacsv_5cbf0f1ee8997.txt', 2, 2);
+(43, '2019-04-24 11:51:04', '1970-04-01', '2019-01-01', 'datacsv_5cc04da821aa7.txt', 2, 2);
 
 -- --------------------------------------------------------
 
@@ -194,23 +210,19 @@ CREATE TABLE IF NOT EXISTS `journal` (
   PRIMARY KEY (`id`),
   KEY `IDX_C1A7E74D1212529D` (`cumul`),
   KEY `IDX_C1A7E74D707CE1F9` (`importation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=399 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=446 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `journal`
 --
 
 INSERT INTO `journal` (`id`, `importation_id`, `jour`, `numPiece`, `numFacture`, `reference`, `numCompteGeneral`, `numComptTiers`, `libelleEcriture`, `dateEcheance`, `positionJournal`, `montantDebit`, `montantCredit`, `cumul`, `dispatch`, `codeOperation`, `suppression`) VALUES
-(327, 34, '2019-04-23 14:21:15', NULL, NULL, NULL, '2020', NULL, 'Remboursement - Chèque', NULL, NULL, 74283, NULL, NULL, 0, NULL, 0),
-(328, 34, '2019-04-23 14:21:15', NULL, NULL, NULL, '65010', NULL, 'Remboursement - Chèque', NULL, NULL, NULL, 19700, 327, NULL, NULL, 0),
-(329, 34, '2019-04-23 14:21:15', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Chèque', NULL, NULL, NULL, 54583, 327, NULL, NULL, 0),
-(330, 34, '2019-04-23 14:21:15', NULL, NULL, NULL, '2020', NULL, 'Remboursement - Chèque', NULL, NULL, 109166, NULL, NULL, NULL, NULL, 0),
-(331, 34, '2019-04-23 14:21:15', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Chèque', NULL, NULL, NULL, 54583, 330, NULL, NULL, 0),
-(332, 34, '2019-04-23 14:21:15', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Chèque', NULL, NULL, NULL, 54583, 330, NULL, NULL, 0),
-(333, 34, '2019-04-23 14:21:16', NULL, NULL, NULL, '2020', NULL, 'Remboursement - Chèque', NULL, NULL, 54583, NULL, NULL, NULL, NULL, 0),
-(334, 34, '2019-04-23 14:21:16', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Chèque', NULL, NULL, NULL, 54583, 333, NULL, NULL, 0),
-(397, 34, '2019-04-23 15:45:51', NULL, NULL, NULL, '2531', NULL, 'test', NULL, NULL, 74283, NULL, 327, 1, '5cbf332f1fd2f', 0),
-(398, 34, '2019-04-23 15:45:51', NULL, NULL, NULL, '2020', NULL, 'test', NULL, NULL, NULL, 74283, 327, 1, '5cbf332f1fd2f', 0);
+(440, 43, '2019-04-24 11:52:49', NULL, NULL, NULL, '2020', NULL, 'Remboursement - Chèque', NULL, NULL, 88518, NULL, NULL, 0, NULL, 0),
+(441, 43, '2019-04-24 11:52:49', NULL, NULL, NULL, '65010', NULL, 'Remboursement - Chèque', NULL, NULL, NULL, 14235, 440, NULL, NULL, 0),
+(442, 43, '2019-04-24 11:52:49', NULL, NULL, NULL, '65010', NULL, 'Remboursement - Chèque', NULL, NULL, NULL, 19700, 440, NULL, NULL, 0),
+(443, 43, '2019-04-24 11:52:49', NULL, NULL, NULL, '65011', NULL, 'Remboursement - Chèque', NULL, NULL, NULL, 54583, 440, NULL, NULL, 0),
+(444, 43, '2019-04-24 12:35:40', NULL, NULL, NULL, '2531', NULL, 'test', NULL, NULL, 88518, NULL, 440, 1, '5cc0581c0a1d1', 0),
+(445, 43, '2019-04-24 12:35:40', NULL, NULL, NULL, '2020', NULL, 'test', NULL, NULL, NULL, 88518, 440, 1, '5cc0581c0a1d1', 0);
 
 -- --------------------------------------------------------
 
@@ -272,18 +284,16 @@ CREATE TABLE IF NOT EXISTS `operation_caisse` (
   PRIMARY KEY (`id`),
   KEY `IDX_CF23EAAAF347EFB` (`produit_id`),
   KEY `IDX_CF23EAAA707CE1F9` (`importation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=185 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=216 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `operation_caisse`
 --
 
 INSERT INTO `operation_caisse` (`id`, `CodeProduit`, `ModeDeComptabilisation`, `Categorie`, `Classification`, `CodeApporteur`, `Apporteur`, `NumeroPolice`, `StatutPolice`, `NumeroSouscripteur`, `Souscripteur`, `NumeroAssure`, `Assure`, `DateNaissanceAssure`, `Compte`, `DateSouscription`, `DateEffet`, `DateEcheance`, `Accessoires`, `CoutSms`, `PrimeDC`, `PrimeEpargne`, `Periodicite`, `Prime`, `KDC`, `KTerme`, `EtatPolice`, `DateSort`, `PMActuelle`, `DateDeLaPM`, `TypeDeReglement`, `ModeDePaiement`, `SourceDeBordereau`, `BanqueDeRemise`, `ReferenceRegt`, `NCLE`, `DateDeReglement`, `DateDeSaisie`, `UtilisateurAyantSaisie`, `MtReglement`, `MtReglementHt`, `CoutDePolice`, `Taxe`, `NetAPayer`, `Utilisateur`, `DateDeValidation`, `BeneficiaireEnCasDeDeces`, `produit_id`, `importation_id`) VALUES
-(180, '811.', 'EMISSION', 'INDIVIDUEL', 'MIXTES CLASSIQUES', '1737', '1737-04-SALAMI', '811070Q', 'EN COURS', '16018', 'AKAKPO KODJO', '160218', 'AKAKPO KODJO', '1983-03-07', '0 0 0', '2018-11-28', '2018-12-01', '2038-11-30', '0', '0', 0, 19700, 'M', 19700, '500000', '5000000', '10', '2019-04-23', 0, '2018-12-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35366', 727390, '2019-04-09', '2019-04-09', 'MIMI', 19700, 19700, '0', '0', 19700, 'GEMEG', '2019-04-09', 'AKAKPO AKOFALA ESTRELLA EVGENIYA\r\n', 1, 34),
-(181, '655.', 'ENCAISSEMENT', 'INDIVIDUEL', 'FAUSSES MIXTES INDIVIDUELLES', '1829', '1829-06-koffi', '6550071C', 'EN COURS', '141865', 'TOSSOU ', '141865', 'TOSSOU AKOUAVI B ', '1969-10-08', '0 0 0', '2018-06-29', '2018-07-01', '2028-06-30', '0', '0', 4583, 50000, 'M', 54583, '5000000', '6532807', '10', '2019-04-23', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35367', 931904, '2019-04-09', '2019-04-09', 'MIMI', 54583, 54583, '0', '0', 54583, 'GEMEG', '2019-04-09', 'AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU\r\n', 2, 34),
-(182, '655.', 'ENCAISSEMENT', 'INDIVIDUEL', 'FAUSSES MIXTES INDIVIDUELLES', '1829', '1829-06-koffi', '6550071C', 'EN COURS', '141865', 'TOSSOU ', '141865', 'TOSSOU AKOUAVI B ', '1969-10-08', '0 0 0', '2018-06-29', '2018-07-01', '2028-06-30', '0', '0', 4583, 50000, 'M', 54583, '5000000', '6532807', '10', '2019-04-23', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35367', 931904, '2019-04-10', '2019-04-09', 'MIMI', 54583, 54583, '0', '0', 54583, 'GEMEG', '2019-04-09', 'AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU\r\n', 2, 34),
-(183, '655.', 'ENCAISSEMENT', 'INDIVIDUEL', 'FAUSSES MIXTES INDIVIDUELLES', '1829', '1829-06-koffi', '6550071C', 'EN COURS', '141865', 'TOSSOU ', '141865', 'TOSSOU AKOUAVI B ', '1969-10-08', '0 0 0', '2018-06-29', '2018-07-01', '2028-06-30', '0', '0', 4583, 50000, 'M', 54583, '5000000', '6532807', '10', '2019-04-23', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35367', 931904, '2019-04-10', '2019-04-09', 'MIMI', 54583, 54583, '0', '0', 54583, 'GEMEG', '2019-04-09', 'AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU\r\n', 2, 34),
-(184, '655.', 'ENCAISSEMENT', 'INDIVIDUEL', 'FAUSSES MIXTES INDIVIDUELLES', '1829', '1829-06-koffi', '6550071C', 'EN COURS', '141865', 'TOSSOU ', '141865', 'TOSSOU AKOUAVI B ', '1969-10-08', '0 0 0', '2018-06-29', '2018-07-01', '2028-06-30', '0', '0', 4583, 50000, 'M', 54583, '5000000', '6532807', '10', '2019-04-23', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35367', 931904, '2019-04-11', '2019-04-09', 'MIMI', 54583, 54583, '0', '0', 54583, 'GEMEG', '2019-04-09', 'AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU\r\n', 2, 34);
+(213, '811.', 'EMISSION', 'INDIVIDUEL', 'MIXTES CLASSIQUES', '1785', '1785-13-KOFFI KODJO OGNANDON YVES LAURENT', '811052X', 'EN COURS', '14167', 'KAWANA', '141607', 'KAWAN', '1979-12-31', '0 0 0', '2018-06-22', '2018-07-01', '2035-06-30', '0', '0', 0, 14235, 'M', 14235, '300000', '3000000', '10', '2019-04-24', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35365', 591867, '2019-04-09', '2019-04-09', 'MIMI', 14235, 14235, '0', '0', 14235, 'GEMEG', '2019-04-09', 'OTAKA UDUNMA PATIENCE\r\n', 1, 43),
+(214, '811.', 'EMISSION', 'INDIVIDUEL', 'MIXTES CLASSIQUES', '1737', '1737-04-SALAMI', '811070Q', 'EN COURS', '16018', 'AKAKPO KODJO', '160218', 'AKAKPO KODJO', '1983-03-07', '0 0 0', '2018-11-28', '2018-12-01', '2038-11-30', '0', '0', 0, 19700, 'M', 19700, '500000', '5000000', '10', '2019-04-24', 0, '2018-12-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35366', 727390, '2019-04-09', '2019-04-09', 'MIMI', 19700, 19700, '0', '0', 19700, 'GEMEG', '2019-04-09', 'AKAKPO AKOFALA ESTRELLA EVGENIYA\r\n', 1, 43),
+(215, '655.', 'ENCAISSEMENT', 'INDIVIDUEL', 'FAUSSES MIXTES INDIVIDUELLES', '1829', '1829-06-koffi', '6550071C', 'EN COURS', '141865', 'TOSSOU ', '141865', 'TOSSOU AKOUAVI B ', '1969-10-08', '0 0 0', '2018-06-29', '2018-07-01', '2028-06-30', '0', '0', 4583, 50000, 'M', 54583, '5000000', '6532807', '10', '2019-04-24', 0, '2018-07-01', 'ENCAISSEMENT DE PRIME', 'ESPECE', 'ESPECES', '', 'CTA-CAP-20194-35367', 931904, '2019-04-09', '2019-04-09', 'MIMI', 54583, 54583, '0', '0', 54583, 'GEMEG', '2019-04-09', 'AMEGNIGNO KOKOU SYLVAIN A DEFAUT TOSSOU KOMLAN A DEFAUT HOUMKPATI SOSSOU\r\n', 2, 43);
 
 -- --------------------------------------------------------
 
@@ -307,6 +317,27 @@ CREATE TABLE IF NOT EXISTS `produit` (
 INSERT INTO `produit` (`id`, `NomProduit`, `NnumeroDeCodeProduit`, `numCptCredit`) VALUES
 (1, 'VISA ETUDES PLUS-VEP BIS', '2536', '65010'),
 (2, 'SERENITE BIS', '3648', '65011');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `type_demande`
+--
+
+DROP TABLE IF EXISTS `type_demande`;
+CREATE TABLE IF NOT EXISTS `type_demande` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `libelle` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Déchargement des données de la table `type_demande`
+--
+
+INSERT INTO `type_demande` (`id`, `libelle`) VALUES
+(1, 'Suppression'),
+(2, 'Modification');
 
 -- --------------------------------------------------------
 
@@ -347,7 +378,8 @@ ALTER TABLE `accord_permission`
 --
 ALTER TABLE `demande_permission`
   ADD CONSTRAINT `FK_1685980B478E8802` FOREIGN KEY (`journal_id`) REFERENCES `journal` (`id`),
-  ADD CONSTRAINT `FK_1685980B95A6EE59` FOREIGN KEY (`demandeur_id`) REFERENCES `fos_user` (`id`);
+  ADD CONSTRAINT `FK_1685980B95A6EE59` FOREIGN KEY (`demandeur_id`) REFERENCES `fos_user` (`id`),
+  ADD CONSTRAINT `FK_1685980BC54C8C93` FOREIGN KEY (`type_id`) REFERENCES `type_demande` (`id`);
 
 --
 -- Contraintes pour la table `exportation`

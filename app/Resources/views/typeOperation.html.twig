@@ -8,36 +8,40 @@
 
 {% block body %}
 <br>
-   <a class="btn btn-primary" href="{{ path('homepage')}}" style="margin:1%">retour</a>
+ <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active"><a href="{{ path('homepage')}}">Acceuil</a></li>
+    <li class="breadcrumb-item ">Mode de paiement</a></li>
+  </ol>
+</nav>
    <div class="row">
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
-                  <div class="card-title">Nouveau Type d'operation</div>
+                  <div class="card-title">Nouveau Mode de paiement</div>
                 </div>
                 <div class="card-body">
                   {{ form_start(typeOperationForm,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
                   <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                       <div class="form-group">
-                        <label>Nom du type d'operation:</label>
+                        <label>Nom du mode de paiement:</label>
                         {{ form_errors(typeOperationForm.libelleTypeOperation) }}
                         {{ form_widget(typeOperationForm.libelleTypeOperation,{'attr':{'class':'form-control'}}) }} 
                       </div>
                     </div>
-                     <div class="col-lg-6">
+                     <div class="col-lg-4">
                       <div class="form-group">
                         <label >Numero de compte du type d'operation:</label>
                          {{ form_errors(typeOperationForm.numCptDebit ) }}
                          {{ form_widget(typeOperationForm.numCptDebit,{'attr':{'class':'form-control'}}) }}  
                       </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <center>
-                    <button type="submit" class="btn btn-primary">valider</button>
-                    <button type="reset" class="btn btn-danger">annuler</button> 
-                    </center>
+                    <div class="col-lg-3 pt-3">
+                      <div class="form-group">
+                       <button type="submit" class="btn btn-primary">valider</button>
+                      </div>
+                    </div>
                   </div>
                   {{ form_end(typeOperationForm) }}
 
@@ -50,14 +54,14 @@
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
-                  <div class="card-title">Liste des types d'operations</div>
+                  <div class="card-title">Liste des Modes de paiement</div>
                 </div>
                 <div class="card-body">
                      <table id="basic-datatables" class="display table table-striped table-hover">
                         <thead>
                         <tr>
-                            <th data-field="nomTypeOperation"  >Nom du type d'operation</th>
-                            <th ddata-field="numTypeOperation">Numero de compte du type d'operation</th>
+                            <th data-field="nomTypeOperation"  >Nom du Mode de paiement</th>
+                            <th ddata-field="numTypeOperation">Numero de compte du Mode de paiement</th>
                             <th data-field="action">Action</th>
                            
                         </tr>                           
@@ -70,9 +74,9 @@
                              
                                 <td>
 
-                                <a  href="{{ path('editTypeOperation',{'typeOperation':typeOperation.id}) }}"><button class="btn btn-primary waves-effect" type="submit" >Modifier</button></a>
+                                <a  href="{{ path('editTypeOperation',{'typeOperation':typeOperation.id}) }}"><button class="btn btn-sm btn-warning waves-effect" type="submit" >Modifier</button></a>
                                 
-                                <a  href="{{ path('effacerTypeOperation',{'typeOperation':typeOperation.id}) }}"><button class="btn btn-danger waves-effect" type="submit" onclick="return confirm('confirmez?')" >Supprimer</button></a>
+                                <a  href="{{ path('effacerTypeOperation',{'typeOperation':typeOperation.id}) }}"><button class="btn btn-sm btn-danger waves-effect" type="submit" onclick="return confirm('cliquez sur ok pour confirmer')" >Supprimer</button></a>
 
                                 </td>  
 
@@ -102,7 +106,7 @@
 {% for error in typeOperationForm.vars.errors.form.getErrors(true) %} 
 
       var placementFrom = 'top';
-      var placementAlign = 'right';
+      var placementAlign = 'center';
       var state = 'danger';
       var style = 'withicon';
       var content = {};

@@ -77,7 +77,7 @@ class nouvelleImportationController extends Controller
 
                     }
 
-                    return $this->redirectToRoute('homepage');
+                return $this->redirectToRoute('formatageRecherche',['importation'=>$importation->getId()]);
 
                 }else
                 {

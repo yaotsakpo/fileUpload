@@ -8,46 +8,50 @@
 
 {% block body %}
 <br>
-   <a class="btn btn-primary" href="{{ path('homepage')}}" style="margin:1%">retour</a>
+ <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active"><a href="{{ path('homepage')}}">Acceuil</a></li>
+    <li class="breadcrumb-item ">{{position}}</a></li>
+  </ol>
+</nav>
+
    <div class="row">
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
-                  <div class="card-title">Entrez les informations de votre recherche</div>
+                  <div class="card-title">{{position}}</div>
                 </div>
                 <div class="card-body">
                   {{ form_start(rechercheForm,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
                   <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                       <div class="form-group">
                         <label>Type d'operation:</label>
                         {{ form_errors(rechercheForm.typeOperation) }}
                         {{ form_widget(rechercheForm.typeOperation,{'attr':{'class':'form-control'}}) }} 
                       </div>
                     </div>
-                     <div class="col-lg-4">
+                     <div class="col-lg-3">
                       <div class="form-group">
                         <label >Mois:</label>
                          {{ form_errors(rechercheForm.mois) }}
-                         {{ form_widget(rechercheForm.mois,{'attr':{'class':'form-control'}}) }}  
-                         <small class="form-text text-muted"> *veuillez renseigner le numero du mois</small>
+                         {{ form_widget(rechercheForm.mois,{'attr':{'class':'form-control','autocomplete': 'off','placeholder':'veuillez saisir le numero du mois'}}) }}
                       </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                       <div class="form-group">
                         <label >annee:</label>
                          {{ form_errors(rechercheForm.annee) }}
-                         {{ form_widget(rechercheForm.annee,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
-                        
+                         {{ form_widget(rechercheForm.annee,{'attr':{'class':'form-control','autocomplete': 'off','placeholder':'veuillez saisir l année en chiffre'}}) }}
+                      </div>
+                    </div>
+                    <div class="col-lg-3 pt-4">
+                      <div class="form-group">
+                       <button type="submit" class="btn btn-primary">Rechercher</button>
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <center>
-                    <button type="submit" class="btn btn-primary">valider</button>
-                    <button type="reset" class="btn btn-danger">annuler</button> 
-                    </center>
-                  </div>
+                 
                   {{ form_end(rechercheForm) }}
 
                 </div>     
@@ -61,7 +65,7 @@
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
-                  <div class="card-title">Resultat de la recherche</div>
+                  <div class="card-title">{{position}}</div>
                 </div>
                 <div class="card-body">
                   <table id="basic-datatables" class="display table table-striped table-hover">
@@ -82,13 +86,13 @@
                            
                               <td>
                                 {% if importation.status == 0 %}
-                                  <a  href="{{ path('operationCaisse',{'importation':importation.id}) }}" onclick="return confirm('confirmez?')" ><button class="btn btn-primary waves-effect" type="submit" >Traiter l'importation</button></a>
+                                  <a  href="{{ path('operationCaisse',{'importation':importation.id}) }}" onclick="return confirm('cliquez sur ok pour confirmer')" ><button class="btn btn-sm btn-primary waves-effect" type="submit" >Traiter l'importation</button></a>
                                 {% endif %}
                                 {% if importation.status == 1 %}
-                                  <a  href="{{ path('generationDeJournal',{'importation':importation.id}) }}" onclick="return confirm('confirmez?')" ><button class="btn btn-primary waves-effect" type="submit" >Creer le Journal de l'operation</button></a>
+                                  <a  href="{{ path('generationDeJournal',{'importation':importation.id}) }}" onclick="return confirm('cliquez sur ok pour confirmer')" ><button class="btn btn-sm btn-primary waves-effect" type="submit" >Creer le Journal de l'operation</button></a>
                                 {% endif %}
                                 {% if importation.status == 2 %}
-                                  <a  href="{{ path('visualisationDeJournal',{'importation':importation.id}) }}" ><button class="btn btn-primary waves-effect" type="submit" >Voir Le Journal</button></a>
+                                  <a  href="{{ path('visualisationDeJournal',{'importation':importation.id}) }}" ><button class="btn btn-sm btn-primary waves-effect" type="submit" >Voir Le Journal</button></a>
                                 {% endif %}
                               </td>  
 
@@ -107,7 +111,7 @@
 {% if importation == null %}
   <br>
   <br>
-  <center><h2>Veuillez saisir les informations de votre recherche dans le formulaire ci-dessus </h2></center>
+  <center><h2 style="color:white">Veuillez saisir les informations de votre recherche dans le formulaire ci-dessus </h2></center>
 {% endif %}
 
 {% endblock %}
@@ -126,7 +130,7 @@ $('#basic-datatables').DataTable({
 {% for error in rechercheForm.vars.errors.form.getErrors(true) %} 
 
       var placementFrom = 'top';
-      var placementAlign = 'right';
+      var placementAlign = 'center';
       var state = 'danger';
       var style = 'withicon';
       var content = {};

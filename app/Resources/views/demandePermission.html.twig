@@ -8,9 +8,12 @@
 
 {% block body %}
 <br>
-   <a class="btn btn-primary" href="{{ path('homepage')}}" style="margin:1%">retour</a>
-
-
+ <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active"><a href="{{ path('homepage')}}">Acceuil</a></li>
+    <li class="breadcrumb-item ">Permission</a></li>
+  </ol>
+</nav>
    <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -23,6 +26,7 @@
                         <tr>
                             <th data-field="date">Date de demande</th>
                             <th ddata-field="Demandeur">Demandeur</th>
+                            <th ddata-field="Type">Type</th>
                             <th ddata-field="ligne">Etat</th>
                             <th data-field="action">Voir la ligne dispatch</th>
                            
@@ -33,6 +37,7 @@
                               <tr>
                                   <td>{{ demande.date|date('d-m-Y H:m:s') }}</td> 
                                   <td>{{ demande.demandeur.username }}</td> 
+                                  <td>{{ demande.type.libelle }}</td> 
                                   <td>
                                     {% if demande.etat == 1 %}
                                       demande autorisée
@@ -48,8 +53,8 @@
 
                                     </td> 
                                   <td>
-                                      <a href="{{path('visualiastionLigneJournal',{'id':demande.journal.id}) }}" >
-                                      <button class="btn btn-success waves-effect" type="submit" >Voir la ligne</button></a> 
+                                      <a href="{{path('visualiastionLigneJournal',{'id':demande.journal.id,'type':demande.type.id}) }}" >
+                                      <button class="btn btn-sm btn-success waves-effect" type="submit" >Voir la ligne</button></a> 
                                   </td> 
                           {% endfor %}  
                         </tbody>

@@ -9,21 +9,24 @@
 {% block body %}
 <br>
 {% set etat = 0 %}
-<div class="row">
-  
-  <div class="col-sm-10 col-md-10">
-  <a class="btn btn-primary" href="{{ path('visualisationDeJournal',{'importation':ligneJournal.importation.id}) }}" style="margin:0.5%">retour</a>
-  </div>
-  <div class="col-sm-2 col-md-2 ">
-  {% if dispatchs != null and ligneJournal.dispatch == 1 %}
-<a class="btn btn-danger pull-right" style="margin:2%" onclick=" valider()"> Cloturer le dispatch</a>
-{% endif %}
-  </div>
-</div>
 
- <div class="row">
-            <div class="col-md-12">
-              <div class="card">
+<div class="mr-auto">
+ <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active "><a href="{{ path('homepage')}}">Acceuil</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('visualisationDeJournal',{'importation':ligneJournal.importation.id}) }}">Journal</a></li>
+    <li class="breadcrumb-item ">Dispatch</a></li>
+    <li class="ml-auto ">
+      {% if dispatchs != null and ligneJournal.dispatch == 1 %}
+      <a class="btn btn-danger pull-right" style="margin:2%" onclick=" valider()"> Cloturer le dispatch</a>
+      {% endif %}
+  </ol>
+</nav>
+
+ <div class="row col-12 ml-2">
+  <div class="col-8">
+      <div class="row">
+         <div class="card col-12">
                 <div class="card-header">
                   <div class="card-title">Ligne cumul choisie</div>
                 </div>
@@ -32,27 +35,24 @@
                       <thead>
                       <tr>
                           <th data-field="total">Montant Total à dispatcher</th>
-                          <th data-field="dispatch">Montant montant deja dispatché</th>
-                          <th data-field="restant">Montant restant à dispatcher</th>
+                          <th data-field="dispatch">Montant dispatché</th>
+                          <th data-field="restant">Reste à dispatcher</th>
                       </tr>
                       </thead>
                       <tbody>
                           <tr> 
-                              <td>{{ ligneJournal.montantDebit|number_format(2, '.', ' ') }}</td> 
-                              <td>{{ dispatch|number_format(2, '.', ' ') }}</td> 
-                              <td id="TotalRestant">{{ (ligneJournal.montantDebit  -  dispatch)|number_format(2, '.', ' ') }}</td> 
+                              <td>{{ ligneJournal.montantDebit|number_format(0, ' ', ' ') }}</td> 
+                              <td>{{ dispatch|number_format(0, ' ', ' ') }}</td> 
+                              <td id="TotalRestant">{{ (ligneJournal.montantDebit  -  dispatch)|number_format(0, ' ', ' ') }}</td> 
                           </tr>
                       </tbody>
                   </table>
-
                 </div>     
             </div>
       </div>
-</div>
-<br><br>
-<div class="row col-12" >
-          <div class="col-8">
-            <div class="card ">
+
+      <div class="row ">
+        <div class="card col-12">
                <div class="card-header" > 
                <h3>Dispatchs deja realisés</h3>
               </div>
@@ -61,7 +61,7 @@
                   <thead>
                   <tr>
                       <th data-field="jour"  >Jour</th>
-                      <th data-field="NumCompteGen">Numero de Compte General</th>
+                      <th data-field="NumCompteGen">Num Compte General</th>
                       <th data-field="Libecriture">Libelle Ecriture</th>
                       <th data-field="debit">Debit</th>
                       <th data-field="Credit">Credit</th>
@@ -76,18 +76,22 @@
                       <td>{{ dispatch.libelleEcriture }}</td> 
                       <td>
                         {% if dispatch.montantDebit != null %}
-                          {{ dispatch.montantDebit|number_format(2, '.', ' ') }}
+                          {{ dispatch.montantDebit|number_format(0, ' ', ' ') }}
                         {% endif %}
                       </td> 
                       <td>
                         {% if dispatch.montantCredit != null %}
-                          {{ dispatch.montantCredit|number_format(2, '.', ' ') }}
+                          {{ dispatch.montantCredit|number_format(0, ' ', ' ') }}
                         {% endif %}
                       </td> 
                       <td>
                          {% if dispatch.montantCredit == null %}
-                           <a href="{{ path('envoieDemandePermission',{'journal':dispatch.id} ) }}" >
-                            <button class="btn btn-success waves-effect" type="submit" >Modifier</button></a>
+
+                    <a style="background-color:#ffad46" href="{{ path('envoieDemandePermission',{'journal':dispatch.id,'type':2} ) }}" >
+                     Modifier</a>|
+                    <a style="background-color:#f25961" href="{{ path('envoieDemandePermission',{'journal':dispatch.id,'type':1} ) }}" onclick="return confirm('Cliquez sur Ok pour confirmer')">
+                     Supprimer</a>
+ 
                         {% endif %}
                        
                       </td> 
@@ -97,35 +101,39 @@
               </table>
               </div>
             </div>
-          </div>
 
-
-
-          <div class="col-4">
-            <div class="card ">
+      </div>
+  </div>
+    <div class="col-4">
+      <div class="card ">
                <div class="card-header" > 
                 <h3>Formulaire pour effectuer un dispatch de la ligne choisie</h3>
               </div>
               <div class="card-body" >
                {{ form_start(form,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
-                  <div class="form-group">
-                    <label class="col-sm-2 col-sm-2 control-label">Credit:</label>
-                      <div class="col-sm-10">
-                     <input type="text" name="numeroType"  class="form-control" value="{{ligneJournal.importation.typeOperation.numCptDebit}}" disabled>
-                      </div>
-                  </div>
-                  <br>
-                  <div class="form-group">
-                    <label class="col-sm-2 col-sm-2 control-label">Banque:</label>
-                    <div class="col-sm-10">
-                     {{ form_errors(form.numCptDebiter) }}
-                     {{ form_widget(form.numCptDebiter,{'attr':{'class':'form-control' ,'autocomplete': 'off'}}) }}
+                 
+                  <div class="form-row mb-2">
+                    <div class="col">
+                         <div class="form-group">
+                            <label class="col-sm-2 col-sm-2 control-label">Credit:</label>
+                            <div class="col-sm-12">
+                            <input type="text" name="numeroType"  class="form-control" value="{{ligneJournal.importation.typeOperation.numCptDebit}}" disabled>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                 <br>
+                    <div class="col">
+                          <div class="form-group">
+                            <label class="col-sm-2 col-sm-2 control-label">Banque:</label>
+                            <div class="col-sm-12">
+                             {{ form_errors(form.numCptDebiter) }}
+                             {{ form_widget(form.numCptDebiter,{'attr':{'class':'form-control' ,'autocomplete': 'off'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
                   <div class="form-group">
                     <label class="col-sm-2 col-sm-2 control-label">Libelle ecriture: </label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-12">
                      {{ form_errors(form.libelle) }}
                      {{ form_widget(form.libelle,{'attr':{'class':'form-control', 'autocomplete': 'off'}}) }}
                     </div>
@@ -133,7 +141,7 @@
                   <br>
                   <div class="form-group">
                     <label class="col-sm-2 col-sm-2 control-label">montant: </label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-12">
                      {{ form_errors(form.montant) }}
                      {{ form_widget(form.montant,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
                     </div>
@@ -143,16 +151,15 @@
                   <div class="form-group">
                     <center>
                     <button type="submit" class="btn btn-primary">valider</button>
-                      <button type="reset" class="btn btn-danger">annuler</button> 
                     </center>
                   </div>
                   {{ form_end(form) }} 
               </div>
             </div>
-          </div>
+    </div>
+            
+</div>
 
-           
-      </div>
 
 
 {% endblock %}
@@ -170,7 +177,7 @@ $('#basic-datatables').DataTable({
 {% for error in form.vars.errors.form.getErrors(true) %} 
 
       var placementFrom = 'top';
-      var placementAlign = 'right';
+      var placementAlign = 'center';
       var state = 'danger';
       var style = 'withicon';
       var content = {};

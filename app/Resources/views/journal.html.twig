@@ -10,22 +10,29 @@
 {% block body %}
 <br>
 {% set etat = 0 %}
-<div class="row">
-  
-  <div class="ml-4">
-  <a class="btn btn-primary" href="{{ path('homepage')}}" style="margin:0.5%">retour</a>
-  </div>
-  <div class="ml-auto ">
-  {% if journalArray[0].dispatch != 1 %}
-  <a onclick="return confirm('confirmez?')" class="btn btn-success " href="{{ path('exportationJournal',{'importation':importation}) }}" style="margin-top:2%">Exporter le journal en format CSV</a>
-    {% endif %}
- 
-  </div>
-</div>
+{% set etat2 = 0 %}
+<div class="mr-auto">
+ <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active "><a href="{{ path('homepage')}}">Acceuil</a></li>
+    <li class="breadcrumb-item">Journal</a></li>
+    <li class="ml-auto ">
+      {% if journalArray[0].dispatch != 1 %}
+        <a onclick="return confirm('confirmez?')" class="btn btn-sm btn-success " href="{{ path('exportationJournal',{'importation':importation}) }}" >Exporter le journal en format CSV</a>
+        {% endif %}</a>
+      </li>
+
+  </ol>
+</nav>
+
 
 <div class="row" >
           <div class="col-12">
-            <h3>Journal</h3>
+            <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Journal</div>
+                </div>
+                <div class="card-body">
             <table id="basic-datatables" class="display table table-striped table-hover" >
                           <thead>
                           <tr>
@@ -58,50 +65,55 @@
                                   <td>{{ journal.positionJournal }}</td> 
                                   <td>
                                     {% if journal.montantDebit != null %}
-                                      {{ journal.montantDebit|number_format(2, '.', ' ') }}
+                                      {{ journal.montantDebit|number_format(0, ' ', ' ') }}
                                     {% endif %}
                                   </td> 
                                   <td>
                                     {% if journal.montantCredit != null %}
-                                      {{ journal.montantCredit|number_format(2, '.', ' ') }}
+                                      {{ journal.montantCredit|number_format(0, '', ' ') }}
                                     {% endif %}
                                   </td> 
                                   <td>
                                       {% if journal.cumul == null  and dispatchs == null %}
                                           <a href="{{ path('dispatch',{'ligneJournal':journal.id}) }}" >
-                                          <button class="btn btn-primary waves-effect" type="submit" >Dispatcher</button></a>
+                                          <button class="btn btn-sm btn-primary waves-effect" type="submit" >Dispatcher</button></a>
                                       {% endif %}
 
                                       {% if journal.cumul == null  and dispatchs != null and journal.dispatch != null  %}
                                           {% if journal.dispatch == 0 or journal.dispatch == 1 %}
                                               {% set etat = 1 %}
                                       <a href="{{ path('dispatch',{'ligneJournal':journal.id}) }}" >
-                                      <button class="btn btn-primary waves-effect" type="submit" >Dispatcher</button></a>
+                                      <button class="btn btn-sm btn-primary waves-effect" type="submit" >Dispatcher</button></a>
                                           {% endif %}
                                       {% endif %}
 
                                       {% if journal.cumul == null  and dispatchs != null and etat == 0 %}
                                           {% if journal.dispatch == 1 or journal.dispatch == null %}
                                       <a href="{{ path('dispatch',{'ligneJournal':journal.id}) }}" >
-                                      <button class="btn btn-primary waves-effect" type="submit" >Dispatcher</button></a>
+                                      <button class="btn btn-sm btn-primary waves-effect" type="submit" >Dispatcher</button></a>
                                           {% endif %}
                                       {% endif %}
 
-                                       {% if journal.cumul != null  and journal.dispatch == 1 and journal.montantCredit == null  %}
-                                         
-                                      <a href="{{ path('envoieDemandePermission',{'journal':journal.id} ) }}" >
-                                      <button class="btn btn-success waves-effect" type="submit" >Modifier</button></a>
-                                          
+                                    {% if journal.cumul != null  and journal.dispatch == 1 and journal.montantCredit == null   %}
+                                    
+                                          <a style="background-color:#ffad46" href="{{ path('envoieDemandePermission',{'journal':journal.id,'type':2} ) }}" >
+                                           Modifier</a>|
+                                          <a style="background-color:#f25961" href="{{ path('envoieDemandePermission',{'journal':journal.id,'type':1} ) }}" onclick="return confirm('Cliquez sur Ok pour confirmer')">
+                                           Supprimer</a>
+  
                                       {% endif %}
-
+                                  
                                   </td> 
                               </tr>
                               {% endfor %}
                           </tbody>
             </table>
+
+                </div>
+            </div>
           </div>
-          
 </div>
+          
 
 
 {% endblock %}

@@ -8,7 +8,12 @@
 
 {% block body %}
 <br>
-   <a class="btn btn-primary" href="{{ path('homepage')}}" style="margin:1%">retour</a>
+ <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active"><a href="{{ path('homepage')}}">Acceuil</a></li>
+    <li class="breadcrumb-item ">Nouvelle Importation</a></li>
+  </ol>
+</nav>
    <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -16,16 +21,16 @@
                   <div class="card-title">Nouvelle Importation</div>
                 </div>
                 <div class="card-body">
-                  {{ form_start(form,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
+                  {{ form_start(form,{'attr': {'v':'v' ,'class':'form-horizontal style-form','autocomplete': 'off' }}) }}
                   <div class="row">
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                       <div class="form-group">
                         <label>Fichier CSV:</label>
                         {{ form_errors(form.datacsv) }}
                         {{ form_widget(form.datacsv,{'attr':{'class':'form-control-file'}}) }} 
                       </div>
                     </div>
-                     <div class="col-lg-3">
+                     <div class="col-lg-2 ">
                       <div class="form-group">
                         <label >Type d'operation:</label>
                          {{ form_errors(form.typeOperation) }}
@@ -36,24 +41,21 @@
                       <div class="form-group">
                         <label >Mois:</label>
                          {{ form_errors(form.mois) }}
-                         {{ form_widget(form.mois,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
-                        <small class="form-text text-muted"> *veuillez renseigner le numero du mois</small>
+                         {{ form_widget(form.mois,{'attr':{'class':'form-control','autocomplete': 'off' ,'placeholder':'veuillez saisir le numero du mois'}}) }}
                       </div>
                     </div>
                     <div class="col-lg-3">
                       <div class="form-group">
                         <label for="email2">annee: </label>
                         {{ form_errors(form.annee) }}
-                        {{ form_widget(form.annee,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
+                        {{ form_widget(form.annee,{'attr':{'class':'form-control','autocomplete': 'off','placeholder':'veuillez saisir l année en chiffre'}}) }}
                       </div>
                     </div>
                    
-                  </div>
-                  <div class="form-group">
-                    <center>
-                    <button type="submit" class="btn btn-primary">valider</button>
-                    <button type="reset" class="btn btn-danger">annuler</button> 
-                    </center>
+                  <div class="col-lg-2 pt-4">
+                    <div class="form-group" >
+                      <button type="submit" class="btn btn-primary">Importer</button>
+                    </div>
                   </div>
                   {{ form_end(form) }}
 
@@ -62,50 +64,6 @@
       </div>
 </div>
 
-   <div class="row">
-            <div class="col-md-12">
-              <div class="card">
-                <div class="card-header">
-                  <div class="card-title">Liste des Importations</div>
-                </div>
-                <div class="card-body">
-                  <table id="basic-datatables" class="display table table-striped table-hover">
-                          <thead>
-                          <tr>
-                              <th data-field="jour"  >Jour d'importation</th>
-                              <th ddata-field="periode">Mois-Annee de l'operation</th>
-                              <th ddata-field="periode">Type de l'operation importé</th>
-                              <th data-field="action">Action</th>
-                             
-                          </tr>                           
-                          </thead>
-                          <tbody>
-                              {% for importation in importations %}
-                              <tr>
-                                  <td>{{ importation.dateCreation|date('d-m-Y H:m:s') }}</td> 
-                                  <td>{{ importation.mois|date('m') }} - {{ importation.annee|date('Y') }}</td> 
-                                  <td>{{ importation.typeOperation.libelletypeOperation }} </td> 
-                               
-                                  <td>
-                                    {% if importation.status == 0 %}
-                                      <a  href="{{ path('operationCaisse',{'importation':importation.id}) }}" onclick="return confirm('confirmez?')" ><button class="btn btn-primary waves-effect" type="submit" >Traiter l'importation</button></a>
-                                    {% endif %}
-                                    {% if importation.status == 1 %}
-                                      <a  href="{{ path('generationDeJournal',{'importation':importation.id}) }}" onclick="return confirm('confirmez?')" ><button class="btn btn-primary waves-effect" type="submit" >Creer le Journal de l'operation</button></a>
-                                    {% endif %}
-                                    {% if importation.status == 2 %}
-                                      <a  href="{{ path('visualisationDeJournal',{'importation':importation.id}) }}" ><button class="btn btn-primary waves-effect" type="submit" >Voir Le Journal</button></a>
-                                    {% endif %}
-                                  </td>  
-
-                              </tr>
-                              {% endfor %}
-                          </tbody>
-                      </table>
-                </div>     
-            </div>
-      </div>
-</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -122,7 +80,7 @@
 {% for error in form.vars.errors.form.getErrors(true) %} 
 
       var placementFrom = 'top';
-      var placementAlign = 'right';
+      var placementAlign = 'center';
       var state = 'danger';
       var style = 'withicon';
       var content = {};

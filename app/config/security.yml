@@ -5,8 +5,8 @@ security:
 
     role_hierarchy:
         ROLE_USER:        ROLE_USER
-        ROLE_ADMIN:       [ROLE_USER,ROLE_ADMIN]
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN,ROLE_SUPER_ADMIN]
+        ROLE_COMPTA:      [ROLE_USER,ROLE_COMPTA]
+        ROLE_ADMIN:       [ROLE_ADMIN,ROLE_COMPTA]
 
     providers:
         fos_userbundle:

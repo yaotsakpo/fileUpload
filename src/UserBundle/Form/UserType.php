@@ -13,9 +13,9 @@ class UserType extends AbstractType
             'style' => 'margin:5px 0;' ),
         'choices' =>
             [
-                'ROLE_ADMIN' => 'ROLE_ADMIN' ,
-                'ROLE_USER' => 'ROLE_USER',
-                'ROLE_SUPER_ADMIN'=> 'ROLE_SUPER_ADMIN'
+                'ROLE_USER' => 'ROLE_USER' ,
+                'ROLE_COMPTA' => 'ROLE_COMPTA',
+                'ROLE_ADMIN'=> 'ROLE_ADMIN'
             ],
         'multiple' => true,
         'required' => true, ) ); 

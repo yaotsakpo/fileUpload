@@ -8,7 +8,12 @@
 
 {% block body %}
 <br>
-   <a class="btn btn-primary" href="{{ path('homepage')}}" style="margin:1%">retour</a>
+   <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active"><a href="{{ path('homepage')}}">Acceuil</a></li>
+    <li class="breadcrumb-item ">Produit</a></li>
+  </ol>
+</nav>
    <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -18,34 +23,34 @@
                 <div class="card-body">
                   {{ form_start(produitForm,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
                   <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                       <div class="form-group">
                         <label>Nom du produit:</label>
                         {{ form_errors(produitForm.nomProduit) }}
                         {{ form_widget(produitForm.nomProduit,{'attr':{'class':'form-control'}}) }} 
                       </div>
                     </div>
-                     <div class="col-lg-4">
+                     <div class="col-lg-3">
                       <div class="form-group">
                         <label >Numero de code du produit:</label>
                          {{ form_errors(produitForm.numeroDeCodeProduit) }}
                          {{ form_widget(produitForm.numeroDeCodeProduit,{'attr':{'class':'form-control'}}) }}  
                       </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                       <div class="form-group">
                         <label >Numero de compte du produit:</label>
                          {{ form_errors(produitForm.numCptCredit) }}
                          {{ form_widget(produitForm.numCptCredit,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
                       </div>
                     </div>
+                    <div class="col-lg-3 pt-3">
+                      <div class="form-group">
+                       <button type="submit" class="btn btn-primary">valider</button>
+                      </div>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <center>
-                    <button type="submit" class="btn btn-primary">valider</button>
-                    <button type="reset" class="btn btn-danger">annuler</button> 
-                    </center>
-                  </div>
+                  
                   {{ form_end(produitForm) }}
 
                 </div>     
@@ -77,8 +82,8 @@
                                                 <td>{{ produit.numeroDeCodeProduit }}</td> 
                                                 <td>{{ produit.numCptCredit }}</td> 
                                                 <td>
-                                                <a  href="{{ path('editProduit',{'produit':produit.id}) }}"><button class="btn btn-primary waves-effect" type="submit" >Modifier</button></a>
-                                                <a  href="{{ path('effacerProduit',{'produit':produit.id}) }}"><button class="btn btn-danger waves-effect" type="submit" onclick="return confirm('confirmez?')" >Supprimer</button></a>
+                                                <a  href="{{ path('editProduit',{'produit':produit.id}) }}"><button class="btn btn-sm btn-warning waves-effect" type="submit" >Modifier</button></a>
+                                                <a  href="{{ path('effacerProduit',{'produit':produit.id}) }}"><button class="btn btn-sm btn-danger waves-effect" type="submit" onclick="return confirm('cliquez sur ok pour confirmer')" >Supprimer</button></a>
                                                 </td>  
 
                                             </tr>
@@ -103,7 +108,7 @@ $('#basic-datatables').DataTable({
 {% for error in produitForm.vars.errors.form.getErrors(true) %} 
 
       var placementFrom = 'top';
-      var placementAlign = 'right';
+      var placementAlign = 'center';
       var state = 'danger';
       var style = 'withicon';
       var content = {};

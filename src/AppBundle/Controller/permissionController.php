@@ -21,14 +21,19 @@ class permissionController extends Controller
 {
 
      /**
-     * @Route("/envoieDemandePermission/{journal}", name="envoieDemandePermission")
+     * @Route("/envoieDemandePermission/{journal}/{type}", name="envoieDemandePermission")
      */
-    public function envoieDemandePermissionAction(Request $request,Journal $journal)
+    public function envoieDemandePermissionAction(Request $request,Journal $journal,$type)
     {
 
+       $repository= $this->getDoctrine()->getRepository('AppBundle:TypeDemande');
+       $typedemande= $repository->findOneBy(['id'=>$type]);
+
        $repository= $this->getDoctrine()->getRepository('AppBundle:DemandePermission');
-       $demande= $repository->findOneBy(['journal'=>$journal,'demandeur'=>$this->getUser()]);
+       $demande= $repository->findOneBy(['journal'=>$journal,'demandeur'=>$this->getUser(),'type'=>$typedemande]);
         
+        //dump($demande);
+        //exit();
         if(empty($demande))
         {
            $demandePermission = new DemandePermission();
@@ -38,11 +43,19 @@ class permissionController extends Controller
            $demandePermission->setstatus(0);
            $demandePermission->setDemandeur($this->getUser());
            $demandePermission->setJournal($journal);
+           $demandePermission->setType($typedemande);
 
            $em->persist($demandePermission);
            $em->flush();
 
-           $this->addFlash('notice','Demande de permission pour modification de la ligne dispatch envoyé avec success ');
+           if( $typedemande->getLibelle() == 'Suppression')
+              {
+              $this->addFlash('notice','Demande de permission pour la luppression de la ligne dispatch envoyé avec success ');
+              }else
+              {
+              $this->addFlash('notice','Demande de permission pour la modification de la ligne dispatch envoyé avec success ');
+              }
+
          }
 
          if(!empty($demande))
@@ -55,19 +68,30 @@ class permissionController extends Controller
 
             if(empty($accord))
             {
-          $this->addFlash('notice','Demande de permission pour modification de la ligne dispatch deja envoyé et en cous de traitement '); 
+             $this->addFlash('notice','Demande de permission dejà envoyé '); 
             }
 
             if(!empty($accord) && $demande->getstatus()==1)
             {
-          $this->addFlash('notice','Votre demande de modification de la ligne dispatch a été refusée par l\'administrateur '); 
+              if( $typedemande->getLibelle() == 'Suppression')
+              {
+               $this->addFlash('notice','Demande de suppression refusée par l\'administrateur '); 
+              }else
+              {
+                $this->addFlash('notice','Demande de modification refusée par l\'administrateur '); 
+              }
             }
             
            }else
            {
             ///code pour renvoyer vers la modification
-
-            return $this->redirectToRoute('editDispatch',['journal'=>$journal->getId()]);
+              if( $demande->gettype()->getLibelle() == 'Suppression')
+              {
+                return $this->redirectToRoute('deleteDispatch',['journal'=>$journal->getId()]);
+              }else
+              {
+                return $this->redirectToRoute('editDispatch',['journal'=>$journal->getId()]);
+              }
 
            }
          }
@@ -94,9 +118,9 @@ class permissionController extends Controller
 
 
      /**
-     * @Route("/visualiastionLigneJournal/{id}", name="visualiastionLigneJournal")
+     * @Route("/visualiastionLigneJournal/{id}/{type}", name="visualiastionLigneJournal")
      */
-    public function visualiastionLigneJournalAction(Request $request,Journal $id)
+    public function visualiastionLigneJournalAction(Request $request,Journal $id,$type)
     {
 
         $repository= $this->getDoctrine()->getRepository('AppBundle:Journal');
@@ -104,7 +128,7 @@ class permissionController extends Controller
         $journalArray= $repository->findBy(['codeOperation'=>$choix[0]->getcodeOperation()]);
 
         $repository= $this->getDoctrine()->getRepository('AppBundle:DemandePermission');
-        $demande = $repository->findOneBy(['journal'=>$id]);
+        $demande = $repository->findOneBy(['journal'=>$id,'type'=>$type]);
 
         
        return $this->render('visualisationLigneDispatch.html.twig', [
@@ -129,8 +153,10 @@ class permissionController extends Controller
        $accordPermission->setaccordeur($this->getUser());
        $accordPermission->setdemande($id);
 
+
        $em->persist($accordPermission);
        $em->flush();
+
 
        $this->addFlash('notice','Demande accordée avec success');
         
@@ -153,6 +179,8 @@ class permissionController extends Controller
        $id->setstatus(1);
        $accordPermission->setaccordeur($this->getUser());
        $accordPermission->setdemande($id);
+
+   
 
        $em->persist($accordPermission);
        $em->flush();

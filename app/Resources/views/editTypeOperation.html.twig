@@ -8,7 +8,13 @@
 
 {% block body %}
 <br>
-   <a class="btn btn-primary" href="{{ path('typeOperation')}}" style="margin:1%">retour</a>
+   <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active"><a href="{{ path('homepage')}}">Acceuil</a></li>
+    <li class="breadcrumb-item " ><a href="{{ path('typeOperation')}}"> Type Operation</a></li>
+    <li class="breadcrumb-item "><a>Modification Type Operation</a></li>
+  </ol>
+</nav>
    <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -18,27 +24,27 @@
                 <div class="card-body">
                   {{ form_start(editForm,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
                   <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                       <div class="form-group">
                         <label>Nom du type d'operation:</label>
                         {{ form_errors(editForm.libelleTypeOperation) }}
                         {{ form_widget(editForm.libelleTypeOperation,{'attr':{'class':'form-control'}}) }} 
                       </div>
                     </div>
-                     <div class="col-lg-6">
+                     <div class="col-lg-4">
                       <div class="form-group">
                         <label >Numero de compte du type d'operation:</label>
                          {{ form_errors(editForm.numCptDebit ) }}
                          {{ form_widget(editForm.numCptDebit,{'attr':{'class':'form-control'}}) }}  
                       </div>
                     </div>
+                    <div class="col-lg-4 pt-4">
+                      <div class="form-group">
+                        <button type="submit" class="btn btn-primary">valider</button>  
+                      </div>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <center>
-                    <button type="submit" class="btn btn-primary">valider</button>
-                    <button type="reset" class="btn btn-danger">annuler</button> 
-                    </center>
-                  </div>
+                 
                   {{ form_end(editForm) }}
 
                 </div>     
@@ -58,7 +64,7 @@
 {% for error in editForm.vars.errors.form.getErrors(true) %} 
 
       var placementFrom = 'top';
-      var placementAlign = 'right';
+      var placementAlign = 'center';
       var state = 'danger';
       var style = 'withicon';
       var content = {};

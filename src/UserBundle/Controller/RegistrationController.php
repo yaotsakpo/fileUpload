@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use UserBundle\Entity\User;
 use UserBundle\Form\UserType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType ;
+
 
 class RegistrationController extends Controller{
 
@@ -40,7 +42,19 @@ class RegistrationController extends Controller{
             return $event->getResponse();
         }
 
-        $form = $formFactory->createForm();
+        $form = $formFactory->createForm()
+        ->add( 'roles' , ChoiceType::class, array(
+        'attr' => array( 'class' => 'form-control' ,
+            'style' => 'margin:5px 0;' ),
+        'choices' =>
+            [
+                'ROLE_USER' => 'ROLE_USER' ,
+                'ROLE_COMPTA' => 'ROLE_COMPTA',
+                'ROLE_ADMIN'=> 'ROLE_ADMIN'
+            ],
+        'multiple' => true,
+        'required' => true, ) );
+
         $form->setData($user);
 
         $form->handleRequest($request);

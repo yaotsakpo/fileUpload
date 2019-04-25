@@ -31,7 +31,6 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
 
-
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
         ]);
@@ -50,20 +49,21 @@ class DefaultController extends Controller
        
         $contenu_du_fichier=file($file);
         $em = $this->getDoctrine()->getManager();
-        for($i=3;$i<(sizeof($contenu_du_fichier)-1);$i++)
+        for($i=2;$i<(sizeof($contenu_du_fichier)-1);$i++)
         {
             if($contenu_du_fichier[$i][1]!=";")
             {      
              $lignes=(explode(";",$contenu_du_fichier[$i]));
              $creationOperationCaisse=$this->get('CreationOperationCaisse');
              $creationOperationCaisse->hydratation($lignes,$importation);
+
             }
         }
         $import->setStatus(1);
         $em->flush();
         $this->addFlash('notice','Traitement effectué effectué avec succes');
 
-        return $this->redirectToRoute('homepage');
+       return $this->redirectToRoute('journalRecherche',['importation'=>$importation]);
 
     }
 
@@ -84,8 +84,7 @@ class DefaultController extends Controller
 
         $cumul= $repository->cumul($importation);
 
-        //dump($cumul);
-        //exit();
+       
 
         foreach ($cumul as $key => $positionCumul) {
 
@@ -124,7 +123,7 @@ class DefaultController extends Controller
         $em->flush();
         $this->addFlash('notice','Journal généré avec succes');
 
-        return $this->redirectToRoute('homepage');
+       return $this->redirectToRoute('dispatchRecherche',['importation'=>$importation]);
 
     }
 
@@ -158,19 +157,6 @@ class DefaultController extends Controller
         ]);
     }
 
-
-    /**
-     * @Route("/rechercheImportation/{importation}", name="rechercheImportation")
-     */
-    public function rechercheImportationAction(Request $request,Importation $importation)
-    {
-        $repository= $this->getDoctrine()->getRepository('AppBundle:Importation');
-        $import= $repository->findBy(['id'=>$importation]);
-
-      return $this->render('recherche.html.twig', [
-            'importation' => $import
-        ]);
-    }
 
 
     /**

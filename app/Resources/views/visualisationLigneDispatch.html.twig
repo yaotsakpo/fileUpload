@@ -8,8 +8,15 @@
 
 {% block body %}
 <br>
-   <a class="btn btn-primary" href="{{ path('demandePermissionListe')}}" style="margin:1%">retour</a>
+<div class="mr-auto">
+ <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active"><a href="{{ path('homepage')}}">Acceuil</a></li>
+    <li class="breadcrumb-item "><a href="{{ path('demandePermissionListe')}}">Demandes de permission</a></li>
+    <li  class="breadcrumb-item ">Demande de permission choisie </li>
 
+  </ol>
+</nav>
    <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -47,27 +54,14 @@
                                   <td>{{ journal.positionJournal }}</td> 
                                   <td>
                                     {% if journal.montantDebit != null %}
-                                      {{ journal.montantDebit|number_format(2, '.', ' ') }}
+                                      {{ journal.montantDebit|number_format(0, ' ', ' ') }}
                                     {% endif %}
                                   </td> 
                                   <td>
                                     {% if journal.montantCredit != null %}
-                                      {{ journal.montantCredit|number_format(2, '.', ' ') }}
+                                      {{ journal.montantCredit|number_format(0, ' ', ' ') }}
                                     {% endif %}
-                                  </td> 
-                                  <td>
-
-                                       {% if journal.cumul != null  and journal.dispatch == 1 and journal.montantCredit == null  %}
-                                         
-                                      <a href="{{ path('accordDemande',{'id':demande.id})}}" >
-                                      <button class="btn btn-success waves-effect" type="submit" >Accorder</button></a>
-
-                                      <a href="{{ path('rejetDemande',{'id':demande.id})}}" >
-                                      <button class="btn btn-danger waves-effect" type="submit" >Refuser</button></a>
-                                          
-                                      {% endif %}
-
-                                  </td> 
+                                  </td>
                               </tr>
                               {% endfor %}
                           </tbody>
@@ -75,6 +69,16 @@
                 </div>     
             </div>
       </div>
+</div>
+
+<div class="text-center">
+
+      <a href="{{ path('accordDemande',{'id':demande.id})}}" >
+      <button class="btn btn-success waves-effect" type="submit" onclick="return confirm('cliquez sur ok pour confirmer')" >Accorder</button></a>
+
+      <a href="{{ path('rejetDemande',{'id':demande.id})}}" >
+      <button class="btn btn-danger waves-effect" type="submit" onclick="return confirm('cliquez sur ok pour confirmer')">Refuser</button></a>
+
 </div>
 {% endblock %}
 
