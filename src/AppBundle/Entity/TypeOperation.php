@@ -29,11 +29,16 @@ class TypeOperation
     private $libelleTypeOperation;
 
     /**
-     * @var string
      *
-     * @ORM\Column(name="numCptDebit", type="string", length=255)
+     * @var CompteCompta $compteCompta
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CompteCompta",inversedBy="numCptTypeOperation",cascade={"all"})
+     *
+     * @ORM\JoinColumn(nullable=true,onDelete="CASCADE")
      */
-    private $numCptDebit;
+
+
+    Private $compteCompta;
 
 
     /**
@@ -56,17 +61,13 @@ class TypeOperation
     }
 
 
-
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->operations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->importation = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
-
-
 
     /**
      * Set libelleTypeOperation
@@ -93,27 +94,27 @@ class TypeOperation
     }
 
     /**
-     * Set numCptDebit
+     * Set compteCompta
      *
-     * @param string $numCptDebit
+     * @param \AppBundle\Entity\CompteCompta $compteCompta
      *
      * @return TypeOperation
      */
-    public function setNumCptDebit($numCptDebit)
+    public function setCompteCompta(\AppBundle\Entity\CompteCompta $compteCompta = null)
     {
-        $this->numCptDebit = $numCptDebit;
+        $this->compteCompta = $compteCompta;
 
         return $this;
     }
 
     /**
-     * Get numCptDebit
+     * Get compteCompta
      *
-     * @return string
+     * @return \AppBundle\Entity\CompteCompta
      */
-    public function getNumCptDebit()
+    public function getCompteCompta()
     {
-        return $this->numCptDebit;
+        return $this->compteCompta;
     }
 
     /**

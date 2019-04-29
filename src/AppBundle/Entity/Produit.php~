@@ -37,12 +37,16 @@ class Produit
     private $numeroDeCodeProduit;
 
     /**
-     * @var string
      *
-     * @ORM\Column(name="numCptCredit", type="string", length=255)
+     * @var CompteCompta $compteCompta
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CompteCompta",inversedBy="numCptProduit",cascade={"all"})
+     *
+     * @ORM\JoinColumn(nullable=true,onDelete="CASCADE")
      */
-    private $numCptCredit;
 
+
+    Private $compteCompta;
 
 
     /**
@@ -62,63 +66,5 @@ class Produit
         return $this->id;
     }
 
-    /**
-     * Set nomProduit
-     *
-     * @param string $nomProduit
-     *
-     * @return Produit
-     */
-    public function setNomProduit($nomProduit)
-    {
-        $this->nomProduit = $nomProduit;
-
-        return $this;
-    }
-
-    /**
-     * Get nomProduit
-     *
-     * @return string
-     */
-    public function getNomProduit()
-    {
-        return $this->nomProduit;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOperations()
-    {
-        return $this->operations;
-    }
-
-    /**
-     * @param mixed $operations
-     */
-    public function setOperations($operations)
-    {
-        $this->operations = $operations;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNumeroDeCodeProduit()
-    {
-        return $this->numeroDeCodeProduit;
-    }
-
-    /**
-     * @param string $numeroDeCodeProduit
-     */
-    public function setNumeroDeCodeProduit($numeroDeCodeProduit)
-    {
-        $this->numeroDeCodeProduit = $numeroDeCodeProduit;
-    }
-
-  
-
+   
 }
-

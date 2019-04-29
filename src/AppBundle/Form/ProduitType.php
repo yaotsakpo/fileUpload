@@ -18,7 +18,9 @@ class ProduitType extends AbstractType
         $builder
         ->add('nomProduit',TextType::class,array('attr'=>['class'=>'form-control']))
         ->add('numeroDeCodeProduit',TextType::class,array('attr'=>['class'=>'form-control']))
-        ->add('numCptCredit',TextType::class,array('attr'=>['class'=>'form-control']));
+        //->add('compteCompta',TextType::class,array('attr'=>['class'=>'form-control']))
+
+        ;
     }/**
      * {@inheritdoc}
      */

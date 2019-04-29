@@ -37,12 +37,16 @@ class Produit
     private $numeroDeCodeProduit;
 
     /**
-     * @var string
      *
-     * @ORM\Column(name="numCptCredit", type="string", length=255)
+     * @var CompteCompta $compteCompta
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CompteCompta",inversedBy="numCptProduit",cascade={"all"})
+     *
+     * @ORM\JoinColumn(nullable=true,onDelete="CASCADE")
      */
-    private $numCptCredit;
 
+
+    Private $compteCompta;
 
 
     /**
@@ -60,6 +64,15 @@ class Produit
     public function getId()
     {
         return $this->id;
+    }
+
+   
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->operations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -87,22 +100,22 @@ class Produit
     }
 
     /**
-     * @return mixed
+     * Set numeroDeCodeProduit
+     *
+     * @param string $numeroDeCodeProduit
+     *
+     * @return Produit
      */
-    public function getOperations()
+    public function setNumeroDeCodeProduit($numeroDeCodeProduit)
     {
-        return $this->operations;
+        $this->numeroDeCodeProduit = $numeroDeCodeProduit;
+
+        return $this;
     }
 
     /**
-     * @param mixed $operations
-     */
-    public function setOperations($operations)
-    {
-        $this->operations = $operations;
-    }
-
-    /**
+     * Get numeroDeCodeProduit
+     *
      * @return string
      */
     public function getNumeroDeCodeProduit()
@@ -111,45 +124,27 @@ class Produit
     }
 
     /**
-     * @param string $numeroDeCodeProduit
-     */
-    public function setNumeroDeCodeProduit($numeroDeCodeProduit)
-    {
-        $this->numeroDeCodeProduit = $numeroDeCodeProduit;
-    }
-
-  
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->operations = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Set numCptCredit
+     * Set compteCompta
      *
-     * @param string $numCptCredit
+     * @param \AppBundle\Entity\CompteCompta $compteCompta
      *
      * @return Produit
      */
-    public function setNumCptCredit($numCptCredit)
+    public function setCompteCompta(\AppBundle\Entity\CompteCompta $compteCompta = null)
     {
-        $this->numCptCredit = $numCptCredit;
+        $this->compteCompta = $compteCompta;
 
         return $this;
     }
 
     /**
-     * Get numCptCredit
+     * Get compteCompta
      *
-     * @return string
+     * @return \AppBundle\Entity\CompteCompta
      */
-    public function getNumCptCredit()
+    public function getCompteCompta()
     {
-        return $this->numCptCredit;
+        return $this->compteCompta;
     }
 
     /**
@@ -174,5 +169,15 @@ class Produit
     public function removeOperation(\AppBundle\Entity\OperationCaisse $operation)
     {
         $this->operations->removeElement($operation);
+    }
+
+    /**
+     * Get operations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOperations()
+    {
+        return $this->operations;
     }
 }

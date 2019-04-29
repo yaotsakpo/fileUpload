@@ -40,8 +40,8 @@
                     <div class="col-lg-3">
                       <div class="form-group">
                         <label >Numero de compte du produit:</label>
-                         {{ form_errors(produitForm.numCptCredit) }}
-                         {{ form_widget(produitForm.numCptCredit,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
+                         {{ form_errors(produitForm.compteCompta) }}
+                         {{ form_widget(produitForm.compteCompta,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
                       </div>
                     </div>
                     <div class="col-lg-3 pt-3">
@@ -80,7 +80,7 @@
                                             <tr>
                                                 <td>{{ produit.nomProduit }}</td> 
                                                 <td>{{ produit.numeroDeCodeProduit }}</td> 
-                                                <td>{{ produit.numCptCredit }}</td> 
+                                                <td>{{ produit.compteCompta.num }}</td> 
                                                 <td>
                                                 <a  href="{{ path('editProduit',{'produit':produit.id}) }}"><button class="btn btn-sm btn-warning waves-effect" type="submit" >Modifier</button></a>
                                                 <a  href="{{ path('effacerProduit',{'produit':produit.id}) }}"><button class="btn btn-sm btn-danger waves-effect" type="submit" onclick="return confirm('cliquez sur ok pour confirmer')" >Supprimer</button></a>

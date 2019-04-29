@@ -12,6 +12,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use AppBundle\Entity\Produit;
 use AppBundle\Form\ProduitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError as FormError;
 
 
@@ -25,29 +26,48 @@ class ProduitController extends Controller
     {
         $produit= new Produit();
 
-        $produitForm= $this->createform(ProduitType::class,$produit);
+        $produitForm= $this->createformBuilder()
+        ->add('nomProduit',TextType::class,array('attr'=>['class'=>'form-control','required'=>true]))
+        ->add('numeroDeCodeProduit',TextType::class,array('attr'=>['class'=>'form-control','required'=>true]))
+        ->add('compteCompta',TextType::class,array('attr'=>['class'=>'form-control','mapped'=>false,'required'=>true]))
+        ->getform();
 
         $produitForm->handleRequest($request);
 
         if ($produitForm->isSubmitted() && $produitForm->isValid()) {
 
-            $repository= $this->getDoctrine()->getRepository('AppBundle:Produit');
-            $pdt= $repository->findOneBy(['nomProduit'=>$produitForm['nomProduit']->getdata(),'numeroDeCodeProduit'=>$produitForm['numeroDeCodeProduit']->getdata(),'numCptCredit'=>$produitForm['numCptCredit']->getdata()]);
+            $repository= $this->getDoctrine()->getRepository('AppBundle:CompteCompta');
+            $compteCompta= $repository->findOneBy(['num'=>$produitForm['compteCompta']->getdata()]);
 
-            if(empty($pdt))
+
+
+            if(!empty($compteCompta))
             {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($produit);
-                $em->flush();
+                $repository= $this->getDoctrine()->getRepository('AppBundle:Produit');
+                $pdt= $repository->findOneBy(['nomProduit'=>$produitForm['nomProduit']->getdata(),'numeroDeCodeProduit'=>$produitForm['numeroDeCodeProduit']->getdata(),'compteCompta'=>$compteCompta]);
 
-                $this->addFlash('notice','Produit enregistré avec success');
+                if(empty($pdt))
+                {
+                    $em = $this->getDoctrine()->getManager();
+                    $produit->setNomProduit($produitForm['nomProduit']->getdata());
+                    $produit->setNumeroDeCodeProduit($produitForm['numeroDeCodeProduit']->getdata());
+                    $produit->setCompteCompta($compteCompta);
+                    $em->persist($produit);
+                    $em->flush();
 
-                return $this->redirectToRoute('produit');
+                    $this->addFlash('notice','Produit enregistré avec success');
 
-            }else
-            {
-                $produitForm->addError(new FormError("Il existe deja un produit avec ces informations! veuillez ressaisir"));
-            }
+                    return $this->redirectToRoute('produit');
+
+                }else
+                {
+                    $produitForm->addError(new FormError("Il existe deja un produit avec ces informations! veuillez ressaisir"));
+                }
+             }else
+             {
+                    $produitForm->addError(new FormError("Numero du compte du produit incorrect"));
+
+             }
             
         }
 
@@ -66,34 +86,51 @@ class ProduitController extends Controller
      */
     public function editProduitAction(Request $request, Produit $produit)
     {
-        $editForm = $this ->createForm( 'AppBundle\Form\ProduitType' , $produit);
+        $editForm = $this->createformBuilder()
+        ->add('nomProduit',TextType::class,array('attr'=>['class'=>'form-control','required'=>true],'data'=>$produit->getNomProduit()))
+        ->add('numeroDeCodeProduit',TextType::class,array('attr'=>['class'=>'form-control','required'=>true],'data'=>$produit->getNumeroDeCodeProduit()))
+        ->add('compteCompta',TextType::class,array('attr'=>['class'=>'form-control','required'=>true],'data'=>$produit->getCompteCompta()->getNum()))
+        ->getform();
+
         $editForm->handleRequest($request);
         $pdt=[];
         if ($editForm->isSubmitted() && $editForm->isValid())
         {
-            $repository= $this->getDoctrine()->getRepository('AppBundle:Produit');
-            $pdt= $repository->findOneBy([
-                'nomProduit'=>$editForm['nomProduit']->getdata(),
-                'numeroDeCodeProduit'=>$editForm['numeroDeCodeProduit']->getdata(),
-                'numCptCredit'=>$editForm['numCptCredit']->getdata()]);
 
-            if( empty($pdt) ) 
+            $repository= $this->getDoctrine()->getRepository('AppBundle:CompteCompta');
+            $compteCompta= $repository->findOneBy(['num'=>$editForm['compteCompta']->getdata()]);
+            if(!empty($compteCompta))
             {
-                $em = $this ->getDoctrine()->getManager();
-                $em->flush();
-                $this->addFlash('notice','Modification reussie');
-                return $this ->redirectToRoute('produit');
-            }else
-            {
-                if($pdt!= $produit)
+                $repository= $this->getDoctrine()->getRepository('AppBundle:Produit');
+                $pdt= $repository->findOneBy([
+                    'nomProduit'=>$editForm['nomProduit']->getdata(),
+                    'numeroDeCodeProduit'=>$editForm['numeroDeCodeProduit']->getdata(),
+                    'compteCompta'=>$compteCompta]);
+
+                if( empty($pdt) ) 
                 {
-                    $editForm->addError(new FormError("Il existe deja un produit avec ces informations! veuillez ressaisir"));
-                    
-                }else
-                {
+                    $em = $this ->getDoctrine()->getManager();
+                    $produit->setNomProduit($editForm['nomProduit']->getdata());
+                    $produit->setNumeroDeCodeProduit($editForm['numeroDeCodeProduit']->getdata());
+                    $produit->setCompteCompta($compteCompta);
+                    $em->flush();
                     $this->addFlash('notice','Modification reussie');
                     return $this ->redirectToRoute('produit');
+                }else
+                {
+                    if($pdt!= $produit)
+                    {
+                        $editForm->addError(new FormError("Il existe deja un produit avec ces informations! veuillez ressaisir"));
+                        
+                    }else
+                    {
+                        $this->addFlash('notice','Modification reussie');
+                        return $this ->redirectToRoute('produit');
+                    }
                 }
+            }else
+            {
+                $editForm->addError(new FormError("Numero du compte du produit incorrect"));
             }
 
             

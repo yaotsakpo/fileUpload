@@ -85,26 +85,26 @@ class dispatchController extends Controller
               $code = uniqid();
 
               $em = $this->getDoctrine()->getManager();
-                    /******Insertion de la ligne de debit du dispatch*****/
-                    $dispatchDebit->setJour(new \DateTime());
-                    $dispatchDebit->setMontantDebit($editForm['montant']->getdata());
-                    $dispatchDebit->setLibelleEcriture($editForm['libelle']->getdata());
-                    $dispatchDebit->setNumCompteGeneral($editForm['numCptDebiter']->getdata()->getnumCptDispatch());
-                    $dispatchDebit->setCumul($journal->getcumul());
-                    $dispatchDebit->setImportation($journal->getImportation());
-                    $dispatchDebit->setDispatch(1);
-                    $dispatchDebit->setCodeOperation($code);
-                    $dispatchDebit->setsuppression(0);
-                    /******Insertion de la ligne de credit du dispatch*****/
-                    $dispatchCredit->setJour(new \DateTime());
-                    $dispatchCredit->setMontantCredit($editForm['montant']->getdata());
-                    $dispatchCredit->setLibelleEcriture($editForm['libelle']->getdata());
-                    $dispatchCredit->setNumCompteGeneral($journal->getImportation()->gettypeOperation()->getnumCptDebit());
-                    $dispatchCredit->setCumul($journal->getcumul());
-                    $dispatchCredit->setImportation($journal->getImportation());
-                    $dispatchCredit->setDispatch(1);
-                    $dispatchCredit->setCodeOperation($code);
-                    $dispatchCredit->setsuppression(0);
+                  /******Insertion de la ligne de debit du dispatch*****/
+                  $dispatchDebit->setJour(new \DateTime());
+                  $dispatchDebit->setMontantDebit($editForm['montant']->getdata());
+                  $dispatchDebit->setLibelleEcriture($editForm['libelle']->getdata());
+                  $dispatchDebit->setNumCompteGeneral($editForm['numCptDebiter']->getdata()->getnumCptDispatch());
+                  $dispatchDebit->setCumul($journal->getcumul());
+                  $dispatchDebit->setImportation($journal->getImportation());
+                  $dispatchDebit->setDispatch(1);
+                  $dispatchDebit->setCodeOperation($code);
+                  $dispatchDebit->setsuppression(0);
+                  /******Insertion de la ligne de credit du dispatch*****/
+                  $dispatchCredit->setJour(new \DateTime());
+                  $dispatchCredit->setMontantCredit($editForm['montant']->getdata());
+                  $dispatchCredit->setLibelleEcriture($editForm['libelle']->getdata());
+                  $dispatchCredit->setNumCompteGeneral($journal->getImportation()->gettypeOperation()->getcompteCompta()->getNum());
+                  $dispatchCredit->setCumul($journal->getcumul());
+                  $dispatchCredit->setImportation($journal->getImportation());
+                  $dispatchCredit->setDispatch(1);
+                  $dispatchCredit->setCodeOperation($code);
+                  $dispatchCredit->setsuppression(0);
                 $em->persist($dispatchDebit);
                 $em->persist($dispatchCredit);
                 $em->flush();

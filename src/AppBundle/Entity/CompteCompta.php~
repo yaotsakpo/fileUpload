@@ -1,0 +1,97 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * CompteCompta
+ *
+ * @ORM\Table(name="compte_compta")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CompteComptaRepository")
+ */
+class CompteCompta
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="num", type="string", length=255)
+     */
+    private $num;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libelle", type="string", length=255)
+     */
+    private $libelle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255)
+     */
+    private $description;
+
+
+    /**
+     *
+     * @var AppBundle\Entity\ClassCompta $classCompta
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ClassCompta",inversedBy="compteComptas")
+     *
+     * @ORM\JoinColumn(nullable=false)
+     */
+
+    private $classCompta;
+
+
+    /**                                     
+    * @ORM\OneToMany(targetEntity="CompteCompta", mappedBy="parent",cascade={"persist"})                                     
+    */                                     
+    private $compteTiers;   
+
+
+    /**                               
+    * @ORM\ManyToOne(targetEntity="CompteCompta", inversedBy="compteTiers")                                
+    * @ORM\JoinColumn(name="parent", referencedColumnName="id",nullable=true,unique=false,onDelete="SET NULL")                                     
+    */                                     
+    private $parent;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Produit",mappedBy="compteCompta",cascade={"remove"})
+     */
+
+    private $numCptProduit;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TypeOperation",mappedBy="compteCompta",cascade={"remove"})
+     */
+
+    private $numCptTypeOperation;
+
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+  
+}

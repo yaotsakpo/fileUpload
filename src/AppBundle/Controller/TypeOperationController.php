@@ -13,6 +13,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use AppBundle\Entity\TypeOperation;
 use AppBundle\Form\TypeOperationType;
 use Symfony\Component\Form\FormError as FormError;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 
 
 class TypeOperationController extends Controller
@@ -25,28 +27,44 @@ class TypeOperationController extends Controller
     {
        $typeOperation= new TypeOperation();
 
-        $typeOperationForm= $this->createform(TypeOperationType::class,$typeOperation);
+        $typeOperationForm= $this->createformBuilder()
+        ->add('libelleTypeOperation',TextType::class,array('attr'=>['class'=>'form-control','required'=>true]))
+        ->add('compteCompta',TextType::class,array('attr'=>['class'=>'form-control','mapped'=>false,'required'=>true]))
+        ->getform();
 
         $typeOperationForm->handleRequest($request);
 
         if ($typeOperationForm->isSubmitted() && $typeOperationForm->isValid()) {
 
+            $repository= $this->getDoctrine()->getRepository('AppBundle:CompteCompta');
+            $compteCompta= $repository->findOneBy(['num'=>$typeOperationForm['compteCompta']->getdata()]);
+
+             if(!empty($compteCompta))
+            {
             $repository= $this->getDoctrine()->getRepository('AppBundle:TypeOperation');
-            $typeOpe= $repository->findOneBy(['libelleTypeOperation'=>$typeOperationForm['libelleTypeOperation']->getdata(),'numCptDebit'=>$typeOperationForm['numCptDebit']->getdata()]);
+            $typeOpe= $repository->findOneBy(['libelleTypeOperation'=>$typeOperationForm['libelleTypeOperation']->getdata(),'compteCompta'=>$compteCompta]);
 
-            if(empty($typeOpe))
+                if(empty($typeOpe))
+                {
+                    $em = $this->getDoctrine()->getManager();
+                    $typeOperation->setlibelleTypeOperation($typeOperationForm['libelleTypeOperation']->getdata());
+                    $typeOperation->setCompteCompta($compteCompta);
+                    $em->persist($typeOperation);
+                    $em->flush();
+
+                    $this->addFlash('notice','Type d\'operation enregistré avec success');
+
+                    return $this->redirectToRoute('typeOperation');
+
+                }else
+                {
+                    $typeOperationForm->addError(new FormError("Il existe deja un type d'operation existant avec ces informations! veuillez ressaisir"));
+                }
+            }
+            else
             {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($typeOperation);
-                $em->flush();
+                    $typeOperationForm->addError(new FormError("Numero du compte incorrect"));
 
-                $this->addFlash('notice','Type d\'operation enregistré avec success');
-
-                return $this->redirectToRoute('typeOperation');
-
-            }else
-            {
-                $typeOperationForm->addError(new FormError("Il existe deja un type d'operation existant avec ces informations! veuillez ressaisir"));
             }
 
         }
@@ -65,34 +83,48 @@ class TypeOperationController extends Controller
      */
     public function editTypeOperationAction(Request $request,TypeOperation $typeOperation)
     {
-        $editForm = $this ->createForm( 'AppBundle\Form\TypeOperationType' , $typeOperation);
+        $editForm =  $this->createformBuilder()
+        ->add('libelleTypeOperation',TextType::class,array('attr'=>['class'=>'form-control','required'=>true],'data'=>$typeOperation->getlibelleTypeOperation()))
+        ->add('compteCompta',TextType::class,array('attr'=>['class'=>'form-control','required'=>true],'data'=>$typeOperation->getCompteCompta()->getNum()))
+        ->getform();
+
         $editForm->handleRequest($request);
         if ($editForm->isSubmitted() && $editForm->isValid())
         {
-            $repository= $this->getDoctrine()->getRepository('AppBundle:TypeOperation');
-            $typeOpe= $repository->findOneBy([
-                'libelleTypeOperation'=>$editForm['libelleTypeOperation']->getdata(),
-                'numCptDebit'=>$editForm['numCptDebit']->getdata()]);
-
-            if( empty($typeOpe) ) 
+            $repository= $this->getDoctrine()->getRepository('AppBundle:CompteCompta');
+            $compteCompta= $repository->findOneBy(['num'=>$editForm['compteCompta']->getdata()]);
+            if(!empty($compteCompta))
             {
+                $repository= $this->getDoctrine()->getRepository('AppBundle:TypeOperation');
+                $typeOpe= $repository->findOneBy([
+                    'libelleTypeOperation'=>$editForm['libelleTypeOperation']->getdata(),
+                    'compteCompta'=>$compteCompta]);
 
-            $em = $this ->getDoctrine()->getManager();
-            $em->flush();
-            $this->addFlash('notice','Modification reussie');
-            return $this ->redirectToRoute('typeOperation');
-            }
-            else
-            {
-                if($typeOpe!= $typeOperation)
+                if( empty($typeOpe) ) 
                 {
-                    $editForm->addError(new FormError("Il existe deja un type d'operation existant avec ces informations! veuillez ressaisir"));
+
+                $em = $this ->getDoctrine()->getManager();
+                $typeOperation->setlibelleTypeOperation($editForm['libelleTypeOperation']->getdata());
+                $typeOperation->setCompteCompta($compteCompta);
+                $em->flush();
+                $this->addFlash('notice','Modification reussie');
+                return $this ->redirectToRoute('typeOperation');
                 }
                 else
                 {
-                    $this->addFlash('notice','Modification reussie');
-                    return $this ->redirectToRoute('typeOperation');
+                    if($typeOpe!= $typeOperation)
+                    {
+                        $editForm->addError(new FormError("Il existe deja un type d'operation existant avec ces informations! veuillez ressaisir"));
+                    }
+                    else
+                    {
+                        $this->addFlash('notice','Modification reussie');
+                        return $this ->redirectToRoute('typeOperation');
+                    }
                 }
+            }else
+            {
+                $editForm->addError(new FormError("Numero du compte incorrect"));
             }
         }
     	

@@ -17,7 +17,7 @@ class TypeOperationType extends AbstractType
     {
         $builder
         ->add('libelleTypeOperation',TextType::class,array('attr'=>['class'=>'form-control']))
-        ->add('numCptDebit',TextType::class,array('attr'=>['class'=>'form-control']));
+        ->add('compteCompta',TextType::class,array('attr'=>['class'=>'form-control']));
     }/**
      * {@inheritdoc}
      */
