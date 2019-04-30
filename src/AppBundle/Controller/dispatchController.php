@@ -34,7 +34,7 @@ class dispatchController extends Controller
         
         
 
-        $cumul=$journal->getCumul();
+       
 
         $montant= $journal->getMontant();
 
@@ -59,6 +59,26 @@ class dispatchController extends Controller
         )->setParameter('ligneCumul', $journal->getId());
          
         $dispatchsMontantTotal = $query->getResult();
+
+
+        $em = $this->getDoctrine()->getManager(); 
+        $query = $em->createQuery(
+        'SELECT SUM(j.montant) FROM AppBundle:Journal j,AppBundle:CompteCompta c WHERE c=j.numCompte and c.parent is null and  j.dispatch = 1 and j.suppression  = 0  and j.isDebit=1 and j.cumul = :ligneCumul'
+        )->setParameter('ligneCumul', $journal->getcumul()->getId());
+         
+        $cumul= $query->getResult();
+
+
+
+
+        $em = $this->getDoctrine()->getManager(); 
+        $query = $em->createQuery(
+        'SELECT j FROM AppBundle:Journal j,AppBundle:CompteCompta c WHERE c=j.numCompte and c.parent is not null and  j.dispatch = 1 and j.suppression = 0 and j.cumul = :ligneCumul'
+        )->setParameter('ligneCumul', $journal->getcumul()->getId());
+
+         
+        $dispatchs = $query->getResult(); 
+
 
 
         $editForm->handleRequest($request);
@@ -168,10 +188,13 @@ class dispatchController extends Controller
 
         }
       
-      
+
        return $this->render('editDispatch.html.twig', [
                 'editForm'=>$editForm->createView(),
-                'journal'=>$journal
+                'dispatch' => ((int) ($dispatchsMontantTotal[0])[1]),
+                'cumul' => ((int) ($cumul[0])[1]),
+                'journal'=>$journal,
+                'dispatchs'=>$dispatchs
         ]); 
   }
 

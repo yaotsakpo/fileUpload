@@ -107,7 +107,7 @@ class permissionController extends Controller
     {
 
         $repository= $this->getDoctrine()->getRepository('AppBundle:DemandePermission');
-        $demandes=  $repository->findBy([],['id' => 'DESC','date' => 'DESC']);
+        $demandes=  $repository->findBy([],['date' => 'DESC']);
 
        return $this->render('demandePermission.html.twig', [
             'demandes' => $demandes,

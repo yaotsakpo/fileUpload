@@ -33,7 +33,7 @@
                         </tr>                           
                         </thead>
                         <tbody>
-                          {% for demande in demandes %}
+                          {% for demande in demandes  %}
                               <tr>
                                   <td>{{ demande.date|date('d-m-Y H:m:s') }}</td> 
                                   <td>{{ demande.demandeur.username }}</td> 
@@ -70,11 +70,9 @@
 {{ parent() }}
 
 <script type="text/javascript">
-
-
-
   $('#basic-datatables').DataTable({
-      });
+            "ordering": false
+        });
 
 
 </script>
