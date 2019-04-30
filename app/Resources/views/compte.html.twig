@@ -1,0 +1,165 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+
+{{ parent() }}
+
+{% endblock %}
+
+{% block body %}
+<br>
+   <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active"><a href="{{ path('homepage')}}">Acceuil</a></li>
+    <li class="breadcrumb-item ">Compte</a></li>
+  </ol>
+</nav>
+   <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Nouveau Compte </div>
+                </div>
+                <div class="card-body">
+                  {{ form_start(compteForm,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
+                  <div class="row">
+                    <div class="col-lg-2">
+                      <div class="form-group">
+                        <label>Libelle du compte:</label>
+                        {{ form_errors(compteForm.libelle) }}
+                        {{ form_widget(compteForm.libelle,{'attr':{'class':'form-control'}}) }} 
+                      </div>
+                    </div>
+                     <div class="col-lg-2">
+                      <div class="form-group">
+                        <label >Numero du  compte:</label>
+                         {{ form_errors(compteForm.num) }}
+                         {{ form_widget(compteForm.num,{'attr':{'class':'form-control'}}) }}  
+                      </div>
+                    </div>
+                    <div class="col-lg-2">
+                      <div class="form-group">
+                        <label >Description du compte:</label>
+                         {{ form_errors(compteForm.description) }}
+                         {{ form_widget(compteForm.description,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
+                      </div>
+                    </div>
+                    <div class="col-lg-2">
+                      <div class="form-group">
+                        <label >Classe du compte:</label>
+                         {{ form_errors(compteForm.classCompta) }}
+                         {{ form_widget(compteForm.classCompta,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
+                      </div>
+                    </div>
+                    <div class="col-lg-2">
+                      <div class="form-group">
+                        <label >Parent du compte:</label>
+                         {{ form_errors(compteForm.parent) }}
+                         {{ form_widget(compteForm.parent,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
+                      </div>
+                    </div>
+
+                    <div class="col-lg-2 pt-3">
+                      <div class="form-group">
+                       <button type="submit" class="btn btn-primary">valider</button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {{ form_end(compteForm) }}
+
+                </div>     
+            </div>
+      </div>
+</div>
+
+   <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Liste des Compte</div>
+                </div>
+                <div class="card-body">
+                   <table id="basic-datatables" class="display table table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th data-field="libelle"  >Libelle du compte</th>
+                                            <th ddata-field="num">Numero du compte</th>
+                                            <th ddata-field="description">Description du compte</th>
+                                            <th ddata-field="classe">Classe du compte</th>
+                                            <th ddata-field="parent">Parent du compte</th>
+                                            <th data-field="action">Action</th>
+                                           
+                                        </tr>                           
+                                        </thead>
+                                        <tbody>
+                                           {% for compte in comptes %}
+                                            <tr>
+                                                <td>{{ compte.libelle }}</td> 
+                                                <td>{{ compte.num }}</td> 
+                                                <td>{{ compte.description }}</td> 
+                                                <td>{{ compte.classCompta.num }}</td> 
+                                                <td>
+                                                  {% if compte.parent == null %}
+                                                      ------
+                                                    {% else %}
+                                                      {{ compte.parent.num }}  
+                                                  {% endif %}
+
+                                                </td> 
+                                                <td>
+                                                <a  href="{{ path('editCompte',{'compte':compte.id}) }}"><button class="btn btn-sm btn-warning waves-effect" type="submit" >Modifier</button></a>
+                                                <a  href="{{ path('effacerCompte',{'compte':compte.id}) }}"><button class="btn btn-sm btn-danger waves-effect" type="submit" onclick="return confirm('cliquez sur ok pour confirmer')" >Supprimer</button></a>
+                                                </td>  
+
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                </div>     
+            </div>
+      </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<script type="text/javascript">
+
+$('#basic-datatables').DataTable({
+      });
+
+{% for error in compteForm.vars.errors.form.getErrors(true) %} 
+
+      var placementFrom = 'top';
+      var placementAlign = 'center';
+      var state = 'danger';
+      var style = 'withicon';
+      var content = {};
+
+      content.message = '{{ error.message }}';
+      content.title = 'notification';
+      if (style == "withicon") {
+          content.icon = 'fa fa-bell';
+      } else {
+          content.icon = 'none';
+      }
+      content.url = '#';
+      
+
+      $.notify(content,{
+          type: state,
+          placement: {
+              from: placementFrom,
+              align: placementAlign
+          },
+          time: 1000,
+          delay: 0,
+      });
+{% endfor %}
+
+</script>
+
+{% endblock %}

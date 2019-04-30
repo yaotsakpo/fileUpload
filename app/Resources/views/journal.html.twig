@@ -17,7 +17,7 @@
     <li class="breadcrumb-item active "><a href="{{ path('homepage')}}">Acceuil</a></li>
     <li class="breadcrumb-item">Journal</a></li>
     <li class="ml-auto ">
-      {% if journalArray[0].dispatch != 1 %}
+      {% if cumuls|length == 0 %}
         <a onclick="return confirm('confirmez?')" class="btn btn-sm btn-success " href="{{ path('exportationJournal',{'importation':importation}) }}" >Exporter le journal en format CSV</a>
         {% endif %}</a>
       </li>
@@ -52,49 +52,51 @@
                           </tr>                           
                           </thead>
                           <tbody>
-                              {% for journal in journalArray %}
+                              {% for journal in journalArray  if journal.numCompte.parent != null %}
                               <tr>
                                   <td>{{ journal.jour|date('d-m-Y H:m:s') }}</td> 
                                   <td>{{ journal.numPiece }}</td> 
                                   <td>{{ journal.numFacture }}</td> 
                                   <td>{{ journal.reference }}</td> 
-                                  <td>{{ journal.numCompteGeneral }}</td> 
-                                  <td>{{ journal.numComptTiers }}</td> 
+                                  {% if journal.numCompte.parent == null %}
+                                    <td>{{ journal.numCompte.num }}</td> 
+                                    <td></td> 
+                                  {% else %}
+                                    <td>{{ journal.numCompte.parent.num }}</td> 
+                                    <td>{{ journal.numCompte.num }}</td>
+                                  {% endif %}
                                   <td>{{ journal.libelleEcriture }}</td> 
                                   <td>{{ journal.dateEcheance }}</td> 
                                   <td>{{ journal.positionJournal }}</td> 
-                                  <td>
-                                    {% if journal.montantDebit != null %}
-                                      {{ journal.montantDebit|number_format(0, ' ', ' ') }}
-                                    {% endif %}
-                                  </td> 
-                                  <td>
-                                    {% if journal.montantCredit != null %}
-                                      {{ journal.montantCredit|number_format(0, '', ' ') }}
-                                    {% endif %}
-                                  </td> 
-                                  <td>
-                                      {% if journal.cumul == null  and dispatchs == null %}
-                                          <a href="{{ path('dispatch',{'ligneJournal':journal.id}) }}" >
-                                          <button class="btn btn-sm btn-primary waves-effect" type="submit" >Dispatcher</button></a>
-                                      {% endif %}
 
-                                      {% if journal.cumul == null  and dispatchs != null and journal.dispatch != null  %}
-                                          {% if journal.dispatch == 0 or journal.dispatch == 1 %}
-                                              {% set etat = 1 %}
+                                  {% if journal.isdebit == 1 %}
+                                    <td>{{ journal.montant|number_format(0, ' ', ' ') }}</td> 
+                                    <td></td> 
+                                  {% else %}
+                                    <td></td> 
+                                    <td>{{ journal.montant|number_format(0, ' ', ' ') }}</td> 
+                                  {% endif %}
+
+                                  <td>
+                                    {% if cumuls|length == 0 %}
+                                      
+                                      {% if journal.cumul == null    %}
+
                                       <a href="{{ path('dispatch',{'ligneJournal':journal.id}) }}" >
                                       <button class="btn btn-sm btn-primary waves-effect" type="submit" >Dispatcher</button></a>
-                                          {% endif %}
+                                         
                                       {% endif %}
 
-                                      {% if journal.cumul == null  and dispatchs != null and etat == 0 %}
-                                          {% if journal.dispatch == 1 or journal.dispatch == null %}
-                                      <a href="{{ path('dispatch',{'ligneJournal':journal.id}) }}" >
-                                      <button class="btn btn-sm btn-primary waves-effect" type="submit" >Dispatcher</button></a>
-                                          {% endif %}
-                                      {% endif %}
+                                    {% else %}
 
-                                    {% if journal.cumul != null  and journal.dispatch == 1 and journal.montantCredit == null   %}
+                                        {% for cumul in cumuls if cumul.id == journal.id %}
+                                            <a href="{{ path('dispatch',{'ligneJournal':journal.id}) }}" >
+                                            <button class="btn btn-sm btn-primary waves-effect" type="submit" >Dispatcher</button></a>
+                                        {% endfor %}
+                          
+                                  {% endif %}
+
+                                    {% if journal.cumul != null  and journal.dispatch == 1 and journal.isdebit == 1   %}
                                     
                                           <a style="background-color:#ffad46" href="{{ path('envoieDemandePermission',{'journal':journal.id,'type':2} ) }}" >
                                            Modifier</a>|

@@ -29,11 +29,16 @@ class Banque
     private $nomDeLaBanque;
 
     /**
-     * @var int
      *
-     * @ORM\Column(name="numCptDispatch", type="integer")
+     * @var CompteCompta $compteCompta
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CompteCompta",inversedBy="banque",cascade={"all"})
+     *
+     * @ORM\JoinColumn(nullable=true,onDelete="CASCADE")
      */
-    private $numCptDispatch;
+
+
+    Private $compteCompta;
 
 
     /**
@@ -45,6 +50,7 @@ class Banque
     {
         return $this->id;
     }
+
 
     /**
      * Set nomDeLaBanque
@@ -71,26 +77,26 @@ class Banque
     }
 
     /**
-     * Set numCptDispatch
+     * Set compteCompta
      *
-     * @param integer $numCptDispatch
+     * @param \AppBundle\Entity\CompteCompta $compteCompta
      *
      * @return Banque
      */
-    public function setNumCptDispatch($numCptDispatch)
+    public function setCompteCompta(\AppBundle\Entity\CompteCompta $compteCompta = null)
     {
-        $this->numCptDispatch = $numCptDispatch;
+        $this->compteCompta = $compteCompta;
 
         return $this;
     }
 
     /**
-     * Get numCptDispatch
+     * Get compteCompta
      *
-     * @return int
+     * @return \AppBundle\Entity\CompteCompta
      */
-    public function getNumCptDispatch()
+    public function getCompteCompta()
     {
-        return $this->numCptDispatch;
+        return $this->compteCompta;
     }
 }

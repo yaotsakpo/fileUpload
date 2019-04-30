@@ -43,6 +43,14 @@ class CompteCompta
     private $description;
 
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Journal",mappedBy="numCompte",cascade={"remove"})
+     */
+
+    private $journals;
+
+
     /**
      *
      * @var AppBundle\Entity\ClassCompta $classCompta
@@ -82,6 +90,13 @@ class CompteCompta
     private $numCptTypeOperation;
 
 
+     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Banque",mappedBy="compteCompta",cascade={"remove"})
+     */
+
+    private $banque;
+
+
 
     /**
      * Get id
@@ -93,5 +108,5 @@ class CompteCompta
         return $this->id;
     }
 
-  
+ 
 }

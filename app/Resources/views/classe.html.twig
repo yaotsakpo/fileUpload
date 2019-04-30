@@ -1,0 +1,139 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+
+{{ parent() }}
+
+{% endblock %}
+
+{% block body %}
+<br>
+   <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active"><a href="{{ path('homepage')}}">Acceuil</a></li>
+    <li class="breadcrumb-item ">Classe</a></li>
+  </ol>
+</nav>
+   <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Nouvelle classe </div>
+                </div>
+                <div class="card-body">
+                  {{ form_start(classeForm,{'attr': {'v':'v' ,'class':'form-horizontal style-form' }}) }}
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <div class="form-group">
+                        <label>Libelle de la classe:</label>
+                        {{ form_errors(classeForm.libelle) }}
+                        {{ form_widget(classeForm.libelle,{'attr':{'class':'form-control'}}) }} 
+                      </div>
+                    </div>
+                     <div class="col-lg-3">
+                      <div class="form-group">
+                        <label >Numero de la classe:</label>
+                         {{ form_errors(classeForm.num) }}
+                         {{ form_widget(classeForm.num,{'attr':{'class':'form-control'}}) }}  
+                      </div>
+                    </div>
+                    <div class="col-lg-3">
+                      <div class="form-group">
+                        <label >Description de la classe:</label>
+                         {{ form_errors(classeForm.description) }}
+                         {{ form_widget(classeForm.description,{'attr':{'class':'form-control','autocomplete': 'off'}}) }}
+                      </div>
+                    </div>
+                    <div class="col-lg-3 pt-3">
+                      <div class="form-group">
+                       <button type="submit" class="btn btn-primary">valider</button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {{ form_end(classeForm) }}
+
+                </div>     
+            </div>
+      </div>
+</div>
+
+   <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Liste des Classes</div>
+                </div>
+                <div class="card-body">
+                   <table id="basic-datatables" class="display table table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th data-field="libelle"  >Libelle de la classe</th>
+                                            <th ddata-field="num">Numero de la classe</th>
+                                            <th ddata-field="description">Description de la classe</th>
+                                            <th data-field="action">Action</th>
+                                           
+                                        </tr>                           
+                                        </thead>
+                                        <tbody>
+                                           {% for classe in classes %}
+                                            <tr>
+                                                <td>{{ classe.libelle }}</td> 
+                                                <td>{{ classe.num }}</td> 
+                                                <td>{{ classe.description }}</td> 
+                                                <td>
+                                                <a  href="{{ path('editClasse',{'classe':classe.id}) }}"><button class="btn btn-sm btn-warning waves-effect" type="submit" >Modifier</button></a>
+                                                <a  href="{{ path('effacerClasse',{'classe':classe.id}) }}"><button class="btn btn-sm btn-danger waves-effect" type="submit" onclick="return confirm('cliquez sur ok pour confirmer')" >Supprimer</button></a>
+                                                </td>  
+
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                </div>     
+            </div>
+      </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<script type="text/javascript">
+
+$('#basic-datatables').DataTable({
+      });
+
+{% for error in classeForm.vars.errors.form.getErrors(true) %} 
+
+      var placementFrom = 'top';
+      var placementAlign = 'center';
+      var state = 'danger';
+      var style = 'withicon';
+      var content = {};
+
+      content.message = '{{ error.message }}';
+      content.title = 'notification';
+      if (style == "withicon") {
+          content.icon = 'fa fa-bell';
+      } else {
+          content.icon = 'none';
+      }
+      content.url = '#';
+      
+
+      $.notify(content,{
+          type: state,
+          placement: {
+              from: placementFrom,
+              align: placementAlign
+          },
+          time: 1000,
+          delay: 0,
+      });
+{% endfor %}
+
+</script>
+
+{% endblock %}

@@ -50,18 +50,16 @@ class Journal
     private $reference;
 
     /**
-     * @var string
      *
-     * @ORM\Column(name="numCompteGeneral", type="string", length=255,nullable=true)
+     * @var CompteCompta $numCompte
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CompteCompta",inversedBy="journals",cascade={"persist"})
+     *
+     * @ORM\JoinColumn(nullable=true,unique=false)
      */
-    private $numCompteGeneral;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="numComptTiers", type="string", length=255,nullable=true)
-     */
-    private $numComptTiers;
+    Private $numCompte;
+
 
     /**
      * @var string
@@ -87,17 +85,9 @@ class Journal
     /**
      * @var int
      *
-     * @ORM\Column(name="montantDebit", type="integer",nullable=true)
+     * @ORM\Column(name="montant", type="integer",nullable=true)
      */
-    private $montantDebit;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="montantCredit", type="integer",nullable=true)
-     */
-    private $montantCredit;
-
+    private $montant;
 
     /**
      * @var int
@@ -105,6 +95,14 @@ class Journal
      * @ORM\Column(name="dispatch", type="integer",nullable=true)
      */
     private $dispatch;
+
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="isDebit", type="integer",nullable=true)
+     */
+    private $isDebit;
 
 
     /**
@@ -168,6 +166,15 @@ class Journal
         return $this->id;
     }
 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->detailsCumul = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->demandePermissions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set jour
@@ -266,54 +273,6 @@ class Journal
     }
 
     /**
-     * Set numCompteGeneral
-     *
-     * @param string $numCompteGeneral
-     *
-     * @return Journal
-     */
-    public function setNumCompteGeneral($numCompteGeneral)
-    {
-        $this->numCompteGeneral = $numCompteGeneral;
-
-        return $this;
-    }
-
-    /**
-     * Get numCompteGeneral
-     *
-     * @return string
-     */
-    public function getNumCompteGeneral()
-    {
-        return $this->numCompteGeneral;
-    }
-
-    /**
-     * Set numComptTiers
-     *
-     * @param string $numComptTiers
-     *
-     * @return Journal
-     */
-    public function setNumComptTiers($numComptTiers)
-    {
-        $this->numComptTiers = $numComptTiers;
-
-        return $this;
-    }
-
-    /**
-     * Get numComptTiers
-     *
-     * @return string
-     */
-    public function getNumComptTiers()
-    {
-        return $this->numComptTiers;
-    }
-
-    /**
      * Set libelleEcriture
      *
      * @param string $libelleEcriture
@@ -386,78 +345,28 @@ class Journal
     }
 
     /**
-     * Set montantDebit
+     * Set montant
      *
-     * @param integer $montantDebit
+     * @param integer $montant
      *
      * @return Journal
      */
-    public function setMontantDebit($montantDebit)
+    public function setMontant($montant)
     {
-        $this->montantDebit = $montantDebit;
+        $this->montant = $montant;
 
         return $this;
     }
 
     /**
-     * Get montantDebit
+     * Get montant
      *
      * @return integer
      */
-    public function getMontantDebit()
+    public function getMontant()
     {
-        return $this->montantDebit;
+        return $this->montant;
     }
-
-    /**
-     * Set montantCredit
-     *
-     * @param integer $montantCredit
-     *
-     * @return Journal
-     */
-    public function setMontantCredit($montantCredit)
-    {
-        $this->montantCredit = $montantCredit;
-
-        return $this;
-    }
-
-    /**
-     * Get montantCredit
-     *
-     * @return integer
-     */
-    public function getMontantCredit()
-    {
-        return $this->montantCredit;
-    }
-
-    /**
-     * Set importation
-     *
-     * @param \AppBundle\Entity\Importation $importation
-     *
-     * @return Journal
-     */
-    public function setImportation(\AppBundle\Entity\Importation $importation = null)
-    {
-        $this->importation = $importation;
-
-        return $this;
-    }
-
-    /**
-     * Get importation
-     *
-     * @return \AppBundle\Entity\Importation
-     */
-    public function getImportation()
-    {
-        return $this->importation;
-    }
-
-
 
     /**
      * Set dispatch
@@ -483,6 +392,53 @@ class Journal
         return $this->dispatch;
     }
 
+    /**
+     * Set isDebit
+     *
+     * @param integer $isDebit
+     *
+     * @return Journal
+     */
+    public function setIsDebit($isDebit)
+    {
+        $this->isDebit = $isDebit;
+
+        return $this;
+    }
+
+    /**
+     * Get isDebit
+     *
+     * @return integer
+     */
+    public function getIsDebit()
+    {
+        return $this->isDebit;
+    }
+
+    /**
+     * Set suppression
+     *
+     * @param integer $suppression
+     *
+     * @return Journal
+     */
+    public function setSuppression($suppression)
+    {
+        $this->suppression = $suppression;
+
+        return $this;
+    }
+
+    /**
+     * Get suppression
+     *
+     * @return integer
+     */
+    public function getSuppression()
+    {
+        return $this->suppression;
+    }
 
     /**
      * Set codeOperation
@@ -508,13 +464,52 @@ class Journal
         return $this->codeOperation;
     }
 
+    /**
+     * Set numCompte
+     *
+     * @param \AppBundle\Entity\CompteCompta $numCompte
+     *
+     * @return Journal
+     */
+    public function setNumCompte(\AppBundle\Entity\CompteCompta $numCompte = null)
+    {
+        $this->numCompte = $numCompte;
+
+        return $this;
+    }
 
     /**
-     * Constructor
+     * Get numCompte
+     *
+     * @return \AppBundle\Entity\CompteCompta
      */
-    public function __construct()
+    public function getNumCompte()
     {
-        $this->detailsCumul = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->numCompte;
+    }
+
+    /**
+     * Set importation
+     *
+     * @param \AppBundle\Entity\Importation $importation
+     *
+     * @return Journal
+     */
+    public function setImportation(\AppBundle\Entity\Importation $importation = null)
+    {
+        $this->importation = $importation;
+
+        return $this;
+    }
+
+    /**
+     * Get importation
+     *
+     * @return \AppBundle\Entity\Importation
+     */
+    public function getImportation()
+    {
+        return $this->importation;
     }
 
     /**
@@ -573,30 +568,6 @@ class Journal
     public function getCumul()
     {
         return $this->cumul;
-    }
-
-    /**
-     * Set suppression
-     *
-     * @param integer $suppression
-     *
-     * @return Journal
-     */
-    public function setSuppression($suppression)
-    {
-        $this->suppression = $suppression;
-
-        return $this;
-    }
-
-    /**
-     * Get suppression
-     *
-     * @return integer
-     */
-    public function getSuppression()
-    {
-        return $this->suppression;
     }
 
     /**

@@ -29,7 +29,7 @@
               </div>
           </div>
       </div>
-
+ {% if is_granted('ROLE_ADMIN') %}
   <div class="row mt-2" >
             <div class="col-12">
             <h4 style="color:white"> Demandes de permission </h4> 
@@ -52,7 +52,7 @@
               </div>
           </div>
       </div>
-
+{% endif %}
       <div class="row mt-3" >
         <div class="col-12">
           <h4 style="color:white">Structure des &eacute;critures</h4>
@@ -116,7 +116,7 @@
             
       </div>
 </div>   
-
+ {% if is_granted('ROLE_ADMIN') %}
       <div class="row mt-3">
         <div class="col-12"> 
             <h4 style="color:white">Administration</h4>
@@ -180,20 +180,54 @@
       </div>
     </div>
 
-      <div class="row mt-3 ">
-       
+            <div class="row mt-3">
         <div class="col-12"> 
-            <h3>Plan comptable</h3>
+            <h4 style="color:white">Plan Comptable</h4>
             <div class="container-fluid">
-                <div class="row">
-   
-            
+              <div class="row">
 
-                </div>
+                    <div style="height: 100px; width: 100px ;margin-right:10px" >
+                      <div class="card shadow mb-5">
+                        <div class="card-body" style="background-color: #0082bb;color:white">
+                         <a href="{{ path('classe') }}"> 
+                            <center>
+                               <span  style="font-size:22px; color: white">
+                                <i class="fas fa-bookmark"></i>
+                              </span>
+                           </center>
+                          </a>
+                        </div>
+                         <div class="card-header p-1 text-center" style="background-color: #005b82 ;color:white ; font-size:12px"> 
+                          Classes
+                        </div>
+                      </div>
+                    </div>
+                     
+                    <div style="height: 100px; width: 100px ;margin-right:10px" >
+                      <div class="card shadow mb-5">
+                        <div class="card-body" style="background-color: #0082bb ;color:white">
+                         <a href="{{ path('compte') }}"> 
+                            <center>
+                               <span  style="font-size:22px; color: white">
+                                <i class="fas fa-book"></i>                              
+                              </span>
+                           </center>
+                          </a>
+                        </div>
+                         <div class="card-header p-1 text-center" style="background-color: #005b82;color:white; font-size:12px"> 
+                          Comptes
+                        </div>
+                      </div>
+                    </div>
+
+                    
+
+              </div>
+
             </div>
-        </div>
       </div>
- 
+    </div>
+{% endif %}
 {% endblock %}
 
 {% block javascripts %}

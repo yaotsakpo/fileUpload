@@ -85,8 +85,10 @@ class DefaultController extends Controller
         $cumul= $repository->cumul($importation);
 
        
-
         foreach ($cumul as $key => $positionCumul) {
+
+        $repository= $this->getDoctrine()->getRepository('AppBundle:CompteCompta');
+        $compte= $repository->findOneBy(['num'=>$positionCumul['numeroCompteDebit']]);
 
         $repository= $this->getDoctrine()->getRepository('AppBundle:OperationCaisse');
         $operations= $repository->findBy(['importation'=>$import,'dateDeReglement'=>$positionCumul['dateReglement']]);
@@ -95,23 +97,26 @@ class DefaultController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $journal->setJour(new \DateTime());
-        $journal->setMontantDebit($positionCumul['prime']);
+        $journal->setMontant($positionCumul['prime']);
         $journal->setLibelleEcriture('Remboursement'.' - '.$positionCumul['type']);
-        $journal->setNumCompteGeneral($positionCumul['numeroCompteDebit']);
+        $journal->setNumCompte($compte);
         $journal->setImportation($import);
         $journal->setsuppression(0);
+        $journal->setIsDebit(1);
         $em->persist($journal);
         $em->flush();
             foreach ($operations as $key => $operation) {
                 $detailsJournal= new Journal();
+
                 $em = $this->getDoctrine()->getManager();
                     $detailsJournal->setJour(new \DateTime());
-                    $detailsJournal->setMontantCredit($operation->getPrime());
+                    $detailsJournal->setMontant($operation->getPrime());
                     $detailsJournal->setLibelleEcriture('Remboursement'.' - '.$positionCumul['type']);
-                    $detailsJournal->setNumCompteGeneral($operation->getProduit()->getcompteCompta());
+                    $detailsJournal->setNumCompte($operation->getProduit()->getcompteCompta());
                     $detailsJournal->setCumul($journal);
                     $detailsJournal->setImportation($operation->getImportation());
                     $detailsJournal->setsuppression(0);
+                    $detailsJournal->setIsDebit(0);
                 $em->persist($detailsJournal);
                 $em->flush();
             }
@@ -134,6 +139,16 @@ class DefaultController extends Controller
     public function visualisationDeJournalAction(Request $request,$importation)
     {
 
+    $em = $this->getDoctrine()->getManager(); 
+        $query = $em->createQuery(
+        'SELECT j 
+         FROM AppBundle:Journal j 
+         WHERE j.cumul IS null AND j.dispatch=1 AND j.suppression=0 AND j.importation= :importation '
+        )->setParameter('importation', $importation);
+   
+    $cumuls = $query->getResult();
+    
+
     $repository= $this->getDoctrine()->getRepository('AppBundle:Journal');
     $journalArray= $repository->findBy(['importation'=>$importation,'suppression'=>0],['id' => 'ASC']);
 
@@ -144,16 +159,15 @@ class DefaultController extends Controller
          WHERE j.cumul IS NOT NULL AND j.dispatch=1 AND j.suppression=0 AND j.importation= :importation '
         )->setParameter('importation', $importation);
    
-         
     $dispatchs = $query->getResult(); 
 
-    //var_dump($dispatchs);
-    //exit();
+
 
       return $this->render('journal.html.twig', [
             'journalArray' => $journalArray,
             'dispatchs' => $dispatchs,
-            'importation' => $importation
+            'importation' => $importation,
+            'cumuls' => $cumuls
         ]);
     }
 
@@ -183,20 +197,31 @@ class DefaultController extends Controller
            $exportation->setnumFacture($ligne->getnumFacture());
            $c['Reference'] = $ligne->getreference();
            $exportation->setreference($ligne->getreference());
-           $c['Numero de Compte General'] = $ligne->getnumCompteGeneral();
-           $exportation->setnumCompteGeneral($ligne->getnumCompteGeneral());
-           $c['Numero Compte Tiers'] = $ligne->getnumComptTiers();
-           $exportation->setnumCompteTiers($ligne->getnumComptTiers());
+           $c['Numero de Compte General'] = $ligne->getnumCompte()->getNum();
+           $exportation->setnumCompteGeneral($ligne->getnumCompte()->getNum());
+           $c['Numero Compte Tiers'] = "";
+           $exportation->setnumCompteTiers("");
            $c['Libelle Ecriture'] = $ligne->getlibelleEcriture();
            $exportation->setlibelleEcriture($ligne->getlibelleEcriture());
            $c['Date Echeance'] = $ligne->getdateEcheance();
            $exportation->setdateEcheance($ligne->getdateEcheance());
            $c['Position Journal'] = $ligne->getpositionJournal();
            $exportation->setpositionJournal($ligne->getpositionJournal());
-           $c['Debit'] = $ligne->getmontantDebit();
-           $exportation->setmontantDebit($ligne->getmontantDebit());
-           $c['Credit'] = $ligne->getmontantCredit();
-           $exportation->setmontantCredit($ligne->getmontantCredit());
+           if($ligne->getisDebit()==1)
+           {
+               $c['Debit'] = $ligne->getmontant();
+               $exportation->setmontantDebit($ligne->getmontant());
+               $c['Credit'] = "";
+               $exportation->setmontantCredit(null);
+           }
+           else
+           {
+               $c['Debit'] = "";
+               $exportation->setmontantDebit(null);
+               $c['Credit'] = $ligne->getmontant();
+               $exportation->setmontantCredit($ligne->getmontant());
+           }
+          
            $em->persist($exportation);
            $em->flush();
            $lignes[] = $c;
@@ -240,7 +265,7 @@ class DefaultController extends Controller
         ->add('numCptDebiter',EntityType::class,array(
                     'class'=>'AppBundle\Entity\Banque',
                     'choice_label'=>'nomDeLaBanque',
-                    'choice_value'=>'numCptDispatch',
+                    'choice_value'=>'id',
                     'placeholder'=>'-Selectionner-',
                     'expanded'=>false,
                     'mapped'=>false,
@@ -252,7 +277,7 @@ class DefaultController extends Controller
 
         $em = $this->getDoctrine()->getManager(); 
         $query = $em->createQuery(
-        'SELECT SUM(j.montantCredit) FROM AppBundle:Journal j WHERE j.dispatch = 1 and j.suppression = 0 and j.cumul = :ligneCumul'
+        'SELECT SUM(j.montant) FROM AppBundle:Journal j,AppBundle:CompteCompta c WHERE c=j.numCompte and c.parent is null and  j.dispatch = 1 and j.suppression  = 0  and j.isDebit=1 and j.cumul = :ligneCumul'
         )->setParameter('ligneCumul', $ligneJournal->getId());
          
         $dispatchsMontantTotal = $query->getResult(); 
@@ -260,21 +285,19 @@ class DefaultController extends Controller
 
         $em = $this->getDoctrine()->getManager(); 
         $query = $em->createQuery(
-        'SELECT j FROM AppBundle:Journal j WHERE j.dispatch = 1 and j.suppression = 0 and j.cumul = :ligneCumul'
+        'SELECT j FROM AppBundle:Journal j,AppBundle:CompteCompta c WHERE c=j.numCompte and c.parent is not null and  j.dispatch = 1 and j.suppression = 0 and j.cumul = :ligneCumul'
         )->setParameter('ligneCumul', $ligneJournal->getId());
 
          
         $dispatchs = $query->getResult(); 
 
-        //dump($dispatchs);
-
-        //exit();
+        
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if( (((int) ($dispatchsMontantTotal[0])[1]) + $form['montant']->getdata()) <= $ligneJournal->getmontantDebit() )
+            if( (((int) ($dispatchsMontantTotal[0])[1]) + $form['montant']->getdata()) <= $ligneJournal->getmontant() )
 
             {
 
@@ -282,27 +305,60 @@ class DefaultController extends Controller
               $dispatchDebit= new Journal();
               $code = uniqid();
 
-              $em = $this->getDoctrine()->getManager();
+                $em = $this->getDoctrine()->getManager();
                 /******Insertion de la ligne de debit du dispatch*****/
                 $dispatchDebit->setJour(new \DateTime());
-                $dispatchDebit->setMontantDebit($form['montant']->getdata());
+                $dispatchDebit->setMontant($form['montant']->getdata());
                 $dispatchDebit->setLibelleEcriture($form['libelle']->getdata());
-                $dispatchDebit->setNumCompteGeneral($form['numCptDebiter']->getdata()->getnumCptDispatch());
+                $dispatchDebit->setNumCompte($form['numCptDebiter']->getdata()->getcompteCompta());
                 $dispatchDebit->setCumul($ligneJournal);
                 $dispatchDebit->setImportation($ligneJournal->getImportation());
                 $dispatchDebit->setDispatch(1);
                 $dispatchDebit->setCodeOperation($code);
                 $dispatchDebit->setsuppression(0);
+                $dispatchDebit->setIsDebit(1);
+                if($form['numCptDebiter']->getdata()->getcompteCompta()->getParent()!=null)
+                {
+                    $compteParentLigne= new Journal();
+                    $compteParentLigne->setJour(new \DateTime());
+                    $compteParentLigne->setMontant($form['montant']->getdata());
+                    $compteParentLigne->setLibelleEcriture($form['libelle']->getdata());
+                    $compteParentLigne->setNumCompte($form['numCptDebiter']->getdata()->getcompteCompta()->getparent());
+                    $compteParentLigne->setCumul($ligneJournal);
+                    $compteParentLigne->setImportation($ligneJournal->getImportation());
+                    $compteParentLigne->setDispatch(1);
+                    $compteParentLigne->setCodeOperation($code);
+                    $compteParentLigne->setsuppression(0);
+                    $compteParentLigne->setIsDebit(1);
+                    $em->persist($compteParentLigne);
+
+                }
                 /******Insertion de la ligne de credit du dispatch*****/
                 $dispatchCredit->setJour(new \DateTime());
-                $dispatchCredit->setMontantCredit($form['montant']->getdata());
+                $dispatchCredit->setMontant($form['montant']->getdata());
                 $dispatchCredit->setLibelleEcriture($form['libelle']->getdata());
-                $dispatchCredit->setNumCompteGeneral($ligneJournal->getImportation()->gettypeOperation()->getcompteCompta()->getNum());
+                $dispatchCredit->setNumCompte($ligneJournal->getImportation()->gettypeOperation()->getcompteCompta());
                 $dispatchCredit->setCumul($ligneJournal);
                 $dispatchCredit->setImportation($ligneJournal->getImportation());
                 $dispatchCredit->setDispatch(1);
                 $dispatchCredit->setCodeOperation($code);
                 $dispatchCredit->setsuppression(0);
+                $dispatchCredit->setIsDebit(0);
+                if($ligneJournal->getImportation()->gettypeOperation()->getcompteCompta()->getParent()!=null)
+                {
+                    $compteParentLigneCredit= new Journal();
+                    $compteParentLigneCredit->setJour(new \DateTime());
+                    $compteParentLigneCredit->setMontant($form['montant']->getdata());
+                    $compteParentLigneCredit->setLibelleEcriture($form['libelle']->getdata());
+                    $compteParentLigneCredit->setNumCompte($ligneJournal->getImportation()->gettypeOperation()->getcompteCompta()->getParent());
+                    $compteParentLigneCredit->setCumul($ligneJournal);
+                    $compteParentLigneCredit->setImportation($ligneJournal->getImportation());
+                    $compteParentLigneCredit->setDispatch(1);
+                    $compteParentLigneCredit->setCodeOperation($code);
+                    $compteParentLigneCredit->setsuppression(0);
+                    $compteParentLigneCredit->setIsDebit(0);
+                    $em->persist($compteParentLigneCredit);
+                }
                 $em->persist($dispatchDebit);
                 $em->persist($dispatchCredit);
                 $ligneJournal->setDispatch(1);

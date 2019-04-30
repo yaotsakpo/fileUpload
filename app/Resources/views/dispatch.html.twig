@@ -41,9 +41,9 @@
                       </thead>
                       <tbody>
                           <tr> 
-                              <td>{{ ligneJournal.montantDebit|number_format(0, ' ', ' ') }}</td> 
+                              <td>{{ ligneJournal.montant|number_format(0, ' ', ' ') }}</td> 
                               <td>{{ dispatch|number_format(0, ' ', ' ') }}</td> 
-                              <td id="TotalRestant">{{ (ligneJournal.montantDebit  -  dispatch)|number_format(0, ' ', ' ') }}</td> 
+                              <td id="TotalRestant">{{ (ligneJournal.montant  -  dispatch)|number_format(0, ' ', ' ') }}</td> 
                           </tr>
                       </tbody>
                   </table>
@@ -61,7 +61,7 @@
                   <thead>
                   <tr>
                       <th data-field="jour"  >Jour</th>
-                      <th data-field="NumCompteGen">Num Compte General</th>
+                      <th data-field="NumCompteGen">Num Compte</th>
                       <th data-field="Libecriture">Libelle Ecriture</th>
                       <th data-field="debit">Debit</th>
                       <th data-field="Credit">Credit</th>
@@ -72,20 +72,17 @@
                       {% for dispatch in dispatchs %}
                       <tr>
                       <td>{{ dispatch.jour|date('d-m-Y H:m:s') }}</td> 
-                      <td>{{ dispatch.numCompteGeneral }}</td> 
+                      <td>{{ dispatch.numCompte.num }}</td> 
                       <td>{{ dispatch.libelleEcriture }}</td> 
+                      {% if dispatch.isdebit == 1 %}
+                      <td>{{ dispatch.montant|number_format(0, ' ', ' ') }}</td> 
+                      <td></td> 
+                    {% else %}
+                      <td></td> 
+                      <td>{{ dispatch.montant|number_format(0, ' ', ' ') }}</td> 
+                    {% endif %} 
                       <td>
-                        {% if dispatch.montantDebit != null %}
-                          {{ dispatch.montantDebit|number_format(0, ' ', ' ') }}
-                        {% endif %}
-                      </td> 
-                      <td>
-                        {% if dispatch.montantCredit != null %}
-                          {{ dispatch.montantCredit|number_format(0, ' ', ' ') }}
-                        {% endif %}
-                      </td> 
-                      <td>
-                         {% if dispatch.montantCredit == null %}
+                         {% if dispatch.isdebit == 1 %}
 
                     <a style="background-color:#ffad46" href="{{ path('envoieDemandePermission',{'journal':dispatch.id,'type':2} ) }}" >
                      Modifier</a>|

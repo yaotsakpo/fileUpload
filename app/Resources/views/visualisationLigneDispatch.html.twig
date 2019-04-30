@@ -41,27 +41,30 @@
                           </tr>                           
                           </thead>
                           <tbody>
-                             {% for journal in journalArray %}
+                             {% for journal in journalArray if journal.numCompte.parent != null  %}
                               <tr>
                                   <td>{{ journal.jour|date('d-m-Y H:m:s') }}</td> 
                                   <td>{{ journal.numPiece }}</td> 
                                   <td>{{ journal.numFacture }}</td> 
                                   <td>{{ journal.reference }}</td> 
-                                  <td>{{ journal.numCompteGeneral }}</td> 
-                                  <td>{{ journal.numComptTiers }}</td> 
+                                  {% if journal.numCompte.parent == null %}
+                                    <td>{{ journal.numCompte.num }}</td> 
+                                    <td></td> 
+                                  {% else %}
+                                    <td>{{ journal.numCompte.parent.num }}</td> 
+                                    <td>{{ journal.numCompte.num }}</td>
+                                  {% endif %}
                                   <td>{{ journal.libelleEcriture }}</td> 
                                   <td>{{ journal.dateEcheance }}</td> 
                                   <td>{{ journal.positionJournal }}</td> 
-                                  <td>
-                                    {% if journal.montantDebit != null %}
-                                      {{ journal.montantDebit|number_format(0, ' ', ' ') }}
-                                    {% endif %}
-                                  </td> 
-                                  <td>
-                                    {% if journal.montantCredit != null %}
-                                      {{ journal.montantCredit|number_format(0, ' ', ' ') }}
-                                    {% endif %}
-                                  </td>
+
+                                  {% if journal.isdebit == 1 %}
+                                    <td>{{ journal.montant|number_format(0, ' ', ' ') }}</td> 
+                                    <td></td> 
+                                  {% else %}
+                                    <td></td> 
+                                    <td>{{ journal.montant|number_format(0, ' ', ' ') }}</td> 
+                                  {% endif %}
                               </tr>
                               {% endfor %}
                           </tbody>

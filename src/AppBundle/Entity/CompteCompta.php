@@ -43,6 +43,14 @@ class CompteCompta
     private $description;
 
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Journal",mappedBy="numCompte",cascade={"remove"})
+     */
+
+    private $journals;
+
+
     /**
      *
      * @var AppBundle\Entity\ClassCompta $classCompta
@@ -82,6 +90,13 @@ class CompteCompta
     private $numCptTypeOperation;
 
 
+     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Banque",mappedBy="compteCompta",cascade={"remove"})
+     */
+
+    private $banque;
+
+
 
     /**
      * Get id
@@ -93,23 +108,17 @@ class CompteCompta
         return $this->id;
     }
 
-  
+ 
     /**
      * Constructor
      */
     public function __construct()
     {
+        $this->journals = new \Doctrine\Common\Collections\ArrayCollection();
         $this->compteTiers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->numCptProduit = new \Doctrine\Common\Collections\ArrayCollection();
         $this->numCptTypeOperation = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Constructor
-     */
-    public function __toString()
-    {
-        return $this->num;
+        $this->banque = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -182,6 +191,40 @@ class CompteCompta
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Add journal
+     *
+     * @param \AppBundle\Entity\Journal $journal
+     *
+     * @return CompteCompta
+     */
+    public function addJournal(\AppBundle\Entity\Journal $journal)
+    {
+        $this->journals[] = $journal;
+
+        return $this;
+    }
+
+    /**
+     * Remove journal
+     *
+     * @param \AppBundle\Entity\Journal $journal
+     */
+    public function removeJournal(\AppBundle\Entity\Journal $journal)
+    {
+        $this->journals->removeElement($journal);
+    }
+
+    /**
+     * Get journals
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getJournals()
+    {
+        return $this->journals;
     }
 
     /**
@@ -332,5 +375,39 @@ class CompteCompta
     public function getNumCptTypeOperation()
     {
         return $this->numCptTypeOperation;
+    }
+
+    /**
+     * Add banque
+     *
+     * @param \AppBundle\Entity\Banque $banque
+     *
+     * @return CompteCompta
+     */
+    public function addBanque(\AppBundle\Entity\Banque $banque)
+    {
+        $this->banque[] = $banque;
+
+        return $this;
+    }
+
+    /**
+     * Remove banque
+     *
+     * @param \AppBundle\Entity\Banque $banque
+     */
+    public function removeBanque(\AppBundle\Entity\Banque $banque)
+    {
+        $this->banque->removeElement($banque);
+    }
+
+    /**
+     * Get banque
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBanque()
+    {
+        return $this->banque;
     }
 }
